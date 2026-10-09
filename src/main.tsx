@@ -9,6 +9,7 @@ type Choice = 'A' | 'B' | 'C' | 'D' | null;
 type NetworkMode = 'online' | 'offline';
 type AttemptStatus = 'not_started' | 'active' | 'reviewing' | 'locked' | 'terminated';
 type UploadStatus = 'idle' | 'uploading' | 'failed';
+type AttemptSnapshot = { screen: ScreenId; consent: boolean; downloadProgress: number; answers: Record<number, Choice>; doubtful: number[]; network: NetworkMode; attemptStatus: AttemptStatus; timeRemaining: number; syncStatus: 'saved' | 'pending_sync' };
 const screenNames: Record<ScreenId, string> = { 1: 'Rules & consent', 2: 'Download package', 3: 'Downloading package', 4: 'Turn off internet', 5: 'Ready to start', 6: 'Start tryout', 7: 'Question 1', 8: 'Question 2', 9: 'Review answers', 10: 'Save result', 11: 'Next subtest', 12: 'Turn on internet', 13: 'Upload result', 14: 'Tryout result' };
 const stepLabels = ['Rules', 'Download', 'Offline', 'Ready'];
 
@@ -41,7 +42,33 @@ function ReviewCard({ answers, doubtful }: { answers: Record<number, Choice>; do
 function ResultCard() { return <section className="card result-card"><div className="result-icon"><Check size={25} /></div><p className="eyebrow">Tryout submitted</p><h2>Your result is being prepared</h2><p>We are processing your answers. You can check back here shortly.</p><div className="result-status"><span className="pulse" /> Processing result</div><Button variant="secondary" onClick={() => undefined}>View discussion when ready <ChevronRight size={16} /></Button></section>; }
 
 function App() {
-  const [screen, setScreen] = useState<ScreenId>(1); const [consent, setConsent] = useState(false); const [downloadProgress, setDownloadProgress] = useState(0); const [answers, setAnswers] = useState<Record<number, Choice>>({}); const [doubtful, setDoubtful] = useState<Set<number>>(new Set()); const [network, setNetwork] = useState<NetworkMode>('online'); const networkRef = useRef<NetworkMode>(network); const [attemptStatus, setAttemptStatus] = useState<AttemptStatus>('not_started'); const [timeRemaining, setTimeRemaining] = useState(272); const [networkWarningSeconds, setNetworkWarningSeconds] = useState<number | null>(null); const [syncStatus, setSyncStatus] = useState<'saved' | 'pending_sync'>('saved'); const [uploadStatus, setUploadStatus] = useState<UploadStatus>('idle'); const [menuOpen, setMenuOpen] = useState(false);
+  const [screen, setScreen] = useState<ScreenId>(1); const [consent, setConsent] = useState(false); const [downloadProgress, setDownloadProgress] = useState(0); const [answers, setAnswers] = useState<Record<number, Choice>>({}); const [doubtful, setDoubtful] = useState<Set<number>>(new Set()); const [network, setNetwork] = useState<NetworkMode>('online'); const networkRef = useRef<NetworkMode>(network); const [attemptStatus, setAttemptStatus] = useState<AttemptStatus>('not_started'); const [timeRemaining, setTimeRemaining] = useState(272); const [networkWarningSeconds, setNetworkWarningSeconds] = useState<number | null>(null); const [syncStatus, setSyncStatus] = useState<'saved' | 'pending_sync'>('saved'); const [uploadStatus, setUploadStatus] = useState<UploadStatus>('idle'); const [menuOpen, setMenuOpen] = useState(false); const [restored, setRestored] = useState(false);
+  useEffect(() => {
+    try {
+      const raw = window.sessionStorage.getItem('ruanguji-to-offline-attempt');
+      if (raw) {
+        const snapshot = JSON.parse(raw) as Partial<AttemptSnapshot>;
+        if (typeof snapshot.screen === 'number' && snapshot.screen >= 1 && snapshot.screen <= 14) setScreen(snapshot.screen as ScreenId);
+        if (typeof snapshot.consent === 'boolean') setConsent(snapshot.consent);
+        if (typeof snapshot.downloadProgress === 'number') setDownloadProgress(snapshot.downloadProgress);
+        if (snapshot.answers && typeof snapshot.answers === 'object') setAnswers(snapshot.answers);
+        if (Array.isArray(snapshot.doubtful)) setDoubtful(new Set(snapshot.doubtful));
+        if (snapshot.network === 'online' || snapshot.network === 'offline') setNetwork(snapshot.network);
+        if (snapshot.attemptStatus) setAttemptStatus(snapshot.attemptStatus);
+        if (typeof snapshot.timeRemaining === 'number') setTimeRemaining(snapshot.timeRemaining);
+        if (snapshot.syncStatus === 'saved' || snapshot.syncStatus === 'pending_sync') setSyncStatus(snapshot.syncStatus);
+      }
+    } catch {
+      window.sessionStorage.removeItem('ruanguji-to-offline-attempt');
+    } finally {
+      setRestored(true);
+    }
+  }, []);
+  useEffect(() => {
+    if (!restored) return;
+    const snapshot: AttemptSnapshot = { screen, consent, downloadProgress, answers, doubtful: Array.from(doubtful), network, attemptStatus, timeRemaining, syncStatus };
+    window.sessionStorage.setItem('ruanguji-to-offline-attempt', JSON.stringify(snapshot));
+  }, [restored, screen, consent, downloadProgress, answers, doubtful, network, attemptStatus, timeRemaining, syncStatus]);
   useEffect(() => { networkRef.current = network; }, [network]);
   useEffect(() => { if (screen !== 3 || downloadProgress >= 100) return; const timer = window.setInterval(() => setDownloadProgress(value => Math.min(100, value + 20)), 350); return () => window.clearInterval(timer); }, [screen, downloadProgress]);
   useEffect(() => { if (downloadProgress === 100 && screen === 3) window.setTimeout(() => setScreen(4), 400); }, [downloadProgress, screen]);
