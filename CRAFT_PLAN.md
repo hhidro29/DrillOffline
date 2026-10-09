@@ -287,9 +287,10 @@ Perbaikan berikutnya:
 
 - Screens: `CRAFT-101`–`CRAFT-114`
 - Viewport: `360 × 740`
-- Status: Changes Requested — functional flow is reviewable; visual parity with Figma is still pending.
+- Status: Functional flow approved; visual parity with Figma is still pending.
 - Evidence: local Vite preview inspected in browser at `http://localhost:5173/`.
 - Verified: consent gating, download progress, offline/online CTA gating, question selection, doubtful state, review summary, save flow, upload flow, result state, and menu jump navigation.
+- User review: flow confirmed okay.
 - Fixed during review: review menu string IDs could render a blank screen; IDs are now converted to numeric `ScreenId` values before routing.
 - Remaining: visual sign-off against the source Figma frames and product decisions for countdown cancellation, backend result timing, and upload error recovery.
 
