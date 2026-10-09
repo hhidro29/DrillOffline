@@ -1,30 +1,30 @@
 # Git Workflow
 
-Workflow ringan untuk task di `TASKS.md`.
+Workflow ringan untuk epic dan task di `TASKS.md`.
 
 ## Branch
 
-- Fitur: `feat/TOFF-###-nama-singkat`
-- Perbaikan: `fix/TOFF-###-nama-singkat`
-- Dokumentasi: `docs/TOFF-###-nama-singkat`
+- Fitur: `feat/EPIC-###-nama-singkat`
+- Perbaikan: `fix/EPIC-###-nama-singkat`
+- Dokumentasi: `docs/EPIC-###-nama-singkat`
 
 Gunakan nama singkat dengan huruf kecil dan tanda hubung. Kerjakan satu task utama per branch.
 
 ## Commit
 
-Awali subject commit dengan ID task:
+Awali subject commit dengan ID epic atau task:
 
 ```text
-TOFF-###: ringkasan perubahan
+EPIC-###: ringkasan perubahan
 ```
 
-Contoh: `TOFF-008: add offline package download state`
+Contoh: `EPIC-004: add offline package download state`
 
 Commit harus menggambarkan perubahan yang benar-benar sudah dibuat. Jangan tandai task **Done** sebelum commit tercatat.
 
 ## Penutupan task
 
-Saat task selesai:
+Saat task atau epic selesai:
 
 1. Pastikan perubahan yang relevan sudah masuk ke commit.
 2. Perbarui status dan catatan task di `TASKS.md`.
