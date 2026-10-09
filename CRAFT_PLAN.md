@@ -40,6 +40,7 @@ flowchart LR
 | CRAFT-004 | Inventarisasi dan lokalkan asset | CRAFT-001 | Asset map dan file asset lokal | Ready for Review |
 | CRAFT-005 | Rancang komponen reusable | CRAFT-002, CRAFT-003, CRAFT-004 | Component map dan API props | Ready for Review |
 | CRAFT-006 | Siapkan app shell dan routing prototype React | CRAFT-002, CRAFT-005 | React shell, screen state, dan navigation model | Ready for Review |
+| CRAFT-007 | Kunci state contract dan test fixture | CRAFT-002, CRAFT-006 | State matrix, fixture path, dan acceptance criteria | Ready for Review |
 | CRAFT-101 | Craft screen 01 — Aturan & Persetujuan | CRAFT-006 | Frame `15:9085` | Ready for Review |
 | CRAFT-102 | Craft screen 02 — Unduh Soal | CRAFT-006 | Frame `6:419` | Ready for Review |
 | CRAFT-103 | Craft screen 03 — Unduh Soal — Proses | CRAFT-006 | Frame `7:978` | Ready for Review |
@@ -54,12 +55,62 @@ flowchart LR
 | CRAFT-112 | Craft screen 12 — Nyalakan Internet — Panduan | CRAFT-006 | Frame `15:9660` | Ready for Review |
 | CRAFT-113 | Craft screen 13 — Unggah & Kumpulkan Hasil | CRAFT-006 | Frame `15:9810` | Ready for Review |
 | CRAFT-114 | Craft screen 14 — Hasil Tryout | CRAFT-006 | Frame `11:2632` | Ready for Review |
-| CRAFT-201 | Integrasikan transisi antar-screen | CRAFT-101–114 | Flow dapat dijalankan dari awal sampai akhir | Planned |
-| CRAFT-202 | Implementasikan state offline dan network enforcement | CRAFT-002, CRAFT-201 | State online, offline, warning, dan terminasi | Planned |
-| CRAFT-203 | Implementasikan timer, autosave, submit, dan pending upload | CRAFT-201, CRAFT-202 | Perilaku tryout sesuai baseline MVP | Planned |
-| CRAFT-204 | Review responsive dan overflow mobile | CRAFT-101–114 | Semua screen stabil pada viewport target | Planned |
+| CRAFT-201 | Integrasikan transisi antar-screen | CRAFT-101–114 | Flow dapat dijalankan dari awal sampai akhir | Ready for Review |
+| CRAFT-202 | Implementasikan state offline dan network enforcement | CRAFT-002, CRAFT-201 | State online, offline, warning, dan terminasi | Ready for Review |
+| CRAFT-203 | Implementasikan timer, autosave, submit, dan pending upload | CRAFT-201, CRAFT-202 | Perilaku tryout sesuai baseline MVP | Ready for Review |
+| CRAFT-204 | Review responsive dan overflow mobile | CRAFT-101–114 | Semua screen stabil pada viewport target | Ready for Review |
 | CRAFT-205 | Review visual end-to-end | CRAFT-201–204 | Daftar mismatch dan hasil iterasi terakhir | Planned |
 | CRAFT-206 | Final cleanup dan handoff | CRAFT-205 | Prototype siap diteruskan ke development | Planned |
+| CRAFT-208 | Jalankan automated smoke test untuk state dan flow | CRAFT-007, CRAFT-201–203 | Test matrix lulus dan evidence tersimpan | Planned |
+| CRAFT-209 | Visual regression per state, bukan hanya per screen | CRAFT-007, CRAFT-204 | Screenshot state matrix dan daftar mismatch | Planned |
+| CRAFT-210 | Tutup defect dan lakukan regression terakhir | CRAFT-208, CRAFT-209 | Semua defect closed atau dicatat sebagai residual risk | Planned |
+| CRAFT-213 | Audit loophole anti-internet dan integritas attempt | CRAFT-002, CRAFT-007 | Threat model, severity, dan mitigation backlog | Ready for Review |
+| CRAFT-214 | Finalisasi boundary enforcement attempt aktif | CRAFT-213 | Policy screen 07–11 dan boundary upload screen 12–13 | Ready for Review |
+| CRAFT-215 | Uji abuse case dan recovery attempt | CRAFT-213, CRAFT-214 | Abuse-case matrix dan evidence | Planned |
+| CRAFT-216 | State-driven screen 04 — Persiapan Offline | CRAFT-202, CRAFT-209 | Step count, checklist, CTA, dan visual mengikuti network state | Ready for Review |
+| CRAFT-217 | Audit visual screen 09 — Tinjau Jawaban | CRAFT-109, CRAFT-204 | Review screen bersih pada posisi scroll 0 dan sesuai frame Figma | Changes Requested |
+
+#### Evidence terbaru
+
+- `npm run build` berhasil pada 10 Oktober 2026.
+- Flow yang diuji pada `http://localhost:4173/`: mulai attempt → koneksi online terdeteksi → input dan navigasi terkunci → kembali offline → timer lanjut → online selama 25 detik → attempt terminated → `pending_sync` → upload berhasil → hasil tryout.
+- Kontrol `Open network simulator` tersedia di header screen pengerjaan karena navbar utama disembunyikan pada frame Figma tersebut.
+- Audit E2E menemukan network enforcement belum mencakup seluruh attempt: screen 09–11 masih dapat dipakai saat Online. Screen 05–06 dicatat sebagai pre-check UX terpisah, bukan boundary nudge anti-cheat. Detail threat model dicatat di `SECURITY_AUDIT.md`.
+- Defect `screen 12 tetap 0/2 saat simulator Online` ditemukan melalui screenshot review dan diperbaiki dengan state-driven rendering.
+- Verifikasi tambahan: screen 12 Online menampilkan `1/2` dan CTA aktif; screen 12 Offline menampilkan `0/2` dan CTA disabled.
+- Defect `screen 04 tetap 1/2 saat simulator Offline` diperbaiki dengan state-driven step count, checklist, success styling, dan CTA.
+- Browser smoke evidence: screen 08 Online menampilkan overlay `25 detik` dan disabled controls; screen 09 Online menampilkan overlay dan disabled `Kembali ke Soal`/`Simpan Hasil` controls.
+- Upload recovery now has visible `uploading`, `failed`, `pending_sync`, and `Coba Lagi` states before screen 14 is reachable.
+
+#### REVIEW-002 — Screen 09 visual parity
+
+- Screen: `CRAFT-109` / node `13:3198`
+- Evidence: screenshot user `Screenshot 2026-10-10 at 6.27.35 AM.png`
+- Target viewport: `360 × 740`, posisi scroll `0`
+- Status: `Changes Requested`
+
+Temuan yang terlihat:
+
+- [ ] Capture tidak dimulai dari top-level viewport yang bersih: ada elemen turquoise terpotong di bagian paling atas dan band putih/abu-abu sebelum hero. Builder perlu memastikan screen tidak mewarisi scroll offset, transform, atau tinggi container dari screen sebelumnya.
+- [ ] Hero, judul, alert, dan card review perlu diverifikasi ulang terhadap koordinat frame Figma; screenshot saat ini hanya menampilkan sebagian screen sehingga tidak membuktikan posisi sticky action, subtitle, dan review groups.
+- [ ] Alert merah terlihat terlalu dominan terhadap card peach: cek kembali tinggi, padding, radius, border, dan hubungan jarak alert ke card detail berdasarkan frame `13:3198`.
+- [ ] Judul alert dan copy kedua harus tetap berada dalam batas inner alert pada lebar `360px`; jangan mengandalkan `white-space: nowrap` bila menyebabkan clipping pada device atau zoom berbeda.
+- [ ] Isi card detail di bawah alert perlu diuji sampai bagian metrik, timer, info banner, subtitle, dan group soal; screenshot parsial belum cukup untuk menyatakan screen pixel-perfect.
+
+Task untuk builder:
+
+- [ ] Render screen 09 pada fresh load dan setelah navigasi dari screen 08, lalu set `scrollTop = 0` sebelum capture.
+- [ ] Bandingkan screenshot dengan node Figma `13:3198` pada viewport `360 × 740`; catat koordinat top/left/width/height untuk hero, title, outer card, alert, detail card, sticky action, subtitle, dan review groups.
+- [ ] Hapus sumber offset yang tidak berasal dari Figma. Jangan mengubah layout screen 10 modal sebagai kompensasi untuk masalah screen 09.
+- [ ] Buat evidence screenshot full viewport untuk state normal dan state setelah memilih `Simpan Hasil`.
+- [ ] Jalankan `npm run build` dan `git diff --check` setelah revisi.
+
+Acceptance criteria:
+
+- [ ] Tidak ada elemen terpotong atau band kosong yang tidak ada di Figma pada top viewport.
+- [ ] Screen 09 tetap stabil saat dibuka langsung dari menu maupun melalui transisi screen 08 → 09.
+- [ ] Semua elemen utama screen 09 terlihat dan tidak tertutup sticky action pada viewport target.
+- [ ] Screenshot evidence full viewport tersedia untuk review planner sebelum status dikembalikan ke `Ready for Review`.
 
 ## Task fondasi
 
@@ -135,11 +186,11 @@ flowchart TD
 | Eligibility | `public`, `offline_branch_active`, `offline_branch_not_started` | Public tetap ke flow online; offline branch masuk flow ini; sesi belum aktif menampilkan status tunggu |
 | Download | `idle`, `downloading`, `completed`, `failed` | Progress, CTA, retry, dan pesan error berubah sesuai status |
 | Consent | `unchecked`, `checked` | CTA utama disabled atau enabled |
-| Network | `online`, `offline`, `unknown` | Checklist, overlay, CTA upload, dan status sinkronisasi berubah |
+| Network | `online`, `offline`, `unknown` | Checklist dan upload gate berubah; overlay enforcement hanya aktif selama attempt |
 | Attempt | `not_started`, `active`, `reviewing`, `locked`, `terminated` | Menentukan apakah soal, timer, dan navigasi dapat dipakai |
 | Answer | `unanswered`, `answered`, `doubtful` | Nomor soal, pilihan jawaban, ringkasan, dan penanda ragu-ragu berubah |
 | Timer | `running`, `paused_by_network`, `expired` | Timer berjalan, berhenti sementara, atau otomatis mengumpulkan |
-| Network enforcement | `clear`, `warning_0_to_25s`, `terminated` | Input dikunci saat online; attempt dihentikan setelah 25 detik sesuai baseline PM |
+| Network enforcement | `inactive`, `clear`, `warning_0_to_25s`, `terminated` | Enforcement aktif hanya selama attempt; input dikunci saat online dan attempt dihentikan setelah 25 detik sesuai baseline PM |
 | Upload | `not_ready`, `ready`, `uploading`, `uploaded`, `failed`, `pending_sync` | CTA, progress, retry, dan status hasil berubah |
 | Result | `waiting`, `available`, `error` | Menampilkan status pemrosesan atau CTA pembahasan |
 
@@ -161,6 +212,8 @@ flowchart TD
 - Jika koneksi kembali offline dalam 25 detik, overlay ditutup dan timer dilanjutkan.
 - Jika koneksi tetap online selama 25 detik, attempt menjadi `terminated` dan tidak dapat dilanjutkan.
 
+Boundary enforcement: nudge anti-internet dimulai ketika attempt masuk screen pengerjaan dan berlaku sampai attempt disimpan atau terminated. Persiapan download tidak memakai nudge anti-cheat; persiapan upload memakai gate koneksi yang terpisah.
+
 **Review dan simpan**
 
 - Screen 09 memperlihatkan soal terjawab, dilewati, dan ragu-ragu.
@@ -181,6 +234,7 @@ flowchart TD
 3. State error download dan upload yang perlu ditampilkan di prototype belum memiliki screen khusus di section ini.
 4. Apakah hasil pada screen 14 langsung tersedia setelah upload atau selalu masuk state menunggu?
 5. Apakah event `NETWORK_RECOVERED`, koneksi terdeteksi, dan terminasi harus terlihat di UI peserta atau hanya dikirim ke dashboard pengawas?
+6. Apakah enforcement harus mencakup screen review, konfirmasi simpan, dan transisi subtes selama attempt belum final? Baseline planning saat ini menganggap iya.
 
 ### CRAFT-003 — Token visual
 
@@ -226,6 +280,22 @@ flowchart TD
 - [ ] Data demo terpusat agar isi screen konsisten.
 - [ ] Komponen visual tidak bergantung pada screen tertentu.
 
+## CRAFT-007 — State contract dan fixture path
+
+- `network`: `online | offline`, controlled by the review menu and retained across screens.
+- `attemptStatus`: `not_started | active | reviewing | locked | terminated`.
+- Attempt boundary: screens 07–11. Online detection locks controls, pauses the timer, and starts a 25-second warning for every non-terminated attempt state.
+- Recovery: returning offline clears the warning and resumes the timer; remaining online terminates the attempt and sets `syncStatus=pending_sync`.
+- Upload boundary: screens 12–13 use a separate connection gate. Upload exposes `idle | uploading | failed`; failed uploads keep `pending_sync` and expose retry.
+- Fixture path for browser review: screen 01 consent → screen 02 download → screen 03 progress → screen 04 offline gate → screen 05 readiness → screen 06 start → screens 07–11 attempt boundary → screen 12 online gate → screen 13 upload/retry → screen 14 result waiting.
+- Acceptance evidence is tracked in `TEST_PLAN.md`; visual sign-off remains a human review action in `USER_ACTIONS.md`.
+
+### CRAFT-202/203/214/216 review notes
+
+- Screen 08 and screen 09 were browser-smoke checked at 360 × 740 with Online mode; the warning overlay appeared and the visible controls were disabled.
+- Screen 04 now renders `1/2` while Online and `2/2` while Offline, including checklist and CTA state.
+- Screen 13 exposes upload failure and retry UI while preserving pending synchronization.
+
 ## Template task screen
 
 Setiap task `CRAFT-101` sampai `CRAFT-114` menggunakan checklist ini.
@@ -263,6 +333,10 @@ Setiap task `CRAFT-101` sampai `CRAFT-114` menggunakan checklist ini.
 8. `CRAFT-112` dan `CRAFT-113` — Menyalakan internet dan upload hasil.
 9. `CRAFT-114` — Hasil tryout.
 10. `CRAFT-201` sampai `CRAFT-206` — Integrasi, behavior offline, review, dan handoff.
+11. `CRAFT-213` — Audit loophole dan integritas attempt.
+12. `CRAFT-214` — Finalisasi boundary enforcement attempt aktif.
+13. `CRAFT-215` — Abuse-case test dan recovery regression.
+14. `CRAFT-216` — State-driven screen 04 dan regression persiapan offline.
 
 ## Format catatan review
 
