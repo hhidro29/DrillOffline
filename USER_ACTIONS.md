@@ -2,7 +2,7 @@
 
 ## USER-ACTION-001 — Review prototype against source Figma
 
-- Status: Open — functional review can proceed; visual review still needs Figma comparison.
+- Status: Functional review complete; visual review still needs Figma comparison.
 - Task terkait: `CRAFT-101`–`CRAFT-114`
 - Screen/node: Section `15:7547`
 - Hambatan: The prototype is implemented and self-reviewed at 360 × 740, but final visual approval still needs a human comparison against the source Figma frames.
