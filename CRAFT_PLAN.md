@@ -48,12 +48,12 @@ flowchart LR
 | CRAFT-106 | Craft screen 06 — Mulai Tryout — Konfirmasi | CRAFT-006 | Frame `37:10312` | Ready for Review |
 | CRAFT-107 | Craft screen 07 — Pengerjaan — Soal 1 | CRAFT-006 | Frame `8:2053` | Ready for Review |
 | CRAFT-108 | Craft screen 08 — Pengerjaan — Soal 2 | CRAFT-006 | Frame `8:2154` | Ready for Review |
-| CRAFT-109 | Craft screen 09 — Tinjau Jawaban | CRAFT-006 | Frame `13:3198` | Changes Requested |
-| CRAFT-110 | Craft screen 10 — Simpan Hasil — Konfirmasi | CRAFT-006 | Frame `15:7308` | Changes Requested |
-| CRAFT-111 | Craft screen 11 — Subtes Berikutnya | CRAFT-006 | Frame `8:2032` | Changes Requested |
-| CRAFT-112 | Craft screen 12 — Nyalakan Internet — Panduan | CRAFT-006 | Frame `15:9660` | Changes Requested |
-| CRAFT-113 | Craft screen 13 — Unggah & Kumpulkan Hasil | CRAFT-006 | Frame `15:9810` | Changes Requested |
-| CRAFT-114 | Craft screen 14 — Hasil Tryout | CRAFT-006 | Frame `11:2632` | Changes Requested |
+| CRAFT-109 | Craft screen 09 — Tinjau Jawaban | CRAFT-006 | Frame `13:3198` | Ready for Review |
+| CRAFT-110 | Craft screen 10 — Simpan Hasil — Konfirmasi | CRAFT-006 | Frame `15:7308` | Ready for Review |
+| CRAFT-111 | Craft screen 11 — Subtes Berikutnya | CRAFT-006 | Frame `8:2032` | Ready for Review |
+| CRAFT-112 | Craft screen 12 — Nyalakan Internet — Panduan | CRAFT-006 | Frame `15:9660` | Ready for Review |
+| CRAFT-113 | Craft screen 13 — Unggah & Kumpulkan Hasil | CRAFT-006 | Frame `15:9810` | Ready for Review |
+| CRAFT-114 | Craft screen 14 — Hasil Tryout | CRAFT-006 | Frame `11:2632` | Ready for Review |
 | CRAFT-201 | Integrasikan transisi antar-screen | CRAFT-101–114 | Flow dapat dijalankan dari awal sampai akhir | Planned |
 | CRAFT-202 | Implementasikan state offline dan network enforcement | CRAFT-002, CRAFT-201 | State online, offline, warning, dan terminasi | Planned |
 | CRAFT-203 | Implementasikan timer, autosave, submit, dan pending upload | CRAFT-201, CRAFT-202 | Perilaku tryout sesuai baseline MVP | Planned |
@@ -292,6 +292,7 @@ Perbaikan berikutnya:
 - Verified: consent gating, download progress, offline/online CTA gating, question selection, doubtful state, review summary, save flow, upload flow, result state, and menu jump navigation.
 - User review: flow confirmed okay.
 - Fixed during review: review menu string IDs could render a blank screen; IDs are now converted to numeric `ScreenId` values before routing. The preparation screens were then aligned against their Figma references: removed the invented stepper, restored Indonesian copy, matched navbar alignment, rebuilt the disclaimer icon from local assets, matched the download card/progress/warning layout, added the long Android connection guide and completed 2/2 readiness state, used the exported Figma confirmation screenshot for screen 06 with functional click targets over the modal actions, and replaced the generic question card with the full-screen instruction, pagination, timer, offline pill, passage, and sticky navigation structure for screens 07–08.
+- Continued visual craft: screens 09–14 now use Figma-matched layouts and local exported illustration assets. Screen 09 includes the review alert, progression metrics, timer, skipped/doubtful groups, and sticky actions. Screen 10 uses the Figma warning modal and keeps the confirmation transitions. Screen 11 is the subtest summary state; screens 12–13 are the offline upload preparation states; screen 14 shows the result pending state and score summary. All six screens were inspected in the local browser at 360 × 740; final status is Ready for Review, pending visual sign-off.
 - Remaining: visual sign-off against the source Figma frames and product decisions for countdown cancellation, backend result timing, and upload error recovery.
 
 ## Definisi selesai
