@@ -82,7 +82,7 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 #### Evidence terbaru
 
 - `npm run build` berhasil pada 10 Oktober 2026.
-- Flow yang diuji pada `http://localhost:4173/`: mulai attempt → koneksi online terdeteksi → input dan navigasi terkunci → kembali offline → timer lanjut → online selama 25 detik → attempt terminated → `pending_sync` → upload berhasil → hasil tryout.
+- Flow yang diuji pada `http://localhost:3000/`: mulai attempt → koneksi online terdeteksi → input dan navigasi terkunci → kembali offline → timer lanjut → online selama 25 detik → attempt terminated → `pending_sync` → upload berhasil → hasil tryout.
 - Kontrol `Open network simulator` tersedia di header screen pengerjaan karena navbar utama disembunyikan pada frame Figma tersebut.
 - Audit E2E menemukan network enforcement belum mencakup seluruh attempt: screen 09–11 masih dapat dipakai saat Online. Screen 05–06 dicatat sebagai pre-check UX terpisah, bukan boundary nudge anti-cheat. Detail threat model dicatat di `SECURITY_AUDIT.md`.
 - Defect `screen 12 tetap 0/2 saat simulator Online` ditemukan melalui screenshot review dan diperbaiki dengan state-driven rendering.
@@ -564,7 +564,7 @@ Perbaikan berikutnya:
 - Screens: `CRAFT-101`–`CRAFT-114`
 - Viewport: `360 × 740`
 - Status: Functional flow approved; visual parity with Figma is still pending.
-- Evidence: local Vite preview inspected in browser at `http://localhost:5173/`.
+- Evidence: local Vite preview inspected in browser at `http://localhost:3000/`.
 - Verified: consent gating, download progress, offline/online CTA gating, question selection, doubtful state, review summary, save flow, upload flow, result state, and menu jump navigation.
 - User review: flow confirmed okay.
 - Fixed during review: review menu string IDs could render a blank screen; IDs are now converted to numeric `ScreenId` values before routing. The preparation screens were then aligned against their Figma references: removed the invented stepper, restored Indonesian copy, matched navbar alignment, rebuilt the disclaimer icon from local assets, matched the download card/progress/warning layout, added the long Android connection guide and completed 2/2 readiness state, used the exported Figma confirmation screenshot for screen 06 with functional click targets over the modal actions, and replaced the generic question card with the full-screen instruction, pagination, timer, offline pill, passage, and sticky navigation structure for screens 07–08.
