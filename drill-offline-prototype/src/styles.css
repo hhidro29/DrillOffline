@@ -22,6 +22,8 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .prep-heading h1 { width: 210px; margin: 0; font-size: 16px; line-height: 24px; }
 .step-ring { display: grid; place-items: center; width: 60px; height: 60px; flex: 0 0 60px; color: #5e677b; border: 6px solid #e8edf3; border-radius: 50%; font-size: 16px; font-weight: 700; }
 .step-ring-ready { border-color: #4caf50; }
+.step-ring-half { padding: 6px; border: 0; background: conic-gradient(#4caf50 0deg 180deg, #e8edf3 180deg 360deg); }
+.step-ring-half span { display: grid; place-items: center; width: 48px; height: 48px; background: #fff; border-radius: 50%; }
 .checklist { display: flex; flex-direction: column; gap: 8px; }
 .checklist-item { display: flex; align-items: center; gap: 4px; width: 100%; min-height: 34px; padding: 8px 16px; color: #2c313a; background: #f2f5fa; border-radius: 100px; font-size: 12px; line-height: 18px; }
 .checklist-item > img:first-child { width: 18px; height: 18px; flex: 0 0 18px; }

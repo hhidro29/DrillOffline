@@ -57,4 +57,5 @@
 - Long preparation guides scroll inside the content panel while their bottom CTA remains anchored to the 360 × 740 frame. Question and summary screens use internal scroll containers with fixed footers and no horizontal overflow.
 - The app canvas now caps at 740px but follows the actual browser `100dvh`, so a 710px in-app content viewport keeps the entire sticky CTA visible instead of clipping its bottom edge.
 - Result summary uses exported Figma score background, confetti, result ring, subbab icon, and video thumbnails; recommendation cards include the visible video titles.
+- Upload screen progress ring now renders the Figma half-green arc for `1/2`, and its alert uses the exported red Figma status icon.
 - Latest browser audit checked all 11 sidebar jumps, full scroll heights, scroll reset between states, correct-answer flow, wrong-answer flow, timeout, upload failed/retry, and Online/Offline gates. `npm run build` and `git diff --check` pass.
