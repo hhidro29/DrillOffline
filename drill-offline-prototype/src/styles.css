@@ -5,8 +5,8 @@
 body { margin: 0; min-width: 320px; background: #f2f5fa; }
 button { border: 0; font: inherit; cursor: pointer; }
 button:disabled { cursor: not-allowed; opacity: .55; }
-.app-shell { position: relative; width: 360px; height: 740px; min-height: 740px; max-height: 740px; margin: 0 auto; overflow: hidden; background: #f2f5fa; }
-.app-shell > .content { height: 612px; min-height: 0; overflow-y: auto; }
+.app-shell { position: relative; width: 360px; height: min(740px, 100dvh); min-height: 0; max-height: 740px; margin: 0 auto; overflow: hidden; background: #f2f5fa; }
+.app-shell > .content { height: calc(100% - 60px); min-height: 0; overflow-y: auto; }
 .navbar { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; height: 60px; padding: 10px 16px; background: #fff; }
 .icon-button { display: grid; place-items: center; width: 40px; height: 40px; padding: 0; background: transparent; }
 .icon-button img { width: 40px; height: 40px; }
@@ -57,7 +57,7 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .ready-banner { position: absolute; top: 276px; right: 12px; left: 12px; z-index: 2; display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 11px 12px; color: #2c313a; background: #e5f6e5; border: 1px solid #4caf50; border-radius: 12px; font-size: 12px; line-height: 16px; }
 .ready-banner img { width: 24px; height: 24px; }
 .ready-banner + .primary-cta { position: absolute; right: 12px; bottom: 12px; left: 12px; width: calc(100% - 24px); }
-.drill-screen { position: relative; width: 360px; height: 740px; min-height: 740px; max-height: 740px; overflow: hidden; background: #e8f1ff; }
+.drill-screen { position: relative; width: 360px; height: min(740px, 100dvh); min-height: 0; max-height: 740px; overflow: hidden; background: #e8f1ff; }
 .question-screen { display: flex; flex-direction: column; }
 .question-hero { position: relative; height: 197px; padding: 24px 16px; color: #fff; background: linear-gradient(135deg, #3658d8, #20a4b0); }
 .question-hero-title { display: flex; flex-direction: column; gap: 4px; }
@@ -104,7 +104,7 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .result-note span { color: #5e677b; font-size: 12px; line-height: 18px; }
 .result-note-timeout { color: #e52a34; }
 .preparation-screen { display: flex; flex-direction: column; }
-.preparation-screen .content { flex: 1; min-height: 680px; overflow-y: auto; }
+.preparation-screen .content { flex: 1; min-height: 0; overflow-y: auto; }
 .online-content { padding-bottom: 90px; }
 .upload-guide-card { min-height: 540px; }
 .upload-card { min-height: 420px; }

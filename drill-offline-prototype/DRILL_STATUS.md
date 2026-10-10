@@ -55,5 +55,6 @@
 - Final question-frame alignment was checked against the Figma coordinates: the info card starts at `y=233` and the question card at `y=319` within the 360px frame after resetting the scroll container.
 - The question stem now matches the Figma inner frame at `y=335` with `107px` height; the option stack begins at `y=458`.
 - Long preparation guides scroll inside the content panel while their bottom CTA remains anchored to the 360 × 740 frame. Question and summary screens use internal scroll containers with fixed footers and no horizontal overflow.
+- The app canvas now caps at 740px but follows the actual browser `100dvh`, so a 710px in-app content viewport keeps the entire sticky CTA visible instead of clipping its bottom edge.
 - Result summary uses exported Figma score background, confetti, result ring, subbab icon, and video thumbnails; recommendation cards include the visible video titles.
 - Latest browser audit checked all 11 sidebar jumps, full scroll heights, scroll reset between states, correct-answer flow, wrong-answer flow, timeout, upload failed/retry, and Online/Offline gates. `npm run build` and `git diff --check` pass.
