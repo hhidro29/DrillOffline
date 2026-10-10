@@ -70,7 +70,7 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-210 | Tutup defect dan lakukan regression terakhir | CRAFT-208, CRAFT-209 | Semua defect closed atau dicatat sebagai residual risk | Internal Review |
 | CRAFT-213 | Audit loophole anti-internet dan integritas attempt | CRAFT-002, CRAFT-007 | Threat model, severity, dan mitigation backlog | Internal Review |
 | CRAFT-214 | Finalisasi boundary enforcement attempt aktif | CRAFT-213 | Policy screen 07–11 dan boundary upload screen 12–13 | Internal Review |
-| CRAFT-215 | Uji abuse case dan recovery attempt | CRAFT-213, CRAFT-214 | Abuse-case matrix dan evidence | Planned |
+| CRAFT-215 | Uji abuse case dan recovery attempt | CRAFT-213, CRAFT-214 | Abuse-case matrix dan evidence | Internal Review |
 | CRAFT-216 | State-driven screen 04 — Persiapan Offline | CRAFT-202, CRAFT-209 | Step count, checklist, floating CTA, dan visual mengikuti network state | Internal Review |
 | CRAFT-217 | Audit visual screen 09 — Tinjau Jawaban | CRAFT-109, CRAFT-204 | Review screen bersih pada posisi scroll 0 dan sesuai frame Figma | Internal Review |
 | CRAFT-218 | Audit visual screen 14 — Hasil Tryout | CRAFT-114, CRAFT-204 | Result screen full-bleed, tidak terpotong, dan sesuai frame Figma | Approved |
@@ -193,6 +193,20 @@ Regression result:
 - [x] Platform and production integrity risks remain listed in `SECURITY_AUDIT.md` (`L-001`–`L-009`) instead of being treated as resolved by this web prototype.
 
 Residual risk: exact pixel sign-off against source Figma remains planner-owned where the connected design-context tool was unavailable; the affected review notes identify the remaining comparison step.
+
+#### CRAFT-215 — Abuse-case dan recovery attempt
+
+- Status: `Internal Review`
+- Matrix: `ABUSE_CASE_MATRIX.md`
+
+Results:
+
+- [x] Active-attempt online detection locks question, review, save, and next-subtest controls and starts the 25-second warning.
+- [x] Returning Offline clears the warning and resumes the timer; remaining Online time terminates the attempt and routes to upload preparation.
+- [x] Question navigator routing respects the same lock guard and preserves the originating question on return.
+- [x] Upload failure keeps `pending_sync` and exposes retry; successful retry reaches the result state.
+- [x] Client persistence and reload recovery are covered by the attempt snapshot implementation and `CRAFT-203` evidence.
+- [x] Device-level and trust-boundary risks remain explicit residual risks in `SECURITY_AUDIT.md`.
 
 #### REVIEW-011 — Figma asset delivery and screen 12 framing
 
