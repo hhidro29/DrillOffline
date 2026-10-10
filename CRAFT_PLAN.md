@@ -65,7 +65,7 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-204 | Review responsive dan overflow mobile | CRAFT-101–114 | Semua screen stabil pada viewport target | Internal Review |
 | CRAFT-205 | Review visual end-to-end | CRAFT-201–204 | Daftar mismatch dan hasil iterasi terakhir | Internal Review |
 | CRAFT-206 | Final cleanup dan handoff | CRAFT-205 | Prototype siap diteruskan ke development | Internal Review |
-| CRAFT-208 | Jalankan automated smoke test untuk state dan flow | CRAFT-007, CRAFT-201–203 | Test matrix lulus dan evidence tersimpan | Planned |
+| CRAFT-208 | Jalankan automated smoke test untuk state dan flow | CRAFT-007, CRAFT-201–203 | Test matrix lulus dan evidence tersimpan | Internal Review |
 | CRAFT-209 | Visual regression per state, bukan hanya per screen | CRAFT-007, CRAFT-204 | Screenshot state matrix dan daftar mismatch | Internal Review |
 | CRAFT-210 | Tutup defect dan lakukan regression terakhir | CRAFT-208, CRAFT-209 | Semua defect closed atau dicatat sebagai residual risk | Planned |
 | CRAFT-213 | Audit loophole anti-internet dan integritas attempt | CRAFT-002, CRAFT-007 | Threat model, severity, dan mitigation backlog | Internal Review |
@@ -161,6 +161,23 @@ Checklist:
 - [x] Browser review remains available at `http://localhost:3000/` with the 360 × 740 target frame.
 
 Handoff note: existing documentation and evidence edits remain in the working tree for planner review; no unrelated user files were reset or discarded.
+
+#### CRAFT-208 — Automated smoke test state dan flow
+
+- Scope: `TEST_PLAN.md` state matrix `SMOKE-001`–`SMOKE-014`
+- Status: `Internal Review`
+
+Evidence:
+
+- [x] Build gate passes with `npm run build`.
+- [x] Runtime root and representative Figma assets return HTTP 200 on `http://localhost:3000/`.
+- [x] Screen 07 grid opens screen 09 and preserves the attempt timer; screen 09 returns to screen 07.
+- [x] Screen 08 grid opens screen 09 and returns to screen 08.
+- [x] Online attempt state shows the enforcement overlay and disabled navigator/actions.
+- [x] Screen 11 offline and locked online states were captured at the 360 × 740 target viewport.
+- [x] `git diff --check` passes.
+
+The broader state matrix evidence remains in `TEST_PLAN.md`; planner review is still required before changing this task to `Approved`.
 
 #### REVIEW-011 — Figma asset delivery and screen 12 framing
 
