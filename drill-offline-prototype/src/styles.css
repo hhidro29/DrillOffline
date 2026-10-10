@@ -38,6 +38,8 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .download-warning { display: flex; align-items: center; gap: 8px; width: 100%; padding: 12px; color: #2c313a; background: #faf4e0; border: 1px solid #f26d0f; border-radius: 12px; text-align: left; }
 .download-warning img { width: 24px; height: 24px; flex: 0 0 24px; }
 .download-warning span { font-size: 12px; line-height: 18px; }
+.detail-meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; width: 100%; }
+.detail-meta span { padding: 4px 8px; color: #5e677b; background: #fff; border: 1px solid #dadfea; border-radius: 999px; font-size: 10px; line-height: 16px; }
 .offline-guide { display: flex; flex-direction: column; gap: 12px; }
 .offline-guide h2, .offline-guide h3, .offline-guide p { margin: 0; }
 .offline-guide h2 { font-size: 14px; line-height: 22px; }
@@ -107,6 +109,9 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .upload-status { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 20px 12px; text-align: center; }
 .upload-status strong { font-size: 14px; line-height: 22px; }
 .upload-status p { margin: 0; color: #5e677b; font-size: 12px; line-height: 18px; }
+.upload-status-failed { color: #e52a34; }
+.upload-error { display: flex; align-items: center; gap: 6px; width: 100%; padding: 8px; color: #e52a34; background: #f9eeef; border-radius: 8px; font-size: 11px; line-height: 16px; text-align: left; }
+.upload-error img { width: 18px; height: 18px; }
 .summary-screen { display: flex; flex-direction: column; background: #e8f1ff; }
 .summary-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 136px; padding: 24px 36px; color: #fff; background: linear-gradient(135deg, #3658d8, #20a4b0); text-align: center; }
 .summary-hero strong { font-size: 24px; line-height: 36px; }

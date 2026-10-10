@@ -46,7 +46,7 @@ function PreparationCard({ state, onReady }: { state: PreparationState; onReady:
 function DownloadPanel({ progress }: { progress?: number }) {
   return <div className="download-panel">
     <div className="download-icon"><img src={asset('download.svg')} alt="" /></div>
-    {progress === undefined ? <><strong>Download paket drill sebelum mulai</strong><p>Download paket drill untuk mengerjakan drill secara offline.</p></> : <><p>Sedang Mendownload Paket Drill · {progress}%</p><div className="progress-track"><span style={{ width: `${progress}%` }} /></div><div className="download-warning"><img src={asset('warning.svg')} alt="" /><span>Jangan tutup atau reload halaman ini.<br />Tunggu proses download selesai.</span></div></>}
+    {progress === undefined ? <><strong>Download paket drill sebelum mulai</strong><p>Download paket drill untuk mengerjakan drill secara offline.</p><div className="detail-meta" aria-label="Drill details"><span>{drillFixture.subject}</span><span>{drillFixture.topic}</span><span>{drillFixture.questionCount} soal</span><span>{drillFixture.durationMinutes} menit</span></div></> : <><p>Sedang Mendownload Paket Drill · {progress}%</p><div className="progress-track"><span style={{ width: `${progress}%` }} /></div><div className="download-warning"><img src={asset('warning.svg')} alt="" /><span>Jangan tutup atau reload halaman ini.<br />Tunggu proses download selesai.</span></div></>}
   </div>;
 }
 
@@ -105,8 +105,8 @@ function OnlineGuide({ onContinue }: { onContinue: () => void }) {
   return <main className="drill-screen preparation-screen"><Navbar /><div className="content online-content"><HeaderArtwork /><section className="prep-card upload-guide-card"><div className="prep-heading"><h1>Persiapan Mengumpulkan<br />Drill Soal Offline</h1><StepRing value="0/2" /></div><div className="checklist"><ChecklistItem icon="wifi.svg">Nyalakan Koneksi Internet</ChecklistItem><ChecklistItem icon="test.svg">Upload Hasil Drill Offline</ChecklistItem></div><div className="divider" /><div className="offline-guide"><h2>Cara menyalakan koneksi internet perangkat</h2><p>Nyalakan koneksi internet untuk mengunggah hasil drill.</p><div className="guide-tabs"><button className="selected">Android</button><button>iOS</button><button>Windows</button><button>MacOS</button></div><div className="guide-image" role="img" aria-label="Android internet guide" /><h3>Cara utama: Nonaktifkan mode terbang</h3><ol><li>Geser layar dari atas ke bawah untuk membuka panel pengaturan cepat.</li><li>Ketuk ikon pesawat untuk menonaktifkan Mode pesawat.</li><li>Pastikan Wi-Fi atau data seluler sudah menyala.</li></ol></div></section></div><div className="sticky-actions"><button className="primary-cta" onClick={onContinue}>Lanjutkan</button></div></main>;
 }
 
-function UploadScreen({ status, onUpload }: { status: 'ready' | 'uploading'; onUpload: () => void }) {
-  return <main className="drill-screen preparation-screen"><Navbar /><div className="content online-content"><HeaderArtwork /><section className="prep-card upload-card"><div className="prep-heading"><h1>Persiapan Mengumpulkan<br />Drill Soal Offline</h1><StepRing value="1/2" /></div><div className="checklist"><ChecklistItem icon="wifi.svg" status="complete">Nyalakan Koneksi Internet</ChecklistItem><ChecklistItem icon="test.svg">Upload Hasil Drill Offline</ChecklistItem></div><div className="divider" /><div className="upload-status"><div className="download-icon"><img src={asset(status === 'uploading' ? 'download.svg' : 'test.svg')} alt="" /></div><strong>{status === 'uploading' ? 'Mengunggah hasil drill…' : 'Hasil drill tersimpan di perangkat'}</strong><p>{status === 'uploading' ? 'Tunggu sampai proses upload selesai.' : 'Upload hasil drill supaya jawabanmu tercatat.'}</p>{status === 'uploading' && <div className="progress-track"><span style={{ width: '68%' }} /></div>}</div></section></div><div className="sticky-actions"><button className="primary-cta" disabled={status === 'uploading'} onClick={onUpload}>{status === 'uploading' ? 'Mengunggah…' : 'Upload & Kumpulkan Hasil'}</button></div></main>;
+function UploadScreen({ status, onUpload, onFail }: { status: 'ready' | 'uploading' | 'failed'; onUpload: () => void; onFail: () => void }) {
+  return <main className="drill-screen preparation-screen"><Navbar /><div className="content online-content"><HeaderArtwork /><section className="prep-card upload-card"><div className="prep-heading"><h1>Persiapan Mengumpulkan<br />Drill Soal Offline</h1><StepRing value="1/2" /></div><div className="checklist"><ChecklistItem icon="wifi.svg" status="complete">Nyalakan Koneksi Internet</ChecklistItem><ChecklistItem icon="test.svg">Upload Hasil Drill Offline</ChecklistItem></div><div className="divider" /><div className={`upload-status ${status === 'failed' ? 'upload-status-failed' : ''}`}><div className="download-icon"><img src={asset(status === 'uploading' ? 'download.svg' : 'test.svg')} alt="" /></div><strong>{status === 'uploading' ? 'Mengunggah hasil drill…' : status === 'failed' ? 'Upload belum berhasil' : 'Hasil drill tersimpan di perangkat'}</strong><p>{status === 'uploading' ? 'Tunggu sampai proses upload selesai.' : status === 'failed' ? 'Periksa koneksi internet lalu coba lagi.' : 'Upload hasil drill supaya jawabanmu tercatat.'}</p>{status === 'uploading' && <div className="progress-track"><span style={{ width: '68%' }} /></div>}{status === 'failed' && <div className="upload-error" role="alert"><img src={asset('warning.svg')} alt="" />Upload gagal. Coba lagi untuk melanjutkan.</div>}</div><button className="prototype-link" onClick={onFail}>Uji upload gagal</button></section></div><div className="sticky-actions"><button className="primary-cta" disabled={status === 'uploading'} onClick={onUpload}>{status === 'uploading' ? 'Mengunggah…' : status === 'failed' ? 'Coba Lagi' : 'Upload & Kumpulkan Hasil'}</button></div></main>;
 }
 
 function SummaryScreen({ onRestart }: { onRestart: () => void }) {
@@ -118,7 +118,7 @@ function App() {
   const [progress, setProgress] = useState(0);
   const [answer, setAnswer] = useState<number | null>(null);
   const [timer, setTimer] = useState(15 * 60);
-  const [uploadStatus, setUploadStatus] = useState<'ready' | 'uploading'>('ready');
+  const [uploadStatus, setUploadStatus] = useState<'ready' | 'uploading' | 'failed'>('ready');
 
   useEffect(() => {
     const onStart = () => setScreen('question');
@@ -157,11 +157,12 @@ function App() {
     setUploadStatus('uploading');
     window.setTimeout(() => setScreen('summary'), 700);
   };
+  const failUpload = () => setUploadStatus('failed');
   if (screen === 'question') return <QuestionScreen timer={timer} answer={answer} onAnswer={setAnswer} onNext={() => setScreen('confirm')} onTimeout={() => setScreen('timeout')} />;
   if (screen === 'confirm') return <ConfirmScreen timer={timer} answer={answer} onBack={() => setScreen('question')} onSubmit={submitAnswer} onTimeout={() => setScreen('timeout')} />;
   if (screen === 'wrong' || screen === 'timeout') return <ResultAnswerScreen kind={screen} timer={timer} onContinue={() => setScreen('online-guide')} />;
   if (screen === 'online-guide') return <OnlineGuide onContinue={() => setScreen('upload')} />;
-  if (screen === 'upload') return <UploadScreen status={uploadStatus} onUpload={upload} />;
+  if (screen === 'upload') return <UploadScreen status={uploadStatus} onUpload={upload} onFail={failUpload} />;
   if (screen === 'summary') return <SummaryScreen onRestart={() => { setAnswer(null); setTimer(15 * 60); setProgress(0); setUploadStatus('ready'); setScreen('download'); }} />;
 
   const shownState = screen === 'downloading' ? (progress || 26) : screen;

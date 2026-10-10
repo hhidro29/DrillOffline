@@ -32,7 +32,7 @@
 - Status: `Internal Review`
 - Implemented frames: `69:13066`, `69:13136`, `69:12792`
 - States: online guide, upload progress, and result summary.
-- Upload is simulated locally and reaches the summary after the progress state.
+- Upload is simulated locally and reaches the summary after the progress state; a visible failed/retry state is available for review.
 
 ## Assumptions and open decisions
 
@@ -40,6 +40,7 @@
 - The guide uses a neutral image placeholder until the Drill-specific instructional asset is exported from Figma.
 - The instructional image area remains a neutral placeholder until the Drill-specific image export is available.
 - The result summary uses local fixture values until a backend result contract is supplied.
+- The teacher-link entry is represented by the standalone app entry; authentication and link validation are outside this prototype.
 
 ## Evidence
 
