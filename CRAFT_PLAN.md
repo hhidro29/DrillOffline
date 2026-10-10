@@ -72,7 +72,7 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-214 | Finalisasi boundary enforcement attempt aktif | CRAFT-213 | Policy screen 07–11 dan boundary upload screen 12–13 | Internal Review |
 | CRAFT-215 | Uji abuse case dan recovery attempt | CRAFT-213, CRAFT-214 | Abuse-case matrix dan evidence | Internal Review |
 | CRAFT-216 | State-driven screen 04 — Persiapan Offline | CRAFT-202, CRAFT-209 | Step count, checklist, floating CTA, dan visual mengikuti network state | Internal Review |
-| CRAFT-217 | Audit visual screen 09 — Tinjau Jawaban | CRAFT-109, CRAFT-204 | Review screen bersih pada posisi scroll 0 dan sesuai frame Figma | Internal Review |
+| CRAFT-217 | Audit visual screen 09 — Tinjau Jawaban | CRAFT-109, CRAFT-204 | Review screen bersih pada posisi scroll 0 dan dapat discroll sampai ujung konten | Internal Review |
 | CRAFT-218 | Audit visual screen 14 — Hasil Tryout | CRAFT-114, CRAFT-204 | Result screen full-bleed, tidak terpotong, dan sesuai frame Figma | Approved |
 | CRAFT-219 | Rebuild screen 06 sebagai native bottom drawer | CRAFT-106, CRAFT-204 | Drawer konfirmasi native, bukan screenshot full-screen | Internal Review |
 | CRAFT-220 | Rebuild ikon navigator soal screen 07–08 | CRAFT-107, CRAFT-108 | Ikon grid/list sesuai Figma, bukan karakter teks | Internal Review |
@@ -81,6 +81,11 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-223 | Perbaiki delivery asset Figma | CRAFT-004, CRAFT-006 | Semua asset lokal tersedia di dev dan production preview | Approved |
 | CRAFT-224 | Wire touchpoint navigator soal ke screen 09 | CRAFT-220, CRAFT-221, CRAFT-109 | Ikon grid pada screen 07/08 membuka screen 09 dengan state attempt tetap utuh | Internal Review |
 | CRAFT-225 | Audit visual screen 11 — Subtes Berikutnya | CRAFT-111, CRAFT-204, CRAFT-223 | Screen 11 mengikuti frame Figma `8:2032` pada viewport 360 × 740 | Internal Review |
+| CRAFT-226 | Audit dan perbaiki scrollability lintas screen | CRAFT-107–109, CRAFT-204, CRAFT-217 | Scroll ownership, route reset, bottom clearance, dan evidence 14 screen | Internal Review |
+| CRAFT-227 | [P0] Ganti fixture soal dengan konten original bergaya UTBK | CRAFT-007, CRAFT-107, CRAFT-108 | Data-driven question fixture untuk screen 07–08 tanpa Lorem ipsum | Planned |
+| CRAFT-228 | [P0] Implementasikan state jawaban dan review end-to-end | CRAFT-224, CRAFT-227 | Pilihan jawaban, ragu-ragu, navigator, review, dan save memakai state nyata | Planned |
+| CRAFT-229 | [P0] Uji recovery attempt dan persistence prototype | CRAFT-202, CRAFT-203, CRAFT-228 | Reload, timer, pending sync, retry, dan recovery evidence | Planned |
+| CRAFT-230 | [P0] Finalisasi boundary anti-cheat produksi | CRAFT-213, CRAFT-214, CRAFT-215 | Keputusan platform/device enforcement di luar kemampuan React prototype | Blocked |
 
 #### Evidence terbaru
 
@@ -146,6 +151,122 @@ Acceptance criteria:
 
 Evidence: screen 11 was inspected at `http://localhost:3000/` in offline and locked online states. The offline capture shows the two-line header, 16 px card gap, local header/bottom patterns, and fixed footer coordinates; the online capture shows the disabled back and CTA state without layout shift.
 
+Scope note: screen 11 adalah **preview-only** untuk menunjukkan transisi ke subtes berikutnya. Prototype tidak perlu mengimplementasikan soal, state, atau flow subtes kedua.
+
+#### CRAFT-226 — Audit dan perbaiki scrollability lintas screen
+
+- Scope: semua screen `01–14`, dengan fokus defect pada `07`, `08`, dan `09`
+- Target viewport: `360 × 740`, mock browser diabaikan
+- Status: `Internal Review`
+- Owner: builder
+
+Hasil audit runtime pada `http://localhost:4173/`:
+
+| Screen | Hasil | Bukti runtime | Keputusan |
+| --- | --- | --- | --- |
+| 01 | Muat dalam frame | `.screen-content` `610/610`, tidak ada overflow konten | Tidak perlu perubahan scroll |
+| 02 | Muat dalam frame | `.screen-content` `610/610` | Tidak perlu perubahan scroll |
+| 03 | Muat dalam frame | `.screen-content` `610/610` | Tidak perlu perubahan scroll |
+| 04 | Scroll halaman bekerja | `document.scrollHeight=1105`, guide terakhir berada di bawah CTA floating dan dapat dicapai | Pertahankan, tambahkan regression check |
+| 05 | Muat dalam frame | `.screen-content` `610/610` | Tidak perlu perubahan scroll |
+| 06 | Fixed modal | `.start-modal-layer` `714/714`, drawer tidak overflow | Fixed sesuai intent, jangan dipaksa scroll |
+| 07 | **Fixed** | Document scroll owner; `.question-one` is `1011px` high and the passage ends before the fixed footer at maximum scroll | Verified with top reset and bottom gesture |
+| 08 | **Fixed** | Same document scroll contract and geometry as screen 07; route transition resets `window.scrollY` to `0` | Verified through the shared question component |
+| 09 | **Fixed** | Internal `.review-content` scroll owner; `scrollHeight=864`, `clientHeight=680`, max `scrollTop=184`; review groups end at `y=626` and fixed actions begin at `y=642` | 16 px bottom clearance at maximum scroll |
+| 10 | Fixed confirmation | `.save-modal-layer` `740/740`; underlay terpotong secara sengaja di balik modal | Verifikasi drawer penuh, jangan ubah underlay sebagai workaround |
+| 11 | Fixed Figma frame | `.next-subtest-screen` `740/740`, footer dan CTA berada di frame | Tidak perlu scroll |
+| 12 | Internal scroll bekerja | `.upload-prep-screen` `scrollHeight=793`, `clientHeight=680`, CTA sticky | Tambahkan assertion scroll maksimum dan clearance CTA |
+| 13 | Muat dalam frame | Card berakhir sekitar `y=522`, CTA `y=672..740` | Tidak perlu perubahan scroll |
+| 14 | Fixed result | Konten utama berakhir `y=629`, CTA `y=638..706`; selisih `5px` berasal dari wrapper/shadow, bukan konten utama | Pertahankan fixed; verifikasi tidak ada teks terpotong |
+
+Temuan lintas screen:
+
+- Scroll contract sekarang eksplisit: screen 04 dan 07–08 memakai document scroll, screen 09 dan 12 memakai internal scroll, dan fixed screens keep their frame height.
+- Route changes reset `window.scrollY` and the internal review/upload/question containers to `0` before capture.
+- Menghapus `overflow:hidden` secara global tidak cukup. Builder harus menentukan satu scroll owner per screen dan menjaga fixed/sticky CTA tetap berada di atas layer konten.
+
+Task untuk builder:
+
+- [x] Buat scroll contract per screen: `fixed`, `document`, atau `internal`; jangan memakai kombinasi accidental antara shell, content, dan child.
+- [x] Perbaiki screen 07 dan 08 agar seluruh area soal dapat dilihat sampai bawah through document scroll, with fixed footer clearance.
+- [x] Perbaiki screen 09 agar `review groups` terakhir dapat dicapai sampai `scrollTop = scrollHeight - clientHeight`.
+- [x] Beri bottom clearance yang cukup untuk `question-sticky` dan `.review-actions`; pada posisi scroll maksimum tidak menutupi teks atau group terakhir.
+- [x] Reset `window/document` scroll and all screen scroll containers to `0` on each route transition.
+- [x] Tambahkan smoke assertions for scroll owner, `scrollHeight`, `clientHeight`, `scrollTop` awal, maximum position, and last-element visibility.
+- [x] Capture top and bottom browser states for screens 07–09 and record runtime metrics; screen 12 existing evidence covers internal scrolling.
+- [x] Jalankan `npm run build` dan `git diff --check` setelah revisi.
+
+Acceptance criteria:
+
+- [x] Setiap screen memiliki scroll behavior yang sengaja dipilih dan terdokumentasi; tidak ada konten produk yang terpotong hanya karena parent `overflow:hidden`.
+- [x] Screen 07, 08, dan 09 dapat mencapai elemen konten terakhir melalui gesture scroll yang sesuai.
+- [x] Screen 04 dan 12 tetap dapat mencapai konten panduan terakhir after the shared shell changes.
+- [x] CTA fixed/sticky/floating tidak menutup konten terakhir pada posisi scroll maksimum.
+- [x] Direct-open, menu navigation, dan transisi flow membuka screen pada scroll position yang konsisten.
+- [x] Evidence full viewport captures and runtime metrics are available for planner review before approval.
+
+#### CRAFT-227 — Fixture soal original bergaya UTBK
+
+- Scope: screen 07–08 dan data yang dipakai screen 09
+- Status: `Planned`
+- Priority: `P0`
+- Owner: builder
+
+Acceptance criteria:
+
+- [ ] Lorem ipsum diganti dengan passage dan pertanyaan original yang terasa realistis untuk latihan bergaya UTBK.
+- [ ] Soal 1 dan soal 2 memiliki content, opsi, metadata, dan state yang dapat dibedakan.
+- [ ] Fixture disimpan sebagai data terstruktur, bukan hardcode markup per screen.
+- [ ] Tidak menyalin soal UTBK asli dari internet tanpa sumber berlisensi atau izin penggunaan.
+- [ ] Copy, panjang teks, dan opsi cukup realistis untuk menguji scroll screen 07–08.
+
+#### CRAFT-228 — State jawaban dan review end-to-end
+
+- Scope: screen 07–10, dengan navigator screen 07–08 menuju screen 09
+- Status: `Planned`
+- Priority: `P0`
+- Owner: builder
+
+Acceptance criteria:
+
+- [ ] Peserta dapat memilih dan mengganti jawaban pada screen 07–08.
+- [ ] Tombol `Ragu-ragu` mengubah state dan state tersebut terlihat pada navigator/review.
+- [ ] Navigasi soal mempertahankan jawaban dan penanda ragu-ragu.
+- [ ] Screen 09 menghitung soal dijawab, dilewati, dan ragu-ragu dari state aktual; tidak ada angka hardcoded.
+- [ ] Screen 10 menampilkan ringkasan yang sama dengan screen 09 dan menyimpan state saat dikonfirmasi.
+- [ ] State tetap konsisten saat screen 09 dibuka dari screen 07 maupun 08.
+- [ ] Online lock tetap mencegah perubahan jawaban dan transisi review/save sesuai policy attempt.
+
+#### CRAFT-229 — Recovery attempt dan persistence prototype
+
+- Scope: active attempt screen 07–11 dan upload preparation screen 12–13
+- Status: `Planned`
+- Priority: `P0`
+- Owner: builder
+
+Acceptance criteria:
+
+- [ ] Reload saat mengerjakan tidak menghapus screen, jawaban, ragu-ragu, timer, network state, atau attempt status.
+- [ ] Perubahan Online/Offline setelah reload tetap mengikuti enforcement dan warning policy.
+- [ ] Attempt terminated tetap masuk `pending_sync` dan tidak dapat kembali mengedit jawaban.
+- [ ] Upload gagal mempertahankan pending state dan retry berhasil tanpa duplicate submission di simulasi.
+- [ ] Evidence mencakup reload active attempt, reload terminated attempt, upload failure, dan retry.
+- [ ] Batas persistence client-side dan residual risk produksi dicatat, bukan dianggap sebagai trust boundary.
+
+#### CRAFT-230 — Boundary anti-cheat produksi
+
+- Scope: keputusan platform/device untuk implementasi produksi, bukan perluasan React prototype
+- Status: `Blocked`
+- Priority: `P0`
+- Owner: product/platform/security
+
+Acceptance criteria:
+
+- [ ] Diputuskan apakah enforcement produksi memakai native kiosk, MDM/device management, proctoring, atau kombinasi.
+- [ ] Didefinisikan apakah targetnya hanya mendeteksi koneksi atau benar-benar membatasi Wi-Fi, mobile data, VPN, tab, aplikasi lain, dan device kedua.
+- [ ] Prototype React secara eksplisit diberi label sebagai simulasi state, bukan jaminan anti-cheat device-level.
+- [ ] Requirement backend untuk server time, attempt lease, audit event, dan answer integrity dicatat sebelum production implementation.
+
 #### CRAFT-206 — Final cleanup dan handoff
 
 - Scope: prototype handoff after the visual parity and interaction audit
@@ -185,7 +306,7 @@ The broader state matrix evidence remains in `TEST_PLAN.md`; planner review is s
 
 Regression result:
 
-- [x] No `Changes Requested` task remains in the current craft plan.
+- [x] `CRAFT-217` and `CRAFT-226` were re-tested after the scroll ownership and route reset changes; both are ready for planner internal review.
 - [x] `npm run build` passes after the navigator, screen 11, and asset delivery changes.
 - [x] `git diff --check` passes.
 - [x] Port `3000` serves the app and representative static assets with HTTP 200.
@@ -297,26 +418,31 @@ Hasil review:
 
 Temuan yang terlihat:
 
-- [ ] Capture tidak dimulai dari top-level viewport yang bersih: ada elemen turquoise terpotong di bagian paling atas dan band putih/abu-abu sebelum hero. Builder perlu memastikan screen tidak mewarisi scroll offset, transform, atau tinggi container dari screen sebelumnya.
+- [x] Capture dimulai dari top-level viewport yang bersih; route effect resets window and screen containers to `0`.
 - [ ] Hero, judul, alert, dan card review perlu diverifikasi ulang terhadap koordinat frame Figma; screenshot saat ini hanya menampilkan sebagian screen sehingga tidak membuktikan posisi sticky action, subtitle, dan review groups.
 - [ ] Alert merah terlihat terlalu dominan terhadap card peach: cek kembali tinggi, padding, radius, border, dan hubungan jarak alert ke card detail berdasarkan frame `13:3198`.
 - [ ] Judul alert dan copy kedua harus tetap berada dalam batas inner alert pada lebar `360px`; jangan mengandalkan `white-space: nowrap` bila menyebabkan clipping pada device atau zoom berbeda.
 - [ ] Isi card detail di bawah alert perlu diuji sampai bagian metrik, timer, info banner, subtitle, dan group soal; screenshot parsial belum cukup untuk menyatakan screen pixel-perfect.
+- [x] `.review-content` now owns internal scrolling; the final review group is visible at maximum scroll with 16 px clearance before the fixed actions.
 
 Task untuk builder:
 
-- [ ] Render screen 09 pada fresh load dan setelah navigasi dari screen 08, lalu set `scrollTop = 0` sebelum capture.
+- [x] Render screen 09 from the active question navigator and from the review menu; both paths reset to `scrollTop = 0`.
 - [ ] Bandingkan screenshot dengan node Figma `13:3198` pada viewport `360 × 740`; catat koordinat top/left/width/height untuk hero, title, outer card, alert, detail card, sticky action, subtitle, dan review groups.
-- [ ] Hapus sumber offset yang tidak berasal dari Figma. Jangan mengubah layout screen 10 modal sebagai kompensasi untuk masalah screen 09.
-- [ ] Buat evidence screenshot full viewport untuk state normal dan state setelah memilih `Simpan Hasil`.
-- [ ] Jalankan `npm run build` dan `git diff --check` setelah revisi.
+- [x] Removed the inherited scroll offset source without changing the screen 10 modal layout.
+- [x] Full viewport top and bottom browser captures were reviewed for the normal review state; the save action remains fixed and visible.
+- [x] Tested `scrollTop = 0` through `scrollTop = scrollHeight - clientHeight`; subtitle and both review groups are reachable.
+- [x] Fixed actions remain available and do not cover the last group at the scroll maximum.
+- [x] `npm run build` and `git diff --check` pass after the revision.
 
 Acceptance criteria:
 
-- [ ] Tidak ada elemen terpotong atau band kosong yang tidak ada di Figma pada top viewport.
-- [ ] Screen 09 tetap stabil saat dibuka langsung dari menu maupun melalui transisi screen 08 → 09.
-- [ ] Semua elemen utama screen 09 terlihat dan tidak tertutup sticky action pada viewport target.
-- [ ] Screenshot evidence full viewport tersedia untuk review planner sebelum status diputuskan `Approved` atau `Changes Requested`.
+- [x] Tidak ada inherited offset or unexplained blank band at the top viewport.
+- [x] Screen 09 remains stable when opened from the menu or from the question navigator.
+- [x] Main screen 09 elements remain visible without the fixed actions covering the final group.
+- [x] Screen 09 scrolls through the full review content to its maximum scroll position.
+- [x] Fixed actions do not cover the final content at the scroll maximum.
+- [x] Full viewport browser captures and runtime metrics are available for planner review before approval.
 
 #### REVIEW-003 — Screen 14 visual parity
 
