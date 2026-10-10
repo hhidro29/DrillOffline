@@ -27,7 +27,7 @@ function ChecklistItem({ icon, children, status = 'pending' }: { icon: string; c
   return <div className={`checklist-item ${status === 'complete' ? 'checklist-item-complete' : ''}`}><img src={asset(icon)} alt="" /><span>{children}</span><img src={asset(status === 'complete' ? 'checklist-ready.svg' : 'checklist.svg')} alt="" /></div>;
 }
 
-function PreparationCard({ state, onReady }: { state: PreparationState; onReady: () => void }) {
+function PreparationCard({ state, network, onReady }: { state: PreparationState; network: NetworkMode; onReady: () => void }) {
   const downloaded = state === 'offline-guide' || state === 'ready';
   const offline = state === 'ready';
   return <section className={`prep-card prep-card-${state}`}>
@@ -39,7 +39,7 @@ function PreparationCard({ state, onReady }: { state: PreparationState; onReady:
     {state !== 'ready' && <div className="divider" />}
     {state === 'download' && <DownloadPanel />}
     {state === 'downloading' && <DownloadPanel progress={26} />}
-    {state === 'offline-guide' && <OfflineGuide onReady={onReady} />}
+    {state === 'offline-guide' && <OfflineGuide network={network} onReady={onReady} />}
   </section>;
 }
 
@@ -50,10 +50,12 @@ function DownloadPanel({ progress }: { progress?: number }) {
   </div>;
 }
 
-function OfflineGuide({ onReady }: { onReady: () => void }) {
+function OfflineGuide({ network, onReady }: { network: NetworkMode; onReady: () => void }) {
+  const blocked = network !== 'offline';
   return <div className="offline-guide">
     <h2>Cara mematikan koneksi internet perangkat</h2>
     <p>Pastikan kamu terlepas dari koneksi internet selama mengerjakan drill offline.</p>
+    {blocked && <div className="network-blocked" role="alert"><strong>Internet masih aktif</strong><span>Gunakan mode Offline untuk menyelesaikan checklist dan mulai Drill.</span></div>}
     <div className="guide-tabs"><button className="selected">Android</button><button>iOS</button><button>Windows</button><button>MacOS</button></div>
     <div className="guide-image" role="img" aria-label="Android airplane mode guide" />
     <h3>Cara utama: Aktifkan mode terbang</h3>
@@ -61,7 +63,7 @@ function OfflineGuide({ onReady }: { onReady: () => void }) {
     <h3>Alternatif: Atur Melalui Pengaturan</h3>
     <ol><li>Buka Pengaturan → Wi-Fi, lalu matikan Wi-Fi.</li><li>Buka Jaringan seluler / Kartu SIM → matikan Data seluler. Jika memakai dua SIM, pastikan data pada keduanya tidak aktif.</li></ol>
     <p>Nama menu dapat berbeda sesuai merek dan versi Android.</p>
-    <button className="guide-continue" onClick={onReady}>Saya sudah mematikan internet</button>
+    <button className="guide-continue" disabled={blocked} onClick={onReady}>Saya sudah mematikan internet</button>
   </div>;
 }
 
@@ -109,17 +111,20 @@ function QuestionCard({ answer, disabled, onAnswer }: { answer: number | null; d
   return <section className="question-card"><div className="question-stem"><div className="question-card-title"><strong>Soal :</strong><span>Hard</span></div><p className="question-prompt">{drillFixture.question.prompt}</p></div><div className="options">{drillFixture.question.options.map((option, index) => <button key={option} disabled={disabled} className={`option ${answer === index ? 'option-selected' : ''}`} onClick={() => onAnswer?.(index)}><b>{String.fromCharCode(65 + index)}</b><span>{option}</span></button>)}</div><div className="question-report"><span>Soal ini bermasalah?</span><button>⚑ &nbsp; Laporkan</button></div></section>;
 }
 
-function QuestionScreen({ timer, answer, onAnswer, onNext, onTimeout }: { timer: number; answer: number | null; onAnswer: (index: number) => void; onNext: () => void; onTimeout: () => void }) {
-  return <main className="drill-screen question-screen"><Navbar /><QuestionHero timer={timer} answered={answer !== null} /><div className="question-scroll"><QuestionCard answer={answer} onAnswer={onAnswer} /><button className="prototype-link" onClick={onTimeout}>Uji state waktu habis</button></div><footer className="question-footer"><div className="footer-timer"><span><span className="timer-glyph">◴</span>Waktu kamu tersisa</span><b>{formatTime(timer)}</b></div><button className="secondary-cta" disabled={answer === null} onClick={onNext}>Lanjutkan</button></footer></main>;
+function QuestionScreen({ network, timer, answer, onAnswer, onNext, onTimeout }: { network: NetworkMode; timer: number; answer: number | null; onAnswer: (index: number) => void; onNext: () => void; onTimeout: () => void }) {
+  const blocked = network !== 'offline';
+  return <main className="drill-screen question-screen"><Navbar /><QuestionHero timer={timer} answered={answer !== null} /><div className="question-scroll">{blocked && <div className="network-blocked question-network-blocked" role="alert"><strong>Matikan koneksi internet untuk mengerjakan Drill</strong><span>Pilih Offline di menu pengujian untuk membuka soal.</span></div>}<QuestionCard answer={answer} disabled={blocked} onAnswer={blocked ? undefined : onAnswer} />{!blocked && <button className="prototype-link" onClick={onTimeout}>Uji state waktu habis</button>}</div><footer className="question-footer"><div className="footer-timer"><span><span className="timer-glyph">◴</span>Waktu kamu tersisa</span><b>{formatTime(timer)}</b></div><button className="secondary-cta" disabled={blocked || answer === null} onClick={onNext}>Lanjutkan</button></footer></main>;
 }
 
-function ConfirmScreen({ timer, answer, onBack, onSubmit, onTimeout }: { timer: number; answer: number | null; onBack: () => void; onSubmit: () => void; onTimeout: () => void }) {
-  return <main className="drill-screen question-screen"><Navbar /><QuestionHero timer={timer} answered={answer !== null} /><div className="question-scroll"><QuestionCard answer={answer} disabled /><button className="prototype-link" onClick={onTimeout}>Uji state waktu habis</button></div><footer className="question-footer confirm-footer"><div><strong>Yakin dengan jawabannya?</strong><span>Klik submit untuk tahu hasilnya, ya</span></div><button className="primary-cta" onClick={onSubmit}>Submit</button></footer></main>;
+function ConfirmScreen({ network, timer, answer, onBack, onSubmit, onTimeout }: { network: NetworkMode; timer: number; answer: number | null; onBack: () => void; onSubmit: () => void; onTimeout: () => void }) {
+  const blocked = network !== 'offline';
+  return <main className="drill-screen question-screen"><Navbar /><QuestionHero timer={timer} answered={answer !== null} /><div className="question-scroll">{blocked && <div className="network-blocked question-network-blocked" role="alert"><strong>Matikan koneksi internet sebelum submit</strong><span>Pilih Offline di menu pengujian untuk melanjutkan.</span></div>}<QuestionCard answer={answer} disabled /><button className="prototype-link" onClick={onTimeout}>Uji state waktu habis</button></div><footer className="question-footer confirm-footer"><div><strong>{blocked ? 'Koneksi internet masih aktif' : 'Yakin dengan jawabannya?'}</strong><span>{blocked ? 'Mode Offline diperlukan untuk submit.' : 'Klik submit untuk tahu hasilnya, ya'}</span></div><button className="primary-cta" disabled={blocked} onClick={onSubmit}>Submit</button></footer></main>;
 }
 
-function ResultAnswerScreen({ kind, timer, onContinue }: { kind: 'wrong' | 'timeout'; timer: number; onContinue: () => void }) {
+function ResultAnswerScreen({ kind, network, timer, onContinue }: { kind: 'wrong' | 'timeout'; network: NetworkMode; timer: number; onContinue: () => void }) {
   const timeout = kind === 'timeout';
-  return <main className="drill-screen question-screen"><Navbar /><QuestionHero timer={timer} answered={false} result={kind} /><div className="question-scroll"><QuestionCard answer={timeout ? null : 1} disabled /><section className={`result-note ${timeout ? 'result-note-timeout' : ''}`}><strong>{timeout ? 'Waktu pengerjaanmu sudah habis' : 'Jawabanmu kurang tepat'}</strong><span>{timeout ? 'Jawabanmu akan dikumpulkan untuk diproses.' : 'Lebih teliti di soal selanjutnya, ya!'}</span></section></div><footer className="question-footer result-footer"><div><strong>{timeout ? 'Waktu pengerjaanmu sudah habis' : 'Jawabanmu kurang tepat'}</strong><span>{timeout ? 'Jawabanmu akan dikumpulkan untuk diproses.' : 'Lebih teliti di soal selanjutnya, ya!'}</span></div><button className="primary-cta" onClick={onContinue}>Lanjut</button></footer></main>;
+  const blocked = network !== 'offline';
+  return <main className="drill-screen question-screen"><Navbar /><QuestionHero timer={timer} answered={false} result={kind} /><div className="question-scroll">{blocked && <div className="network-blocked question-network-blocked" role="alert"><strong>Offline mode diperlukan untuk melanjutkan</strong><span>Pilih Offline di menu pengujian untuk membuka hasil jawaban.</span></div>}{!blocked && <><QuestionCard answer={timeout ? null : 1} disabled /><section className={`result-note ${timeout ? 'result-note-timeout' : ''}`}><strong>{timeout ? 'Waktu pengerjaanmu sudah habis' : 'Jawabanmu kurang tepat'}</strong><span>{timeout ? 'Jawabanmu akan dikumpulkan untuk diproses.' : 'Lebih teliti di soal selanjutnya, ya!'}</span></section></>}</div><footer className="question-footer result-footer"><div><strong>{blocked ? 'Koneksi internet masih aktif' : timeout ? 'Waktu pengerjaanmu sudah habis' : 'Jawabanmu kurang tepat'}</strong><span>{blocked ? 'Mode Offline diperlukan untuk melanjutkan.' : timeout ? 'Jawabanmu akan dikumpulkan untuk diproses.' : 'Lebih teliti di soal selanjutnya, ya!'}</span></div><button className="primary-cta" disabled={blocked} onClick={onContinue}>Lanjut</button></footer></main>;
 }
 
 function OnlineGuide({ onContinue }: { onContinue: () => void }) {
@@ -183,7 +188,7 @@ function App() {
     document.querySelectorAll<HTMLElement>('.question-scroll, .summary-scroll, .content').forEach(element => { element.scrollTop = 0; });
   }, [screen]);
 
-  const submitAnswer = () => setScreen(answer === drillFixture.question.answer ? 'online-guide' : 'wrong');
+  const submitAnswer = () => { if (network !== 'offline') return; setScreen(answer === drillFixture.question.answer ? 'online-guide' : 'wrong'); };
   const upload = () => {
     if (network !== 'online') return;
     setUploadStatus('uploading');
@@ -192,11 +197,8 @@ function App() {
   const failUpload = () => setUploadStatus('failed');
   const resetSession = () => { setAnswer(null); setTimer(15 * 60); setProgress(0); setUploadStatus('ready'); setNetwork('online'); setScreen('download'); };
   const navigateFromMenu = (next: DrillScreen) => {
-    if (next === 'question') { setAnswer(null); setTimer(15 * 60); setNetwork('offline'); }
-    if (next === 'confirm') { setAnswer(0); setTimer(15 * 60); setNetwork('offline'); }
-    if (next === 'ready') setNetwork('offline');
-    if (next === 'wrong' || next === 'timeout') setNetwork('offline');
-    if (next === 'online-guide') setNetwork('offline');
+    if (next === 'question') { setAnswer(null); setTimer(15 * 60); }
+    if (next === 'confirm') { setAnswer(0); setTimer(15 * 60); }
     if (next === 'upload' || next === 'summary') setNetwork('online');
     if (next === 'downloading') setProgress(26);
     if (next === 'upload') setUploadStatus('ready');
@@ -204,15 +206,15 @@ function App() {
   };
 
   let content: ReactNode;
-  if (screen === 'question') content = <QuestionScreen timer={timer} answer={answer} onAnswer={setAnswer} onNext={() => setScreen('confirm')} onTimeout={() => setScreen('timeout')} />;
-  else if (screen === 'confirm') content = <ConfirmScreen timer={timer} answer={answer} onBack={() => setScreen('question')} onSubmit={submitAnswer} onTimeout={() => setScreen('timeout')} />;
-  else if (screen === 'wrong' || screen === 'timeout') content = <ResultAnswerScreen kind={screen} timer={timer} onContinue={() => setScreen('online-guide')} />;
+  if (screen === 'question') content = <QuestionScreen network={network} timer={timer} answer={answer} onAnswer={setAnswer} onNext={() => setScreen('confirm')} onTimeout={() => setScreen('timeout')} />;
+  else if (screen === 'confirm') content = <ConfirmScreen network={network} timer={timer} answer={answer} onBack={() => setScreen('question')} onSubmit={submitAnswer} onTimeout={() => setScreen('timeout')} />;
+  else if (screen === 'wrong' || screen === 'timeout') content = <ResultAnswerScreen kind={screen} network={network} timer={timer} onContinue={() => { if (network === 'offline') setScreen('online-guide'); }} />;
   else if (screen === 'online-guide') content = <OnlineGuide onContinue={() => { setNetwork('online'); setScreen('upload'); }} />;
   else if (screen === 'upload') content = <UploadScreen status={uploadStatus} network={network} onUpload={upload} />;
   else if (screen === 'summary') content = <SummaryScreen onRestart={resetSession} />;
   else {
     const shownState = screen === 'downloading' ? (progress || 26) : screen;
-    content = <main className="app-shell"><Navbar /><div className="content"><HeaderArtwork /><PreparationCard state={screen as PreparationState} onReady={() => { setNetwork('offline'); setScreen('ready'); }} /></div>{screen === 'ready' ? <ReadyState network={network} /> : <div className="sticky-actions"><button className="primary-cta" disabled={screen === 'offline-guide'} onClick={() => screen === 'download' ? (setProgress(26), setScreen('downloading')) : undefined}>{screen === 'download' ? 'Download Soal' : screen === 'downloading' ? `Mendownload… ${shownState}%` : 'Lanjutkan'}</button></div>}</main>;
+    content = <main className="app-shell"><Navbar /><div className="content"><HeaderArtwork /><PreparationCard state={screen as PreparationState} network={network} onReady={() => { setNetwork('offline'); setScreen('ready'); }} /></div>{screen === 'ready' ? <ReadyState network={network} /> : <div className="sticky-actions"><button className="primary-cta" disabled={screen === 'offline-guide' || (screen === 'downloading' && network === 'online')} onClick={() => screen === 'download' ? (setProgress(26), setScreen('downloading')) : undefined}>{screen === 'download' ? 'Download Soal' : screen === 'downloading' ? `Mendownload… ${shownState}%` : 'Lanjutkan'}</button></div>}</main>;
   }
   return <div className="drill-review-root" data-network={network}>{content}{menuOpen && <DrillSidebar current={screen} network={network} onClose={() => setMenuOpen(false)} onNavigate={navigateFromMenu} onNetworkChange={setNetwork} onReset={resetSession} onFailUpload={failUpload} />}</div>;
 }

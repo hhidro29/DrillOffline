@@ -39,6 +39,7 @@
 
 - Status: `Internal Review`
 - The TO Offline sidebar interaction pattern is adapted locally for Drill: open/close, reset, active state, 11 direct jumps, Online/Offline simulation, and upload failure trigger.
+- Online/Offline simulation now changes behavior, not only active styling: offline guide completion and question attempt require Offline; upload requires Online; changing the mode while a state is open immediately shows or removes the gate.
 
 ## D-007 — Visual iteration and QA
 
@@ -79,3 +80,4 @@
 - Result summary uses exported Figma score background, confetti, result ring, subbab icon, and video thumbnails; recommendation cards include the visible video titles.
 - Upload screen progress ring now renders the Figma half-green arc for `1/2`, and its alert uses the exported red Figma status icon.
 - Latest browser audit checked all 11 sidebar jumps, full scroll heights, scroll reset between states, correct-answer flow, wrong-answer flow, timeout, upload failed/retry, and Online/Offline gates. `npm run build` and `git diff --check` pass.
+- Network matrix evidence: screen 03 Online disables the completion CTA and shows an alert; Offline enables it. Screen 04 Online disables `Kerjakan Drill`; Offline enables it. Screen 05 direct Online jumps show a blocked alert and disabled options; switching Offline enables the attempt. Screen 06 Submit is disabled Online and enabled Offline. Screen 10 upload is enabled Online and blocked Offline. Full network-gated correct flow and upload failed → retry → summary pass.
