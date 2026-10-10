@@ -67,7 +67,7 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-206 | Final cleanup dan handoff | CRAFT-205 | Prototype siap diteruskan ke development | Internal Review |
 | CRAFT-208 | Jalankan automated smoke test untuk state dan flow | CRAFT-007, CRAFT-201–203 | Test matrix lulus dan evidence tersimpan | Internal Review |
 | CRAFT-209 | Visual regression per state, bukan hanya per screen | CRAFT-007, CRAFT-204 | Screenshot state matrix dan daftar mismatch | Internal Review |
-| CRAFT-210 | Tutup defect dan lakukan regression terakhir | CRAFT-208, CRAFT-209 | Semua defect closed atau dicatat sebagai residual risk | Planned |
+| CRAFT-210 | Tutup defect dan lakukan regression terakhir | CRAFT-208, CRAFT-209 | Semua defect closed atau dicatat sebagai residual risk | Internal Review |
 | CRAFT-213 | Audit loophole anti-internet dan integritas attempt | CRAFT-002, CRAFT-007 | Threat model, severity, dan mitigation backlog | Internal Review |
 | CRAFT-214 | Finalisasi boundary enforcement attempt aktif | CRAFT-213 | Policy screen 07–11 dan boundary upload screen 12–13 | Internal Review |
 | CRAFT-215 | Uji abuse case dan recovery attempt | CRAFT-213, CRAFT-214 | Abuse-case matrix dan evidence | Planned |
@@ -178,6 +178,21 @@ Evidence:
 - [x] `git diff --check` passes.
 
 The broader state matrix evidence remains in `TEST_PLAN.md`; planner review is still required before changing this task to `Approved`.
+
+#### CRAFT-210 — Regression terakhir dan residual risk
+
+- Status: `Internal Review`
+
+Regression result:
+
+- [x] No `Changes Requested` task remains in the current craft plan.
+- [x] `npm run build` passes after the navigator, screen 11, and asset delivery changes.
+- [x] `git diff --check` passes.
+- [x] Port `3000` serves the app and representative static assets with HTTP 200.
+- [x] Attempt enforcement, upload recovery, question navigator routing, and screen 11 enabled/locked states were rechecked in the browser.
+- [x] Platform and production integrity risks remain listed in `SECURITY_AUDIT.md` (`L-001`–`L-009`) instead of being treated as resolved by this web prototype.
+
+Residual risk: exact pixel sign-off against source Figma remains planner-owned where the connected design-context tool was unavailable; the affected review notes identify the remaining comparison step.
 
 #### REVIEW-011 — Figma asset delivery and screen 12 framing
 
