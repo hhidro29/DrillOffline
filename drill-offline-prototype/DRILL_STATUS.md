@@ -40,3 +40,9 @@
 - The guide uses a neutral image placeholder until the Drill-specific instructional asset is exported from Figma.
 - The instructional image area remains a neutral placeholder until the Drill-specific image export is available.
 - The result summary uses local fixture values until a backend result contract is supplied.
+
+## Evidence
+
+- Preview: `http://127.0.0.1:3001/` at `360 × 740`.
+- Live browser review covered download → offline guide → ready → question → confirmation → wrong-answer result → online guide → upload → summary.
+- Timeout state was also verified through the local review control; the question controls lock and the timeout result appears.
