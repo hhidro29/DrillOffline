@@ -35,6 +35,25 @@
 - Upload is simulated locally and reaches the summary after the progress state; a visible failed/retry state is available for review.
 - The developer sidebar includes an Online/Offline simulation. Offline blocks starting from the ready state until the mode is switched, while Online blocks upload until restored. Upload failure can be triggered from the sidebar while reviewing screen 10.
 
+## D-006 — Navigation and tester sidebar
+
+- Status: `Internal Review`
+- The TO Offline sidebar interaction pattern is adapted locally for Drill: open/close, reset, active state, 11 direct jumps, Online/Offline simulation, and upload failure trigger.
+
+## D-007 — Visual iteration and QA
+
+- Status: `Internal Review`
+- Planner live audit passed all 11 states, including top/mid/bottom scroll checks on screens 03, 05, 06, 09, 10, and 11.
+- Planner confirmed screen 10's green `1/2` progress arc and red alert icon match Figma, screen 11 lower sections remain visible through scroll, and sticky CTAs stay fully visible at the actual preview height.
+- Copy audit across all 11 states is free of `tryout` and `subtest` wording.
+
+## D-008 — Handoff to planner
+
+- Status: `Internal Review`
+- Final commits: `bb40218` (responsive viewport and scroll anchoring), `ac89d98` (upload progress arc and red alert asset).
+- Preview: `http://127.0.0.1:3001/`
+- Planner verdict: Internal Review ready after live verification.
+
 ## Assumptions and open decisions
 
 - Download progress is simulated locally for visual review.
