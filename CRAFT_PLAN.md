@@ -41,7 +41,7 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-001 | Inventarisasi 14 screen dan node Figma | CRAFT-000 | Screen inventory | Done |
 | CRAFT-002 | Petakan flow, state, dan transisi | CRAFT-001 | Flow/state map | Internal Review |
 | CRAFT-003 | Ekstrak token visual | CRAFT-001 | Token warna, typography, spacing, radius, shadow | Internal Review |
-| CRAFT-004 | Inventarisasi dan lokalkan asset | CRAFT-001 | Asset map dan file asset lokal | Internal Review |
+| CRAFT-004 | Inventarisasi dan lokalkan asset | CRAFT-001 | Asset map dan file asset lokal | Approved |
 | CRAFT-005 | Rancang komponen reusable | CRAFT-002, CRAFT-003, CRAFT-004 | Component map dan API props | Internal Review |
 | CRAFT-006 | Siapkan app shell dan routing prototype React | CRAFT-002, CRAFT-005 | React shell, screen state, dan navigation model | Internal Review |
 | CRAFT-007 | Kunci state contract dan test fixture | CRAFT-002, CRAFT-006 | State matrix, fixture path, dan acceptance criteria | Internal Review |
@@ -58,13 +58,13 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-111 | Craft screen 11 — Subtes Berikutnya | CRAFT-006 | Frame `8:2032` | Internal Review |
 | CRAFT-112 | Craft screen 12 — Nyalakan Internet — Panduan | CRAFT-006 | Frame `15:9660` | Internal Review |
 | CRAFT-113 | Craft screen 13 — Unggah & Kumpulkan Hasil | CRAFT-006 | Frame `15:9810` | Internal Review |
-| CRAFT-114 | Craft screen 14 — Hasil Tryout | CRAFT-006 | Frame `11:2632` | Internal Review |
+| CRAFT-114 | Craft screen 14 — Hasil Tryout | CRAFT-006 | Frame `11:2632` | Approved |
 | CRAFT-201 | Integrasikan transisi antar-screen | CRAFT-101–114 | Flow dapat dijalankan dari awal sampai akhir | Internal Review |
 | CRAFT-202 | Implementasikan state offline dan network enforcement | CRAFT-002, CRAFT-201 | State online, offline, warning, dan terminasi | Internal Review |
 | CRAFT-203 | Implementasikan timer, autosave, submit, dan pending upload | CRAFT-201, CRAFT-202 | Perilaku tryout sesuai baseline MVP | Internal Review |
 | CRAFT-204 | Review responsive dan overflow mobile | CRAFT-101–114 | Semua screen stabil pada viewport target | Internal Review |
 | CRAFT-205 | Review visual end-to-end | CRAFT-201–204 | Daftar mismatch dan hasil iterasi terakhir | Internal Review |
-| CRAFT-206 | Final cleanup dan handoff | CRAFT-205 | Prototype siap diteruskan ke development | Planned |
+| CRAFT-206 | Final cleanup dan handoff | CRAFT-205 | Prototype siap diteruskan ke development | Internal Review |
 | CRAFT-208 | Jalankan automated smoke test untuk state dan flow | CRAFT-007, CRAFT-201–203 | Test matrix lulus dan evidence tersimpan | Planned |
 | CRAFT-209 | Visual regression per state, bukan hanya per screen | CRAFT-007, CRAFT-204 | Screenshot state matrix dan daftar mismatch | Internal Review |
 | CRAFT-210 | Tutup defect dan lakukan regression terakhir | CRAFT-208, CRAFT-209 | Semua defect closed atau dicatat sebagai residual risk | Planned |
@@ -73,11 +73,14 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-215 | Uji abuse case dan recovery attempt | CRAFT-213, CRAFT-214 | Abuse-case matrix dan evidence | Planned |
 | CRAFT-216 | State-driven screen 04 — Persiapan Offline | CRAFT-202, CRAFT-209 | Step count, checklist, floating CTA, dan visual mengikuti network state | Internal Review |
 | CRAFT-217 | Audit visual screen 09 — Tinjau Jawaban | CRAFT-109, CRAFT-204 | Review screen bersih pada posisi scroll 0 dan sesuai frame Figma | Internal Review |
-| CRAFT-218 | Audit visual screen 14 — Hasil Tryout | CRAFT-114, CRAFT-204 | Result screen full-bleed, tidak terpotong, dan sesuai frame Figma | Internal Review |
+| CRAFT-218 | Audit visual screen 14 — Hasil Tryout | CRAFT-114, CRAFT-204 | Result screen full-bleed, tidak terpotong, dan sesuai frame Figma | Approved |
 | CRAFT-219 | Rebuild screen 06 sebagai native bottom drawer | CRAFT-106, CRAFT-204 | Drawer konfirmasi native, bukan screenshot full-screen | Internal Review |
 | CRAFT-220 | Rebuild ikon navigator soal screen 07–08 | CRAFT-107, CRAFT-108 | Ikon grid/list sesuai Figma, bukan karakter teks | Internal Review |
 | CRAFT-221 | Kunci visual state screen 07 vs 08 | CRAFT-107, CRAFT-108, CRAFT-220 | State question navigator konsisten tanpa layout drift | Internal Review |
 | CRAFT-222 | Audit framing dan state screen 12 | CRAFT-112, CRAFT-204, CRAFT-216 | Screen upload preparation stabil dari scroll 0 dan sesuai Figma | Internal Review |
+| CRAFT-223 | Perbaiki delivery asset Figma | CRAFT-004, CRAFT-006 | Semua asset lokal tersedia di dev dan production preview | Approved |
+| CRAFT-224 | Wire touchpoint navigator soal ke screen 09 | CRAFT-220, CRAFT-221, CRAFT-109 | Ikon grid pada screen 07/08 membuka screen 09 dengan state attempt tetap utuh | Internal Review |
+| CRAFT-225 | Audit visual screen 11 — Subtes Berikutnya | CRAFT-111, CRAFT-204, CRAFT-223 | Screen 11 mengikuti frame Figma `8:2032` pada viewport 360 × 740 | Internal Review |
 
 #### Evidence terbaru
 
@@ -95,6 +98,148 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 - User visual feedback for screens 07–08: the text glyph `▦` was replaced with a `LayoutGrid` control with an accessible label and disabled state. Tracked in `CRAFT-220`.
 - User visual feedback for screens 07–08: the two references intentionally differ by question state. Track state parity separately from browser/capture offset in `CRAFT-221`.
 - User visual feedback for screen 12: navbar/logo appears cropped and the upload-preparation card sits high against the hero. The screenshot may be scrolled, so builder must verify from scroll 0 before changing geometry. Tracked in `CRAFT-222`.
+- User visual feedback: screen 01 showed broken images for exam art, question-count icon, and clock icon. The supported localhost runtime now serves the tracked `public/assets/figma/` path correctly; verified in clean reload and all screen smoke checks. Tracked in `CRAFT-223`.
+- User flow feedback: ikon grid pada screen 07 dan 08 adalah touchpoint menuju screen 09 `Tinjau Jawaban`. Kontrol visualnya sudah tersedia, tetapi handler navigasinya belum tersambung. Tracked in `CRAFT-224`.
+
+#### CRAFT-224 — Question navigator menuju screen 09
+
+- Screens: `CRAFT-107` dan `CRAFT-108` → `CRAFT-109` / nodes `8:2053`, `8:2154`, `13:3198`
+- Status: `Internal Review`
+- Owner: builder
+
+Acceptance criteria:
+
+- [x] Klik ikon grid dari screen 07 membuka screen 09 `Tinjau Jawaban`.
+- [x] Klik ikon grid dari screen 08 membuka screen 09 `Tinjau Jawaban`.
+- [x] Transisi menetapkan `attemptStatus = reviewing` dan mempertahankan jawaban, ragu-ragu, serta timer.
+- [x] Saat attempt terkunci atau terminated, ikon tidak dapat membuka screen 09.
+- [x] Tombol `Kembali ke Soal` dari screen 09 memiliki route yang ditentukan dan tidak selalu memaksa kembali ke screen 07 bila entry point berasal dari screen 08.
+- [x] Browser smoke evidence mencakup kedua entry point serta enabled dan disabled state pada viewport 360 × 740.
+- [x] `npm run build` dan `git diff --check` lulus.
+
+Evidence: screen 07 grid → screen 09 → `Kembali ke Soal` returns to screen 07; screen 08 grid → screen 09 → `Kembali ke Soal` returns to screen 08; online mode exposes a disabled question navigator and locks the attempt controls.
+
+#### CRAFT-225 — Screen 11 visual parity
+
+- Screen: `CRAFT-111` / node `8:2032` (`11 · Subtes Berikutnya`)
+- Figma frame: `360 × 740`
+- Status: `Internal Review`
+- Owner: builder
+
+Temuan audit terhadap source Figma:
+
+- Header Figma memiliki frame `y=0..300`; tombol back berada di `x=8, y=16, 32×32` dan title berada di `x=56, y=16, 248×48`. Prototype perlu mengikuti posisi ini, termasuk line-height title dua baris.
+- Figma menempatkan summary pada `x=12, y=82, 336×67`, lalu card `Tes selanjutnya` pada `x=12, y=165, 336×176`. Prototype saat ini menempatkan card kedua pada `top: 140px`, sehingga jarak 16 px dari summary hilang dan kedua card terlihat terlalu rapat/bertumpuk.
+- Header Figma memakai pattern asset header, bukan hanya gradient dan mask yang dirender terpisah. Pattern dekoratif bagian atas dan sisi kanan perlu tetap terlihat seperti frame `8:2033`.
+- Figma memakai `asset_ruanguji_backgroundpage` pada `x=0, y=604, 360×136` di area countdown dan CTA. Prototype saat ini masih memakai background datar dan shadow wrapper, sehingga area bawah belum mengikuti source.
+- Footer Figma memiliki countdown pada `y=647`, progress track pada `y=672` dengan fill `84 px`, dan sticky button wrapper pada `y=676..740`. Posisi ketiganya perlu dikunci terhadap frame, bukan dihitung dari offset yang dapat bergeser.
+
+Acceptance criteria:
+
+- [x] Summary dan card berikutnya memiliki posisi `y=82` dan `y=165`, dengan jarak 16 px dan tanpa overlap.
+- [x] Card `Tes selanjutnya` berukuran `336×176` dan struktur internalnya mengikuti instance Figma `8:2046`.
+- [x] Header title dan tombol back mengikuti bounds Figma; tidak ada vertical drift pada viewport `360×740`.
+- [x] Pattern header dan background bawah memakai asset lokal yang sesuai dari Figma, termasuk `result-bg.svg` untuk area `y=604..740`.
+- [x] Countdown, progress track/fill, sticky wrapper, dan CTA berada pada bounds `y=647`, `y=672`, dan `y=676` sesuai frame.
+- [x] State disabled saat attempt terkunci tetap terlihat sesuai desain dan tidak menggeser layout.
+- [x] Browser evidence screenshot full viewport screen 11 tersedia pada `360×740`; `npm run build` dan `git diff --check` lulus.
+
+Evidence: screen 11 was inspected at `http://localhost:3000/` in offline and locked online states. The offline capture shows the two-line header, 16 px card gap, local header/bottom patterns, and fixed footer coordinates; the online capture shows the disabled back and CTA state without layout shift.
+
+#### CRAFT-206 — Final cleanup dan handoff
+
+- Scope: prototype handoff after the visual parity and interaction audit
+- Status: `Internal Review`
+
+Checklist:
+
+- [x] Vite development and preview configuration use port `3000` by default.
+- [x] All 44 Figma assets are tracked under `public/assets/figma/` and included in the production build.
+- [x] Question navigator transitions and screen 11 geometry are implemented and committed in `bce367b`.
+- [x] `npm run build` passes.
+- [x] `git diff --check` passes.
+- [x] Browser review remains available at `http://localhost:3000/` with the 360 × 740 target frame.
+
+Handoff note: existing documentation and evidence edits remain in the working tree for planner review; no unrelated user files were reset or discarded.
+
+#### REVIEW-011 — Figma asset delivery and screen 12 framing
+
+- Tasks: `CRAFT-004`, `CRAFT-222`, `CRAFT-223`
+- Viewport: `360 × 740`, production preview at `http://127.0.0.1:4173/`
+- Status: `Approved`
+- Evidence: `evidence/CRAFT-223-screen01.png`, `evidence/CRAFT-222-screen12-online.png`, `evidence/CRAFT-222-screen12-offline.png`, `evidence/CRAFT-222-screen13-online.png`
+
+Results:
+
+- Selected `public/assets/figma/` as the static delivery directory; product code consistently requests `/assets/figma/*`. All 44 local Figma assets are present in the production `dist/assets/figma/` output and are served with HTTP 200 by Vite preview.
+- Checked `naturalWidth > 0` for every rendered image on all 14 screens in a fresh Chrome profile. No broken images were found. CSS hero and review mask URLs also resolve from the production preview.
+- Screen 12 capture from scroll top shows the navbar fully within the frame, full-bleed hero, and the upload card at the 12 px inset. The preparation content is 793 px tall inside a 680 px view, so it now scrolls internally while the CTA remains at the bottom of the 360 × 740 frame.
+- Screen 12 state capture: Online renders `1/2`, green connection checklist, and enabled `Lanjutkan`; Offline renders `0/2` and disabled CTA.
+- Screen 13 comparison remains at the bottom of the frame with its short upload card, enabled only while Online. Upload card and CTA state remain distinct from screen 12.
+- Evidence was captured from the production build at `scrollTop = 0`; guide content was also inspected at the lower scroll position. No source-node Figma connection was available in this session, so exact pixel-by-pixel coordinates remain for planner visual review.
+- Verification: `npm run build`, `git diff --check`, production preview asset HTTP checks, and 14-screen Chrome image sweep passed.
+- Additional live verification: clean reload at `http://localhost:4173/` rendered screen 01 assets, and all 14 screen image checks returned `complete && naturalWidth > 0`.
+- Runtime note: use `http://localhost:4173/` for the Vite prototype. The `file://` tab is not a supported runtime and can make root asset URLs appear broken.
+
+#### REVIEW-012 — Screen 04, 06, and question state follow-up
+
+- Tasks: `CRAFT-216`, `CRAFT-219`, `CRAFT-220`, `CRAFT-221`
+- Viewport: `360 × 740`, production preview at `http://127.0.0.1:4173/`
+- Status: `Internal Review`
+- Evidence: `evidence/CRAFT-216-screen04-online.png`, `evidence/CRAFT-216-screen04-offline.png`, `evidence/CRAFT-216-screen04-online-scroll-bottom.png`, `evidence/CRAFT-219-screen06.png`, `evidence/CRAFT-221-screen07.png`, `evidence/CRAFT-221-screen07-pagination.png`, `evidence/CRAFT-221-screen07-online-locked.png`, `evidence/CRAFT-221-screen08.png`, `evidence/CRAFT-221-screen08-pagination.png`, `evidence/CRAFT-221-screen08-online-locked.png`
+
+Results:
+
+- Screen 04 CTA floats at x=24, y=672, width=312 px, with a 24 px bottom margin. Online is disabled; Offline is enabled. Scrolling to the bottom keeps the CTA in place and brings the final guide copy above it.
+- Screen 06 uses a semantic dialog and separate illustration asset. Close, `Kembali`, and `Kerjakan Sekarang` were each activated with Enter and reached their correct screens.
+- Screen 07 and 08 share identical geometry for header, pagination, instruction, passage, and sticky navigation. Question index, answered/current states, and offline label follow their respective fixture. Online mode shows the enforcement overlay and disables controls on both screens.
+- Planner pixel comparison against nodes `8:1203`, `37:10312`, `8:2053`, and `8:2154` remains pending because the Figma design-context tool is unavailable in this builder session.
+- Verification: `npm run build` and `git diff --check` passed.
+
+#### REVIEW-010 — Figma asset delivery regression
+
+- Scope: all screens using `/assets/figma/*`, initially observed on screen 01
+- Evidence: screenshot user `Screenshot 2026-10-10 at 7.24.24 AM.png`
+- Status: `Internal Review`
+
+Temuan:
+
+- [x] `book-pencil.svg`, `question-count.svg`, dan `clock.png` tampil utuh di exam card pada clean production preview.
+- [x] Seluruh 44 asset tersedia di `dist/assets/figma/` setelah build.
+- [x] Runtime memakai satu strategi static public path: `/assets/figma/...` dari `public/assets/figma/`.
+- [x] Sweep 14 screen tidak menemukan image dengan `naturalWidth === 0`.
+
+Task untuk builder:
+
+- [x] Pilih strategi static public path yang konsisten dengan URL `/assets/figma/...`.
+- [x] Pastikan semua 44 asset Figma masuk ke hasil build dan tersedia melalui production preview.
+- [x] Periksa `naturalWidth > 0` pada seluruh gambar di 14 screen dan cek URL CSS mask/background terhadap preview.
+- [x] Uji direct-open pada clean Chrome profile dan pindah screen melalui fixture tanpa cache tab lama.
+- [x] Simpan screenshot screen 01 dan screen 12/13, lalu jalankan `npm run build` dan `git diff --check`.
+
+Acceptance criteria:
+
+- [x] Tidak ada broken image icon pada seluruh 14 screen.
+- [x] Asset exam art, question count, clock, header, alert, guide, upload, review, dan result tampil dari local source.
+- [x] `dist/` dan preview production memuat semua asset yang dirujuk.
+- [x] Verifikasi lulus pada clean browser session.
+
+#### REVIEW-009 — Screen 14 re-review
+
+- Screen: `CRAFT-114` / `CRAFT-218` / node `11:2632`
+- Evidence: live browser capture at `http://localhost:4173/`, viewport `360 × 740`
+- Status: `Approved`
+
+Hasil review:
+
+- [x] Navbar dan hero tampil utuh tanpa clipping.
+- [x] Profile card berada di posisi yang sesuai dan tidak menutupi title hero.
+- [x] Waiting card, illustration, heading, dan tanggal tidak overflow.
+- [x] Summary card menampilkan tiga metrik dan waktu pengerjaan dengan alignment konsisten.
+- [x] Sticky CTA berada di bawah tanpa menutup summary content.
+- [x] Tidak terlihat overlap, horizontal overflow, atau band kosong yang tidak diharapkan.
+- [x] `npm run build` berhasil.
+- [x] `git diff --check` berhasil.
 - Review evidence after the parity pass: screen 06 drawer, screen 07/08 navigator states, screen 09 clean top frame, screen 12 online/offline framing, and screen 14 full-bleed result were inspected in the local browser at `360 × 740`.
 
 #### REVIEW-002 — Screen 09 visual parity
@@ -102,7 +247,7 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 - Screen: `CRAFT-109` / node `13:3198`
 - Evidence: screenshot user `Screenshot 2026-10-10 at 6.27.35 AM.png`
 - Target viewport: `360 × 740`, posisi scroll `0`
-- Status: `Ready for Review`
+- Status: `Internal Review`
 
 Temuan yang terlihat:
 
@@ -132,7 +277,7 @@ Acceptance criteria:
 - Screen: `CRAFT-114` / node `11:2632`
 - Evidence: screenshot user `Screenshot 2026-10-10 at 6.36.15 AM.png`
 - Target viewport: `360 × 740`, posisi scroll `0`
-- Status: `Ready for Review`
+- Status: `Approved` after `REVIEW-009`
 
 Temuan yang terlihat:
 
@@ -162,107 +307,107 @@ Acceptance criteria:
 - Screen: `CRAFT-104` / `CRAFT-216` / node `8:1203`
 - Evidence: screenshot user `Screenshot 2026-10-10 at 6.37.13 AM.png`
 - Target viewport: `360 × 740`
-- Status: `Ready for Review`
+- Status: `Internal Review`
 
 Temuan:
 
-- [ ] CTA `Lanjutkan` saat ini terbaca sebagai bar yang menempel di bagian bawah viewport. Di desain target, tombol perlu tampil sebagai elemen floating yang memiliki jarak dari tepi layar/card dan tidak membentuk sticky action bar penuh.
-- [ ] Disabled state tetap dipertahankan ketika koneksi masih online, tetapi tombol floating harus tetap terlihat jelas dan tidak menyatu dengan background abu-abu.
-- [ ] Pastikan CTA tidak menutup isi panduan terakhir dan tidak berubah posisi ketika konten panduan bertambah atau viewport sedikit lebih tinggi/rendah.
+- [x] CTA `Lanjutkan` tampil sebagai tombol floating dengan margin dari sisi viewport dan tanpa panel selebar frame.
+- [x] Online tetap disabled dan offline enabled; kedua state terlihat di posisi yang sama.
+- [x] Isi panduan terakhir dapat dicapai dengan scroll dan tidak tertutup CTA.
 
 Task untuk builder:
 
-- [ ] Ubah wrapper CTA screen 04 menjadi floating action sesuai koordinat dan jarak pada node Figma `8:1203`; jangan memakai pola `left: 0; right: 0; bottom: 0` yang menghasilkan bar penuh.
-- [ ] Validasi posisi CTA pada viewport `360 × 740`, posisi scroll `0`, dan setelah scroll ke bagian bawah panduan.
-- [ ] Uji state `online` (disabled) dan `offline` (enabled), termasuk kontras, radius, shadow, dan jarak CTA terhadap card.
-- [ ] Capture evidence kedua state dan jalankan `npm run build` serta `git diff --check`.
+- [x] Wrapper memakai tombol floating berukuran 312 px dengan inset horizontal 24 px dan jarak bawah 24 px pada viewport target.
+- [x] Validasi posisi pada scroll `0` dan scroll ke bawah: CTA tetap pada viewport sementara teks panduan terakhir dapat dicapai.
+- [x] Online disabled dan offline enabled; radius, shadow, dan kontras diperiksa.
+- [x] Capture kedua state serta build dan whitespace check berhasil.
 
 Acceptance criteria:
 
-- [ ] Tombol terlihat floating dengan margin yang konsisten di sekelilingnya, bukan sebagai panel putih selebar viewport.
-- [ ] CTA tidak menutup copy panduan terakhir dan tetap dapat ditekan pada state offline.
-- [ ] State disabled/online dan enabled/offline sesuai dengan behavior yang sudah disepakati.
-- [ ] Screenshot kedua state tersedia untuk review planner.
+- [x] Tombol terlihat floating dengan margin 24 px, bukan sebagai panel putih selebar viewport.
+- [x] CTA tidak menutup copy panduan terakhir dan dapat ditekan pada state offline.
+- [x] State disabled/online dan enabled/offline sesuai behavior yang disepakati.
+- [x] Screenshot kedua state tersedia untuk review planner.
 
 #### REVIEW-005 — Screen 06 native bottom drawer
 
 - Screen: `CRAFT-106` / `CRAFT-219` / node `37:10312`
 - Evidence: screenshot user `Screenshot 2026-10-10 at 6.38.23 AM.png`
 - Target viewport: `360 × 740`; mock browser dan elemen background overlay diabaikan
-- Status: `Ready for Review`
+- Status: `Internal Review`
 
 Temuan:
 
-- [ ] Implementasi saat ini masih memakai satu gambar `start-tryout-modal.png` untuk seluruh screen, lalu menambahkan transparent hit areas. Ini membuat drawer tidak semantic, sulit di-review pixel-per-pixel, dan tidak merepresentasikan layout UI yang sebenarnya.
-- [ ] Yang perlu diambil dari referensi hanya bottom drawer: panel putih dengan top corners, close button outlined di kanan atas, ilustrasi peringatan, judul, copy utama, copy emphasis orange, serta dua CTA.
-- [ ] Background screen dan dark overlay di luar drawer tidak menjadi target visual task ini; gunakan layer sederhana hanya untuk konteks modal dan jangan menjadikannya bagian dari asset screenshot.
-- [ ] Drawer harus memiliki ukuran, padding, radius, dan posisi bottom yang stabil pada viewport target. Isi tidak boleh bergeser atau terpotong saat copy berubah sedikit.
+- [x] Screen 06 memakai struktur DOM native dan tidak lagi merender screenshot modal penuh.
+- [x] Drawer berisi close control, ilustrasi warning terpisah, heading, copy, emphasis orange, dan dua CTA.
+- [x] Backdrop adalah layer terpisah dari konten drawer.
+- [x] Drawer stabil pada viewport target dan seluruh konten terlihat.
 
 Task untuk builder:
 
-- [ ] Ganti `StartTryoutModal` menjadi struktur UI native, misalnya `start-modal-layer`, `start-modal-backdrop`, dan `start-modal-sheet`.
-- [ ] Pisahkan asset ilustrasi peringatan dari screenshot. Jika asset sumber belum tersedia secara terpisah, lokalkan hanya ilustrasi drawer sebagai asset baru; jangan merender screenshot penuh.
-- [ ] Rebuild elemen drawer sesuai referensi: close control, ilustrasi, heading `Mulai Tryoutnya Sekarang?`, body copy, emphasis orange, tombol `Kembali`, dan tombol `Kerjakan Sekarang`.
-- [ ] `Kembali` dan close mengembalikan ke screen 05; `Kerjakan Sekarang` memulai attempt dan masuk screen 07.
-- [ ] Tambahkan evidence screenshot clean pada viewport `360 × 740` serta keyboard/accessibility evidence untuk close dan kedua CTA.
-- [ ] Jalankan `npm run build` dan `git diff --check` setelah revisi.
+- [x] `StartTryoutModal` menggunakan `start-modal-layer`, `start-modal-backdrop`, dan `start-modal-sheet`.
+- [x] Drawer hanya memakai asset ilustrasi warning yang terpisah, bukan screenshot full-screen.
+- [x] Seluruh label dan kontrol drawer dibangun sebagai elemen DOM yang semantic.
+- [x] Close dan `Kembali` menuju screen 05; `Kerjakan Sekarang` memulai attempt dan masuk screen 07.
+- [x] Close button punya accessible label; Enter mengaktifkan close, `Kembali`, dan `Kerjakan Sekarang` dalam browser.
+- [x] Screenshot viewport clean tersedia; build dan `git diff --check` berhasil.
 
 Acceptance criteria:
 
-- [ ] Tidak ada `<img>` yang merender screenshot full-screen sebagai layout utama screen 06.
-- [ ] Drawer tetap terlihat benar jika background overlay diubah atau diabaikan; semua elemen drawer adalah DOM/UI yang dapat diinspeksi.
-- [ ] Close, `Kembali`, dan `Kerjakan Sekarang` memiliki target interaksi terpisah dan berfungsi.
-- [ ] Drawer tidak memiliki overflow horizontal/vertical yang tidak ada pada referensi dan tidak menutup CTA.
-- [ ] Screenshot builder hanya memperlihatkan drawer sebagai target review, dengan background overlay diperlakukan sebagai konteks.
+- [x] Tidak ada `<img>` screenshot full-screen sebagai layout screen 06.
+- [x] Drawer dan controls adalah DOM; backdrop layer terpisah.
+- [x] Close, `Kembali`, dan `Kerjakan Sekarang` memiliki target terpisah dan interaksi click berfungsi.
+- [x] Drawer tidak memiliki overflow atau menutup CTA.
+- [x] Screenshot clean dan keyboard activation evidence tersedia untuk close dan kedua CTA.
 
 #### REVIEW-006 — Screen 07–08 question navigator icon
 
 - Screen: `CRAFT-107` dan `CRAFT-108` / nodes `8:2053` dan `8:2154`
 - Evidence: screenshot user `Screenshot 2026-10-10 at 6.39.40 AM.png`
 - Target viewport: `360 × 740`
-- Status: `Ready for Review`
+- Status: `Internal Review`
 
 Temuan:
 
-- [ ] Ikon navigator soal pada sisi kanan pagination belum sesuai referensi. Implementasi saat ini memakai karakter teks `▦`, sehingga bentuk grid, ketebalan garis, ukuran, dan baseline mengikuti font, bukan desain Figma.
-- [ ] Ikon perlu diperlakukan sebagai control visual yang stabil: ukuran box, posisi vertikal, jarak dari nomor soal, dan area klik harus konsisten pada screen 07 dan 08.
-- [ ] Screenshot evidence yang dikirim hanya berupa crop; builder perlu memvalidasi ulang card pagination secara utuh agar radius, clipping, dan posisi ikon terhadap tepi card tidak ikut berubah.
+- [x] Glyph `▦` diganti dengan icon component `LayoutGrid` dari icon library project.
+- [x] Control punya ukuran box 32 × 32 px dan accessible label yang sama pada kedua screen.
+- [x] Full viewport dan crop pagination tersedia untuk kedua screen.
 
 Task untuk builder:
 
-- [ ] Ganti glyph `▦` dengan asset/icon UI yang bentuknya sama dengan Figma. Gunakan asset lokal jika tersedia; bila tidak, gunakan icon library yang sudah dipakai project, bukan karakter font.
-- [ ] Sesuaikan ukuran, stroke/color, alignment, dan hit target ikon berdasarkan node Figma `8:2053` dan `8:2154`.
-- [ ] Uji state screen 07 (soal 1 aktif) dan screen 08 (soal 2 aktif), termasuk state disabled ketika network enforcement aktif.
-- [ ] Capture full viewport dan close-up pagination card untuk kedua screen.
-- [ ] Jalankan `npm run build` dan `git diff --check`.
+- [x] Gunakan `LayoutGrid` dari icon library yang sudah dipakai project.
+- [x] Ukuran, stroke, alignment, dan hit target konsisten di screen 07 dan 08; pixel match menunggu planner review.
+- [x] Uji screen 07/08 offline dan state online terkunci.
+- [x] Capture full viewport dan crop pagination untuk kedua screen.
+- [x] Jalankan `npm run build` dan `git diff --check`.
 
 Acceptance criteria:
 
-- [ ] Ikon tidak lagi berasal dari text glyph dan tidak berubah karena font/zoom.
-- [ ] Bentuk dan posisi ikon sesuai Figma pada screen 07 dan 08.
-- [ ] Control tetap memiliki accessible label dan hit target yang wajar.
-- [ ] Pagination card tidak mengalami clipping atau perubahan radius akibat perbaikan ikon.
+- [x] Ikon memakai vector icon, bukan glyph teks.
+- [ ] Bentuk dan posisi exact terhadap node Figma menunggu planner review.
+- [x] Control memiliki accessible label dan hit target 32 × 32 px.
+- [x] Pagination card tidak clipping dan geometry kedua screen identik.
 
 #### REVIEW-007 — Screen 07 vs 08 state parity
 
 - Screens: `CRAFT-107` dan `CRAFT-108` / nodes `8:2053` dan `8:2154`
 - Evidence: screenshots user `Screenshot 2026-10-10 at 6.40.34 AM.png` dan `Screenshot 2026-10-10 at 6.40.41 AM.png`
 - Target viewport: `360 × 740`; mock browser/capture chrome diabaikan
-- Status: `Ready for Review`
+- Status: `Internal Review`
 
 Perbedaan yang memang berasal dari state:
 
-- [ ] Screen 07 menampilkan `Soal 1/4`; screen 08 menampilkan `Soal 2/4`.
-- [ ] Screen 07: nomor 1 adalah current/orange, nomor 2–4 belum dijawab.
-- [ ] Screen 08: nomor 1 menjadi answered/blue, nomor 2 menjadi current/orange, nomor 3–4 belum dijawab.
-- [ ] Label status koneksi berbeda: screen 07 `Mode Offline Aktif`, screen 08 `Mengerjakan Offline`; perbedaan copy harus berasal dari state, bukan layout terpisah.
-- [ ] Timer boleh memiliki nilai waktu berbeda, tetapi box, separator, baseline, dan posisi harus identik.
-- [ ] Ikon navigator/grid, card pagination, header, dan spacing harus identik di kedua state. Perbaikan ikon tetap mengikuti `CRAFT-220`.
+- [x] Screen 07 menampilkan `Soal 1/4`; screen 08 menampilkan `Soal 2/4`.
+- [x] Screen 07: nomor 1 current/orange, nomor 2–4 belum dijawab.
+- [x] Screen 08: nomor 1 answered/blue, nomor 2 current/orange, nomor 3–4 belum dijawab.
+- [x] Label koneksi berbeda sesuai fixture/state: `Mode Offline Aktif` dan `Mengerjakan Offline`.
+- [x] Bounds timer dan elemen utama identik di kedua state.
+- [x] Ikon grid, pagination, header, dan spacing identik di kedua state.
 
 Perbedaan yang bukan target perubahan layout:
 
-- [ ] Selisih posisi vertikal pada dua capture berasal dari top crop/browser chrome. Builder tidak boleh menggeser header atau pagination 16 px hanya untuk menyamakan screenshot mentah.
-- [ ] Validasi dilakukan setelah kedua state dirender pada viewport bersih `360 × 740` dengan posisi scroll `0`.
+- [x] Kedua state dirender pada viewport bersih `360 × 740`, scroll `0`, dengan geometry identik.
+- [ ] Pixel alignment terhadap screenshot sumber Figma menunggu planner visual review.
 
 Task untuk builder:
 
@@ -284,31 +429,31 @@ Acceptance criteria:
 - Screen: `CRAFT-112` / `CRAFT-222` / node `15:9660`
 - Evidence: screenshot user `Screenshot 2026-10-10 at 6.43.42 AM.png`
 - Target viewport: `360 × 740`, mock browser diabaikan
-- Status: `Ready for Review`
+- Status: `Internal Review`
 
 Temuan:
 
-- [ ] Navbar/logo pada capture terpotong di bagian atas, sementara card sudah naik ke area hero. Ini mengindikasikan capture tidak berada pada `scrollTop = 0` atau ada container yang menggeser layout. Builder wajib memastikan penyebabnya sebelum mengubah posisi komponen.
-- [ ] Hero/background harus diverifikasi full-bleed terhadap app frame; card upload preparation tetap berada pada inset horizontal yang sama dengan Figma.
-- [ ] Header card, progress ring `1/2`, alert, dua checklist item, divider, dan panel lanjutan perlu dicek sebagai satu vertical rhythm. Jangan hanya menyamakan bagian yang terlihat pada crop.
-- [ ] State online harus menunjukkan step koneksi selesai (`1/2`), item `Nyalakan Koneksi Internet` success, item upload belum selesai, dan CTA sesuai gate koneksi. State offline/online harus diuji terpisah.
-- [ ] Screen 12 dan screen 13 boleh memakai komponen yang sama, tetapi status step, copy, panel, dan CTA tidak boleh tertukar.
+- [x] Dari `scrollTop = 0`, navbar/logo utuh; card berada pada inset 12 px dan hero full-bleed ke frame.
+- [x] Header, progress ring, alert, checklist, divider, dan panduan membentuk satu alur vertikal yang dapat digulir.
+- [x] Online menunjukkan `1/2`, koneksi success, upload belum selesai, dan CTA aktif. Offline menunjukkan `0/2` dan CTA disabled.
+- [x] Screen 12 dan 13 mempertahankan panel, state, dan posisi CTA yang berbeda.
+- [ ] Perbandingan koordinat exact terhadap source node `15:9660` menunggu planner visual review; Figma design-context tool tidak tersedia di sesi builder.
 
 Task untuk builder:
 
-- [ ] Capture screen 12 dari direct-open dan flow screen 11 → 12 dengan `scrollTop = 0`; gunakan viewport `360 × 740` tanpa mock browser.
-- [ ] Audit apakah `navbar`, `screen-content` padding, `upload-prep-screen`, dan `Hero` menghasilkan satu framing yang konsisten. Hapus offset/overflow yang tidak berasal dari Figma.
-- [ ] Bandingkan koordinat top/left/width/height untuk navbar, hero, upload card, progress ring, alert, checklist rows, divider, panel, dan CTA dengan node `15:9660`.
-- [ ] Uji state simulator online dan offline, lalu capture evidence untuk state `1/2` dan `0/2` atau state yang memang ditetapkan Figma.
-- [ ] Jalankan `npm run build` dan `git diff --check`.
+- [x] Capture direct-open pada `scrollTop = 0`, viewport `360 × 740`, tanpa mock browser.
+- [x] Audit framing navbar, screen content, hero, card, dan CTA; panduan dapat digulir.
+- [ ] Bandingkan koordinat terhadap source node `15:9660` saat planner visual review.
+- [x] Uji dan capture state Online (`1/2`), Offline (`0/2`), serta screen 13 sebagai pembanding.
+- [x] Jalankan `npm run build` dan `git diff --check`.
 
 Acceptance criteria:
 
-- [ ] Navbar/logo tidak terpotong pada capture scroll 0.
-- [ ] Hero tidak tampak sebagai strip yang salah akibat offset; batas dan layering sesuai frame Figma.
-- [ ] Upload preparation card dan seluruh child element mempertahankan vertical rhythm pada viewport target.
-- [ ] State online/offline mengubah progress, checklist, dan CTA secara konsisten tanpa merusak layout.
-- [ ] Evidence full viewport tersedia untuk screen 12 dan pembanding screen 13.
+- [x] Navbar/logo utuh pada capture scroll 0.
+- [x] Hero full-bleed pada app frame dan card mengikuti inset 12 px; exact Figma coordinate match masih menunggu review planner.
+- [x] Upload preparation card mempertahankan urutan vertikal dan panduan dapat digulir pada viewport target.
+- [x] State online/offline mengubah progress, checklist, dan CTA secara konsisten tanpa merusak layout.
+- [x] Evidence full viewport tersedia untuk screen 12 dan pembanding screen 13.
 
 ## Task fondasi
 
@@ -446,10 +591,24 @@ Boundary enforcement: nudge anti-internet dimulai ketika attempt masuk screen pe
 ### CRAFT-004 — Asset map
 
 - [x] Download asset yang dipakai screen 01.
-- [ ] Kelompokkan asset berdasarkan navbar, header, icon, illustration, dan state.
-- [ ] Pastikan setiap asset punya nama lokal yang jelas.
-- [ ] Catat node Figma asal setiap asset.
-- [ ] Tandai asset yang masih perlu diambil dari screen 02–14.
+- [x] Kelompokkan asset berdasarkan komponen dan fungsi.
+- [x] Pertahankan nama file lokal yang jelas dan konsisten dengan export Figma.
+- [x] Catat section sumber dan node screen yang menggunakan registry.
+- [x] Inventarisasi 44 asset lokal yang dipakai lintas screen 01–14.
+
+#### Asset registry
+
+Semua file di bawah bersumber dari section Figma `15:7547`. Salinan untuk delivery statis berada di `public/assets/figma/` dan tersedia saat build di `dist/assets/figma/`; runtime memakai URL `/assets/figma/<nama-file>`.
+
+| Kelompok | Asset |
+| --- | --- |
+| Navbar dan profil | `ruangguru-logo.svg`, `navbar-more.svg`, `dropdown.svg`, `user-head.svg`, `user-body.svg`, `user-outer.svg`, `result-account.png` |
+| Hero dan background | `header-left.svg`, `header-right.svg`, `header-mask.svg`, `result-bg.svg`, `result-header-bg.svg`, `review-background-mask.svg` |
+| Exam dan download | `book-pencil.svg`, `book.svg`, `pencil.svg`, `test.svg`, `download.svg`, `question-count.svg`, `clock.png` |
+| Checklist dan network | `checklist.svg`, `checklist-ready.svg`, `checklist-ready-banner.svg`, `checklist-success.svg`, `checklist-offline-complete.svg`, `wifi.svg`, `protected.svg`, `refresh.svg`, `warning.svg` |
+| Review dan timer | `review-alert.svg`, `review-info.svg`, `review-info-blue.svg`, `review-pagination.svg`, `review-pagination-blue.svg`, `review-clock.png`, `divider.svg`, `alert-paper.svg`, `alert-paper-detail.svg`, `alert-badge.svg` |
+| Panduan dan konfirmasi | `android-guide.svg`, `save-warning.png`, `start-tryout-modal.png`, `start-tryout-warning.png` |
+| Hasil | `result-waiting.png` |
 
 ### CRAFT-005 — Komponen reusable
 
@@ -539,6 +698,9 @@ Setiap task `CRAFT-101` sampai `CRAFT-114` menggunakan checklist ini.
 16. `CRAFT-220` — Rebuild ikon navigator soal screen 07–08.
 17. `CRAFT-221` — Kunci visual state screen 07 vs 08.
 18. `CRAFT-222` — Audit framing dan state screen 12.
+19. `CRAFT-223` — Perbaiki delivery asset Figma.
+20. `CRAFT-224` — Wire touchpoint navigator soal ke screen 09.
+21. `CRAFT-225` — Audit visual screen 11 — Subtes Berikutnya.
 
 ## Format catatan review
 
