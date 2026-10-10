@@ -38,8 +38,9 @@
 ## D-006 — Navigation and tester sidebar
 
 - Status: `Internal Review`
-- The TO Offline sidebar interaction pattern is adapted locally for Drill: open/close, reset, active state, 11 direct jumps, Online/Offline simulation, and upload failure trigger.
+- The TO Offline sidebar interaction pattern is adapted locally for Drill: open/close, reset, active state, 11 direct jumps, an accessible single Online/Offline switch, and upload failure trigger.
 - Online/Offline simulation now changes behavior, not only active styling: offline guide completion and question attempt require Offline; upload requires Online; changing the mode while a state is open immediately shows or removes the gate.
+- The switch exposes `role="switch"` and `aria-checked`; its label and state remain visible in the open test menu.
 
 ## D-007 — Visual iteration and QA
 
@@ -82,3 +83,4 @@
 - Latest browser audit checked all 11 sidebar jumps, full scroll heights, scroll reset between states, correct-answer flow, wrong-answer flow, timeout, upload failed/retry, and Online/Offline gates. `npm run build` and `git diff --check` pass.
 - Network matrix evidence: screen 03 Online disables the completion CTA and shows an alert; Offline enables it. Screen 04 Online disables `Kerjakan Drill`; Offline enables it. Screen 05 direct Online jumps show a blocked alert and disabled options; switching Offline enables the attempt. Screen 06 Submit is disabled Online and enabled Offline. Screen 10 upload is enabled Online and blocked Offline. Full network-gated correct flow and upload failed → retry → summary pass.
 - Direct sidebar jumps preserve the selected network mode, so jumping to screen 10 while Offline cannot silently reset to Online; toggling to Online then immediately enables upload.
+- Latest switch iteration verified at the preview viewport: screen 03 changes between blocked and complete guide states, screen 04 changes between disabled and enabled start CTA, screen 09 updates its 0/2 → 1/2 internet checklist, and screen 10 changes between disabled `Nyalakan Internet` and enabled upload. Upload failure → `Coba Lagi` → progress → result summary also passes.
