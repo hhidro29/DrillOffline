@@ -221,7 +221,7 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .summary-score > span { position: relative; z-index: 1; display: grid; place-items: center; width: 125px; height: 125px; color: #434856; background: #fff; border-radius: 50%; font-size: 40px; font-weight: 700; }
 .summary-xp { width: 100%; padding: 12px; color: #fff; background: rgba(16,111,207,.75); border-radius: 12px; text-align: center; font-size: 12px; }
 .summary-xp b { display: block; margin-top: 4px; font-size: 16px; }
-.summary-grid { gap: 8px; margin-top: 16px; }
+.summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
 .summary-grid div { flex-direction: row; align-items: center; justify-content: center; gap: 8px; padding: 10px; background: #fff; border: 1px solid #dde4f1; border-radius: 12px; text-align: left; }
 .summary-grid b { display: grid; place-items: center; width: 18px; height: 18px; color: #fff; background: #1eb57e; border-radius: 4px; font-size: 12px; }
 .summary-grid div:nth-child(2) b { background: #ef5270; }

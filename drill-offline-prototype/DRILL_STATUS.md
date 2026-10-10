@@ -45,6 +45,7 @@
 - Status: `Internal Review`
 - Planner live audit passed all 11 states, including top/mid/bottom scroll checks on screens 03, 05, 06, 09, 10, and 11.
 - Planner confirmed screen 10's green `1/2` progress arc and red alert icon match Figma, screen 11 lower sections remain visible through scroll, and sticky CTAs stay fully visible at the actual preview height.
+- Screen 11 stat cards now use two equal `145px` columns at `x=28–173` and `x=187–332`, matching the Figma result row instead of leaving an unused third-column slot.
 - Copy audit across all 11 states is free of `tryout` and `subtest` wording.
 
 ## D-008 — Handoff to planner
