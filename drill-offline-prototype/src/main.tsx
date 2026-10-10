@@ -8,7 +8,7 @@ const asset = (name: string) => `/assets/figma/${name}`;
 function Navbar() {
   return (
     <nav className="navbar" aria-label="Primary navigation">
-      <button className="icon-button" aria-label="Open product menu"><img src={asset('navbar-more.svg')} alt="" /></button>
+      <button className="icon-button" aria-label="Open Drill test menu" onClick={() => window.dispatchEvent(new Event('drill:menu'))}><img src={asset('navbar-more.svg')} alt="" /></button>
       <img className="brand" src={asset('ruangguru-logo.svg')} alt="ruang guru" />
       <button className="account-button">Akun Saya <img src={asset('dropdown.svg')} alt="" /></button>
     </nav>
@@ -71,6 +71,24 @@ function ReadyState() {
 
 type DrillScreen = PreparationState | 'question' | 'confirm' | 'wrong' | 'timeout' | 'online-guide' | 'upload' | 'summary';
 
+const drillScreenLabels: Record<DrillScreen, string> = {
+  download: '01 · Download package',
+  downloading: '02 · Downloading package',
+  'offline-guide': '03 · Turn off internet guide',
+  ready: '04 · Ready to start',
+  question: '05 · Work on questions',
+  confirm: '06 · Confirm answers',
+  wrong: '07 · Wrong answer result',
+  timeout: '08 · Time expired',
+  'online-guide': '09 · Turn on internet guide',
+  upload: '10 · Upload and collect',
+  summary: '11 · Result summary',
+};
+
+function DrillSidebar({ current, onClose, onNavigate, onReset }: { current: DrillScreen; onClose: () => void; onNavigate: (screen: DrillScreen) => void; onReset: () => void }) {
+  return <div className="drill-menu-overlay" role="presentation" onClick={onClose}><aside className="drill-side-menu" role="dialog" aria-modal="true" aria-label="Drill test navigation" onClick={event => event.stopPropagation()}><button className="drill-menu-close" aria-label="Close test menu" onClick={onClose}>×</button><img className="drill-menu-mark" src={asset('navbar-more.svg')} alt="" /><h2>Drill Offline demo</h2><p>Jump to a state for review.</p><div className="drill-menu-tools"><span>Test controls</span><button onClick={onReset}>Reset session</button></div><div className="drill-menu-items">{(Object.keys(drillScreenLabels) as DrillScreen[]).map(screen => <button className={`drill-menu-item ${current === screen ? 'current' : ''}`} key={screen} onClick={() => { onNavigate(screen); onClose(); }}>{drillScreenLabels[screen]}</button>)}</div></aside></div>;
+}
+
 function formatTime(seconds: number) {
   const minutes = Math.floor(seconds / 60).toString().padStart(2, '0');
   const remainder = (seconds % 60).toString().padStart(2, '0');
@@ -119,11 +137,14 @@ function App() {
   const [answer, setAnswer] = useState<number | null>(null);
   const [timer, setTimer] = useState(15 * 60);
   const [uploadStatus, setUploadStatus] = useState<'ready' | 'uploading' | 'failed'>('ready');
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onStart = () => setScreen('question');
+    const onMenu = () => setMenuOpen(true);
     window.addEventListener('drill:start', onStart);
-    return () => window.removeEventListener('drill:start', onStart);
+    window.addEventListener('drill:menu', onMenu);
+    return () => { window.removeEventListener('drill:start', onStart); window.removeEventListener('drill:menu', onMenu); };
   }, []);
 
   useEffect(() => {
@@ -158,15 +179,27 @@ function App() {
     window.setTimeout(() => setScreen('summary'), 700);
   };
   const failUpload = () => setUploadStatus('failed');
-  if (screen === 'question') return <QuestionScreen timer={timer} answer={answer} onAnswer={setAnswer} onNext={() => setScreen('confirm')} onTimeout={() => setScreen('timeout')} />;
-  if (screen === 'confirm') return <ConfirmScreen timer={timer} answer={answer} onBack={() => setScreen('question')} onSubmit={submitAnswer} onTimeout={() => setScreen('timeout')} />;
-  if (screen === 'wrong' || screen === 'timeout') return <ResultAnswerScreen kind={screen} timer={timer} onContinue={() => setScreen('online-guide')} />;
-  if (screen === 'online-guide') return <OnlineGuide onContinue={() => setScreen('upload')} />;
-  if (screen === 'upload') return <UploadScreen status={uploadStatus} onUpload={upload} onFail={failUpload} />;
-  if (screen === 'summary') return <SummaryScreen onRestart={() => { setAnswer(null); setTimer(15 * 60); setProgress(0); setUploadStatus('ready'); setScreen('download'); }} />;
+  const resetSession = () => { setAnswer(null); setTimer(15 * 60); setProgress(0); setUploadStatus('ready'); setScreen('download'); };
+  const navigateFromMenu = (next: DrillScreen) => {
+    if (next === 'question') { setAnswer(null); setTimer(15 * 60); }
+    if (next === 'confirm') { setAnswer(0); setTimer(15 * 60); }
+    if (next === 'downloading') setProgress(26);
+    if (next === 'upload') setUploadStatus('ready');
+    setScreen(next);
+  };
 
-  const shownState = screen === 'downloading' ? (progress || 26) : screen;
-  return <main className="app-shell"><Navbar /><div className="content"><HeaderArtwork /><PreparationCard state={screen as PreparationState} onReady={() => setScreen('ready')} /></div>{screen === 'ready' ? <ReadyState /> : <div className="sticky-actions"><button className="primary-cta" disabled={screen === 'offline-guide'} onClick={() => screen === 'download' ? (setProgress(26), setScreen('downloading')) : undefined}>{screen === 'download' ? 'Download Soal' : screen === 'downloading' ? `Mendownload… ${shownState}%` : 'Lanjutkan'}</button></div>}</main>;
+  let content: ReactNode;
+  if (screen === 'question') content = <QuestionScreen timer={timer} answer={answer} onAnswer={setAnswer} onNext={() => setScreen('confirm')} onTimeout={() => setScreen('timeout')} />;
+  else if (screen === 'confirm') content = <ConfirmScreen timer={timer} answer={answer} onBack={() => setScreen('question')} onSubmit={submitAnswer} onTimeout={() => setScreen('timeout')} />;
+  else if (screen === 'wrong' || screen === 'timeout') content = <ResultAnswerScreen kind={screen} timer={timer} onContinue={() => setScreen('online-guide')} />;
+  else if (screen === 'online-guide') content = <OnlineGuide onContinue={() => setScreen('upload')} />;
+  else if (screen === 'upload') content = <UploadScreen status={uploadStatus} onUpload={upload} onFail={failUpload} />;
+  else if (screen === 'summary') content = <SummaryScreen onRestart={resetSession} />;
+  else {
+    const shownState = screen === 'downloading' ? (progress || 26) : screen;
+    content = <main className="app-shell"><Navbar /><div className="content"><HeaderArtwork /><PreparationCard state={screen as PreparationState} onReady={() => setScreen('ready')} /></div>{screen === 'ready' ? <ReadyState /> : <div className="sticky-actions"><button className="primary-cta" disabled={screen === 'offline-guide'} onClick={() => screen === 'download' ? (setProgress(26), setScreen('downloading')) : undefined}>{screen === 'download' ? 'Download Soal' : screen === 'downloading' ? `Mendownload… ${shownState}%` : 'Lanjutkan'}</button></div>}</main>;
+  }
+  return <div className="drill-review-root">{content}{menuOpen && <DrillSidebar current={screen} onClose={() => setMenuOpen(false)} onNavigate={navigateFromMenu} onReset={resetSession} />}</div>;
 }
 
 createRoot(document.getElementById('root')!).render(<StrictMode><App /></StrictMode>);

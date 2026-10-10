@@ -130,4 +130,17 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .recommendation { padding: 12px; color: #5e677b; background: #edf7f8; border-radius: 8px; font-size: 12px; line-height: 18px; }
 .summary-footer { display: flex; gap: 12px; padding: 20px 16px; background: #fff; box-shadow: 0 -2px 8px rgba(0,0,0,.06); }
 .summary-footer .primary-cta, .summary-footer .secondary-cta { flex: 1; }
+.drill-review-root { min-height: 100vh; }
+.drill-menu-overlay { position: fixed; inset: 0; z-index: 50; background: rgba(25,31,40,.35); }
+.drill-side-menu { position: absolute; top: 0; bottom: 0; left: max(calc(50% - 180px), 0px); width: 292px; padding: 18px 16px 24px; overflow-y: auto; background: #fff; box-shadow: 7px 0 20px rgba(0,0,0,.15); }
+.drill-menu-close { position: absolute; top: 10px; right: 12px; width: 32px; height: 32px; color: #6d7788; background: transparent; font-size: 28px; line-height: 28px; }
+.drill-menu-mark { width: 32px; height: 32px; margin: 4px 0 14px; }
+.drill-side-menu h2 { margin: 0 0 4px; color: #2c313a; font-size: 18px; line-height: 26px; }
+.drill-side-menu > p { margin: 0 0 18px; color: #6d7788; font-size: 12px; line-height: 18px; }
+.drill-menu-tools { display: grid; gap: 8px; margin-bottom: 12px; padding: 11px 10px; color: #6d7788; background: #f7f8fa; border-radius: 9px; font-size: 11px; }
+.drill-menu-tools button { width: 100%; padding: 7px 9px; color: #fff; background: #2c313a; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.drill-menu-items { display: grid; gap: 2px; }
+.drill-menu-item { display: block; width: 100%; padding: 9px 10px; color: #596477; background: transparent; border-radius: 8px; text-align: left; font-size: 12px; line-height: 18px; }
+.drill-menu-item:hover { background: #f7f8fa; }
+.drill-menu-item.current { color: #f26d0f; background: #fff1e8; font-weight: 700; }
 @media (min-width: 500px) { .app-shell { box-shadow: 0 0 0 1px #e0e4ea, 0 12px 40px rgba(44,49,58,.12); } }

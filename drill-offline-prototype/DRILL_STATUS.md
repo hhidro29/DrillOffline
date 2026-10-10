@@ -47,3 +47,4 @@
 - Preview: `http://127.0.0.1:3001/` at `360 × 740`.
 - Live browser review covered download → offline guide → ready → question → confirmation → wrong-answer result → online guide → upload → summary.
 - Timeout state was also verified through the local review control; the question controls lock and the timeout result appears.
+- The Drill sidebar was verified at `360 × 740`; it opens from the navbar, highlights the current state, and jumps directly to all 11 states without changing the TO preview.
