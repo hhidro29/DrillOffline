@@ -60,7 +60,6 @@ function OfflineGuide({ network, onReady }: { network: NetworkMode; onReady: () 
   return <div className="offline-guide">
     <h2>Cara mematikan koneksi internet perangkat</h2>
     <p>Pastikan kamu terlepas dari koneksi internet selama mengerjakan drill offline.</p>
-    {blocked && <div className="network-blocked" role="alert"><strong>Internet masih aktif</strong><span>Gunakan mode Offline untuk menyelesaikan checklist dan mulai Drill.</span></div>}
     <div className="guide-tabs"><button className="selected">Android</button><button>iOS</button><button>Windows</button><button>MacOS</button></div>
     <div className="guide-image" role="img" aria-label="Android airplane mode guide" />
     <h3>Cara utama: Aktifkan mode terbang</h3>
