@@ -18,10 +18,25 @@
 
 - Status: `Internal Review`
 - Implemented states: download, downloading, offline guide, and ready.
-- Remaining flow: question session, answer confirmation, wrong answer, timeout, upload, and result summary.
+- Preparation states are implemented and connected to the question session.
+
+## D-004 — Question and answer results
+
+- Status: `Internal Review`
+- Implemented frames: `69:10610`, `69:10677`, `69:10823`, `69:10895`
+- States: question selection, answer confirmation, wrong answer, and time expired.
+- The timer is local to one session and has no network enforcement or subtest transition.
+
+## D-005 — Upload and result
+
+- Status: `Internal Review`
+- Implemented frames: `69:13066`, `69:13136`, `69:12792`
+- States: online guide, upload progress, and result summary.
+- Upload is simulated locally and reaches the summary after the progress state.
 
 ## Assumptions and open decisions
 
 - Download progress is simulated locally for visual review.
 - The guide uses a neutral image placeholder until the Drill-specific instructional asset is exported from Figma.
-- The question/session screens will use the fixture in `src/fixtures/drill.ts` and will be implemented in D-004.
+- The instructional image area remains a neutral placeholder until the Drill-specific image export is available.
+- The result summary uses local fixture values until a backend result contract is supplied.
