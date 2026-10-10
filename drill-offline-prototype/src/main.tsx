@@ -199,7 +199,6 @@ function App() {
   const navigateFromMenu = (next: DrillScreen) => {
     if (next === 'question') { setAnswer(null); setTimer(15 * 60); }
     if (next === 'confirm') { setAnswer(0); setTimer(15 * 60); }
-    if (next === 'upload' || next === 'summary') setNetwork('online');
     if (next === 'downloading') setProgress(26);
     if (next === 'upload') setUploadStatus('ready');
     setScreen(next);
