@@ -161,13 +161,13 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .timer-chip b i { display: grid; place-items: center; width: 24px; height: 24px; color: #3658d8; background: #fff; border-radius: 4px; font-style: normal; }
 .timer-chip-result b i { color: #fff; background: #f26d0f; }
 .timer-chip b em { font-style: normal; }
-.question-info { height: 70px; margin: -17px 16px 0; padding: 0 12px; border-radius: 20px; }
+.question-info { height: 70px; margin: -54px 16px 0; padding: 0 12px; border-radius: 20px; }
 .question-info > strong { font-size: 16px; }
 .xp { display: inline-flex; gap: 8px; align-items: center; margin-right: auto; margin-left: 16px; color: #434856; font-size: 16px; }
 .xp-mark { display: grid; place-items: center; width: 24px; height: 24px; color: #fff; background: linear-gradient(135deg,#75dc48,#20a4b0); border-radius: 50%; font-size: 9px; font-weight: 700; }
 .score { gap: 8px; font-size: 16px; }
 .score i { width: 18px; height: 18px; }
-.question-scroll { gap: 12px; padding: 32px 16px 94px; }
+.question-scroll { gap: 12px; padding: 16px 16px 94px; }
 .question-card { padding: 16px; border: 0; border-radius: 12px; }
 .question-card-title { margin-bottom: 16px; font-size: 12px; color: #5e677b; }
 .question-card-title span { padding: 5px 12px; color: #f26d0f; background: #fff1e8; font-size: 11px; }

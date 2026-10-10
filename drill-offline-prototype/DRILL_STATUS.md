@@ -50,3 +50,4 @@
 - The Drill sidebar was verified at `360 × 740`; it opens from the navbar, highlights the current state, and jumps directly to all 11 states without changing the TO preview.
 - The Figma parity pass aligned the question, confirmation, wrong-answer, timeout, upload-guide, upload, and result-summary layouts to the Drill frames in section `69:14041`, including the breadcrumb, gradient hero, timer treatment, answer cards, upload alert, score panel, and sticky actions.
 - End-to-end browser verification passed on `http://127.0.0.1:3001/`: download → offline guide → ready → question → confirmation → correct result → upload guide → upload → summary, plus direct wrong-answer, timeout, and upload-failed states.
+- Final question-frame alignment was checked against the Figma coordinates: the info card starts at `y=233` and the question card at `y=319` within the 360px frame after resetting the scroll container.
