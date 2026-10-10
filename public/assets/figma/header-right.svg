@@ -1,0 +1,16 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="171.498" height="222.472" viewBox="0 0 171.498 222.472" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="kanan">
+<path id="Ellipse 577" d="M110.193 48.8871C144.051 75.8868 149.611 125.222 122.611 159.08L0 61.3057C26.9996 27.4475 76.3346 21.8875 110.193 48.8871Z" fill="url(#paint0_linear_0_124)"/>
+<path id="Ellipse 576" d="M55.519 183.39C83.2625 204.974 123.251 199.981 144.835 172.238L44.3667 94.0742C22.7824 121.818 27.7755 161.806 55.519 183.39Z" fill="url(#paint1_linear_0_124)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_124" x1="22.5432" y1="68.2504" x2="154.858" y2="92.6755" gradientUnits="userSpaceOnUse">
+<stop stop-color="#80D2FF" stop-opacity="0"/>
+<stop offset="0.768164" stop-color="#0084CC"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_124" x1="8.0001" y1="118.191" x2="55.5806" y2="263.357" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0084CC"/>
+<stop offset="1" stop-color="#80D2FF" stop-opacity="0"/>
+</linearGradient>
+</defs>
+</svg>
