@@ -53,7 +53,7 @@
 ## D-008 — Handoff to planner
 
 - Status: `Internal Review`
-- Final commits: `bb40218` (responsive viewport and scroll anchoring), `ac89d98` (upload progress arc and red alert asset).
+- Final commits: `bb40218` (responsive viewport and scroll anchoring), `ac89d98` (upload progress arc and red alert asset), `fba5906` (accessible network switch and reactive network gates).
 - Preview: `http://127.0.0.1:3001/`
 - Planner verdict: Internal Review ready after live verification.
 
@@ -84,3 +84,4 @@
 - Network matrix evidence: screen 03 Online disables the completion CTA and shows an alert; Offline enables it. Screen 04 Online disables `Kerjakan Drill`; Offline enables it. Screen 05 direct Online jumps show a blocked alert and disabled options; switching Offline enables the attempt. Screen 06 Submit is disabled Online and enabled Offline. Screen 10 upload is enabled Online and blocked Offline. Full network-gated correct flow and upload failed → retry → summary pass.
 - Direct sidebar jumps preserve the selected network mode, so jumping to screen 10 while Offline cannot silently reset to Online; toggling to Online then immediately enables upload.
 - Latest switch iteration verified at the preview viewport: screen 03 changes between blocked and complete guide states, screen 04 changes between disabled and enabled start CTA, screen 09 updates its 0/2 → 1/2 internet checklist, and screen 10 changes between disabled `Nyalakan Internet` and enabled upload. Upload failure → `Coba Lagi` → progress → result summary also passes.
+- Planner final verdict after the latest live pass: Internal Review ready; all 11 states, long-screen scroll, sticky CTAs, network gates, wrong-answer, timeout, upload retry, and summary flow have no remaining P0/P1 mismatch.
