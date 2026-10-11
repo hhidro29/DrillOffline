@@ -22,7 +22,7 @@ Board ini memakai task berukuran **epic/fase besar**. Pecah epic menjadi checkli
 | EPIC-005 | Bangun pengumpulan dan hasil tryout | P1 | Backlog | Ringkasan sebelum submit, unggah dan pemulihan kegagalan, status hasil, serta akses pembahasan. Mulai setelah EPIC-004 dan keputusan produk terkait tersedia. |
 | EPIC-006 | Refactor boundary TO Offline | P2 | Deferred | Tidak diperlukan untuk milestone Drill standalone. Evaluasi setelah prototype TO dan Drill stabil. |
 | EPIC-007 | Ekstrak shared offline foundation | P2 | Deferred | Tidak menjadi dependency Drill milestone pertama. Evaluasi berdasarkan evidence setelah kedua prototype direview. |
-| EPIC-008 | Bangun student flow Drill Offline | P0 | Internal Review | Standalone Drill project sudah tersedia di `feat/drill-dev` pada `drill-offline-prototype/`; 11 frame dan one-session flow sudah memiliki evidence. |
+| EPIC-008 | Bangun student flow Drill Offline | P0 | Internal Review | Standalone Drill project tersedia di `/Users/fa-2400/Documents/ChatGPT/Drill Offline/drill-offline-prototype/` pada branch `feat/drill-dev`; 11 frame dan one-session flow sudah memiliki evidence. |
 | EPIC-009 | Sediakan preview entrypoint Drill | P1 | Internal Review | Project Drill memiliki package dan Vite preview sendiri di `http://localhost:3001/`; tidak memakai entrypoint TO. |
 | EPIC-010 | Regression dan handoff Drill | P1 | In Progress | Planner review dan keputusan approval masih berjalan setelah project boundary dipisahkan. |
 
@@ -33,7 +33,7 @@ Task Drill di bawah ini adalah rencana lengkap untuk prototype berdasarkan Figma
 | ID | Task | Prioritas | Status | Cakupan / output |
 | --- | --- | --- | --- | --- |
 | D-001 | Validasi source desain Drill | P0 | Internal Review | Inspect metadata, screenshot, urutan flow, copy, state, dan node ID dari 11 frame Drill. Catat pertanyaan terbuka di `USER_ACTIONS.md`. |
-| D-002 | Scaffold project Drill standalone | P0 | Internal Review | Worktree `feat/drill-dev` now contains `drill-offline-prototype/` with its own React/Vite package, entrypoint, styles, fixtures, assets, and port `3001`. |
+| D-002 | Scaffold project Drill standalone | P0 | Internal Review | `/Users/fa-2400/Documents/ChatGPT/Drill Offline/drill-offline-prototype/` on branch `feat/drill-dev` has its own React/Vite package, entrypoint, styles, fixtures, assets, and port `3001`. |
 | D-003 | Implementasi persiapan Drill | P0 | Internal Review | Frame 01–04 implemented: Unduh Soal, download dalam proses, panduan matikan internet, dan Siap Mengerjakan. |
 | D-004 | Implementasi pengerjaan Drill | P0 | Internal Review | Frame 05–08 implemented: Kerjakan Soal, Konfirmasi Jawaban, Hasil Jawaban — Salah, dan Waktu Habis. One session without subtests. |
 | D-005 | Implementasi pengumpulan Drill | P0 | Internal Review | Frame 09–11 implemented: Nyalakan Internet, Unggah dan Kumpulkan Hasil, dan Ringkasan Hasil. |
@@ -90,7 +90,7 @@ Epic lama `TOFF-001` sampai `TOFF-012` digabung ke epic TO di atas sebelum peker
 
 ## Catatan status Drill
 
-Branch `feat/drill-dev` memiliki project standalone `drill-offline-prototype/` dengan entrypoint, styles, fixtures, assets, dan Vite port `3001` sendiri. Preview dan source harus diverifikasi dari project tersebut; nama branch atau commit `DRILL-*` saja tetap bukan evidence.
+Branch `feat/drill-dev` memiliki project standalone `/Users/fa-2400/Documents/ChatGPT/Drill Offline/drill-offline-prototype/` dengan entrypoint, styles, fixtures, assets, dan Vite port `3001` sendiri. Preview dan source harus diverifikasi dari project tersebut; nama branch atau commit `DRILL-*` saja tetap bukan evidence.
 
 ## Prompt ownership
 
