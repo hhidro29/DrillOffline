@@ -263,7 +263,7 @@ button:disabled { cursor: not-allowed; }
 .passage-sheet { display: flex; flex-direction: column; gap: 16px; height: 477px; }
 .passage-sheet > strong { display: block; flex: 0 0 25px; line-height: 20px; }
 .passage-scroll { width: 296px; height: 404px; margin-top: 0; overflow-x: hidden; overflow-y: auto; }
-.passage-text { width: 420px; color: #313131; font-family: 'Source Sans Pro', sans-serif; font-size: 14px; line-height: 22px; }
+.passage-text { width: 100%; max-width: 100%; box-sizing: border-box; overflow-wrap: anywhere; color: #313131; font-family: 'Source Sans Pro', sans-serif; font-size: 14px; line-height: 22px; }
 .network-overlay { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: 20px; background: rgba(31, 40, 52, .62); }
 .network-overlay-card { width: min(320px, 100%); padding: 22px 18px 18px; background: #fff; border-radius: 16px; box-shadow: 0 14px 36px rgba(0,0,0,.2); text-align: center; }
 .network-overlay-icon { display: grid; place-items: center; width: 56px; height: 56px; margin: 0 auto 12px; color: #a15b2f; background: #fff1e8; border-radius: 50%; }.network-overlay-icon.terminated { color: #cd1924; background: #ffebec; }

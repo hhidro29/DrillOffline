@@ -205,6 +205,8 @@ Acceptance criteria:
 - [x] CTA fixed/sticky/floating tidak menutup konten terakhir pada posisi scroll maksimum.
 - [x] Direct-open, menu navigation, dan transisi flow membuka screen pada scroll position yang konsisten.
 - [x] Evidence full viewport captures and runtime metrics are available for planner review before approval.
+- CRAFT-227 top and bottom evidence: `evidence/CRAFT-227-screen07.png`, `evidence/CRAFT-227-screen08.png`, `evidence/CRAFT-227-screen07-bottom.png`, and `evidence/CRAFT-227-screen08-bottom.png`.
+- Passage copy now uses the available card width, wraps without horizontal clipping, and resets to the top when switching between screen 07 and screen 08.
 
 #### CRAFT-227 — Fixture soal original bergaya UTBK
 

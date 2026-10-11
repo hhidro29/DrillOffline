@@ -74,7 +74,7 @@ function App() {
   useEffect(() => { networkRef.current = network; }, [network]);
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 });
-    document.querySelectorAll<HTMLElement>('.question-one, .review-content, .upload-prep-screen').forEach(container => {
+    document.querySelectorAll<HTMLElement>('.question-one, .passage-scroll, .review-content, .upload-prep-screen').forEach(container => {
       container.scrollTop = 0;
     });
   }, [screen]);
