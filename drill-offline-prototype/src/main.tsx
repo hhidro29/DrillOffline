@@ -111,13 +111,18 @@ function QuestionHero({ timer, answered, result }: { timer: number; answered: bo
   </>;
 }
 
+function TimerBoxes({ timer, result = false }: { timer: number; result?: boolean }) {
+  const [minutes, seconds] = formatTime(timer).split(':');
+  return <b className="timer-boxes"><i>{result ? '00' : '00'}</i><em>:</em><i>{result ? '00' : minutes}</i><em>:</em><i>{result ? '00' : seconds}</i></b>;
+}
+
 function QuestionCard({ answer, disabled, onAnswer }: { answer: number | null; disabled?: boolean; onAnswer?: (index: number) => void }) {
   return <section className="question-card"><div className="question-stem"><div className="question-card-title"><strong>Soal :</strong><span>Hard</span></div><p className="question-prompt">{drillFixture.question.prompt}</p></div><div className="options">{drillFixture.question.options.map((option, index) => <button key={option} disabled={disabled} className={`option ${answer === index ? 'option-selected' : ''}`} onClick={() => onAnswer?.(index)}><b>{String.fromCharCode(65 + index)}</b><span>{option}</span></button>)}</div><div className="question-report"><span>Soal ini bermasalah?</span><button>⚑ &nbsp; Laporkan</button></div></section>;
 }
 
 function QuestionScreen({ network, timer, answer, onAnswer, onNext, onTimeout }: { network: NetworkMode; timer: number; answer: number | null; onAnswer: (index: number) => void; onNext: () => void; onTimeout: () => void }) {
   const blocked = network !== 'offline';
-  return <main className="drill-screen question-screen"><Navbar /><QuestionHero timer={timer} answered={answer !== null} /><div className="question-scroll">{blocked && <div className="network-blocked question-network-blocked" role="alert"><strong>Matikan koneksi internet untuk mengerjakan Drill</strong><span>Pilih Offline di menu pengujian untuk membuka soal.</span></div>}<QuestionCard answer={answer} disabled={blocked} onAnswer={blocked ? undefined : onAnswer} />{!blocked && <button className="prototype-link" onClick={onTimeout}>Uji state waktu habis</button>}</div><footer className="question-footer"><div className="footer-timer"><span><span className="timer-glyph">◴</span>Waktu kamu tersisa</span><b>{formatTime(timer)}</b></div><button className="secondary-cta" disabled={blocked || answer === null} onClick={onNext}>Lanjutkan</button></footer></main>;
+  return <main className="drill-screen question-screen"><Navbar /><QuestionHero timer={timer} answered={answer !== null} /><div className="question-scroll">{blocked && <div className="network-blocked question-network-blocked" role="alert"><strong>Matikan koneksi internet untuk mengerjakan Drill</strong><span>Pilih Offline di menu pengujian untuk membuka soal.</span></div>}<QuestionCard answer={answer} disabled={blocked} onAnswer={blocked ? undefined : onAnswer} />{!blocked && <button className="prototype-link" onClick={onTimeout}>Uji state waktu habis</button>}</div><footer className="question-footer"><div className="footer-timer"><span><span className="timer-glyph">◴</span>Waktu kamu tersisa</span><TimerBoxes timer={timer} /></div><button className="secondary-cta" disabled={blocked || answer === null} onClick={onNext}>Lanjutkan</button></footer></main>;
 }
 
 function ConfirmScreen({ network, timer, answer, onBack, onSubmit, onTimeout }: { network: NetworkMode; timer: number; answer: number | null; onBack: () => void; onSubmit: () => void; onTimeout: () => void }) {
