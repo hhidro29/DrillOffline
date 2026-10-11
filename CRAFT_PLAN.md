@@ -82,10 +82,11 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-224 | Wire touchpoint navigator soal ke screen 09 | CRAFT-220, CRAFT-221, CRAFT-109 | Ikon grid pada screen 07/08 membuka screen 09 dengan state attempt tetap utuh | Internal Review |
 | CRAFT-225 | Audit visual screen 11 — Subtes Berikutnya | CRAFT-111, CRAFT-204, CRAFT-223 | Screen 11 mengikuti frame Figma `8:2032` pada viewport 360 × 740 | Internal Review |
 | CRAFT-226 | Audit dan perbaiki scrollability lintas screen | CRAFT-107–109, CRAFT-204, CRAFT-217 | Scroll ownership, route reset, bottom clearance, dan evidence 14 screen | Internal Review |
-| CRAFT-227 | [P0] Ganti fixture soal dengan konten original bergaya UTBK | CRAFT-007, CRAFT-107, CRAFT-108 | Data-driven question fixture untuk screen 07–08 tanpa Lorem ipsum | Planned |
+| CRAFT-227 | [P0] Ganti fixture soal dengan konten original bergaya UTBK | CRAFT-007, CRAFT-107, CRAFT-108 | Data-driven question fixture untuk screen 07–08 tanpa Lorem ipsum | Internal Review |
 | CRAFT-228 | [P0] Implementasikan state jawaban dan review end-to-end | CRAFT-224, CRAFT-227 | Pilihan jawaban, ragu-ragu, navigator, review, dan save memakai state nyata | Planned |
 | CRAFT-229 | [P0] Uji recovery attempt dan persistence prototype | CRAFT-202, CRAFT-203, CRAFT-228 | Reload, timer, pending sync, retry, dan recovery evidence | Planned |
 | CRAFT-230 | [P0] Finalisasi boundary anti-cheat produksi | CRAFT-213, CRAFT-214, CRAFT-215 | Keputusan platform/device enforcement di luar kemampuan React prototype | Blocked |
+| CRAFT-231 | Sediakan reset simulasi untuk timer dan attempt | CRAFT-007, CRAFT-229 | Kontrol reviewer untuk mengembalikan fixture ke kondisi awal tanpa state basi | Planned |
 
 #### Evidence terbaru
 
@@ -208,17 +209,17 @@ Acceptance criteria:
 #### CRAFT-227 — Fixture soal original bergaya UTBK
 
 - Scope: screen 07–08 dan data yang dipakai screen 09
-- Status: `Planned`
+- Status: `Internal Review`
 - Priority: `P0`
 - Owner: builder
 
 Acceptance criteria:
 
-- [ ] Lorem ipsum diganti dengan passage dan pertanyaan original yang terasa realistis untuk latihan bergaya UTBK.
-- [ ] Soal 1 dan soal 2 memiliki content, opsi, metadata, dan state yang dapat dibedakan.
-- [ ] Fixture disimpan sebagai data terstruktur, bukan hardcode markup per screen.
-- [ ] Tidak menyalin soal UTBK asli dari internet tanpa sumber berlisensi atau izin penggunaan.
-- [ ] Copy, panjang teks, dan opsi cukup realistis untuk menguji scroll screen 07–08.
+- [x] Lorem ipsum diganti dengan passage dan pertanyaan original yang terasa realistis untuk latihan bergaya UTBK.
+- [x] Soal 1 dan soal 2 memiliki content, opsi, metadata, dan state yang dapat dibedakan.
+- [x] Fixture disimpan sebagai data terstruktur, bukan hardcode markup per screen.
+- [x] Tidak menyalin soal UTBK asli dari internet tanpa sumber berlisensi atau izin penggunaan.
+- [x] Copy, panjang teks, dan opsi cukup realistis untuk menguji scroll screen 07–08.
 
 #### CRAFT-228 — State jawaban dan review end-to-end
 
@@ -266,6 +267,24 @@ Acceptance criteria:
 - [ ] Didefinisikan apakah targetnya hanya mendeteksi koneksi atau benar-benar membatasi Wi-Fi, mobile data, VPN, tab, aplikasi lain, dan device kedua.
 - [ ] Prototype React secara eksplisit diberi label sebagai simulasi state, bukan jaminan anti-cheat device-level.
 - [ ] Requirement backend untuk server time, attempt lease, audit event, dan answer integrity dicatat sebelum production implementation.
+
+#### CRAFT-231 — Reset simulasi untuk timer dan attempt
+
+- Scope: menu demo/reviewer dan state persistence prototype
+- Status: `Planned`
+- Priority: `P1` (developer/reviewer productivity; bukan fitur peserta)
+- Owner: builder
+
+Acceptance criteria:
+
+- [ ] Menu demo memiliki aksi `Reset Simulasi` yang terlihat jelas sebagai kontrol preview, bukan bagian dari UI peserta.
+- [ ] Reset mengembalikan timer ke durasi fixture awal yang didefinisikan oleh satu constant/config, bukan angka yang tersebar di komponen.
+- [ ] Reset juga membersihkan attempt status, network warning, jawaban, penanda ragu-ragu, sync/upload status, dan progress download agar state tidak saling mewarisi.
+- [ ] Reset menghapus snapshot `sessionStorage` yang relevan lalu mengembalikan prototype ke entry state yang ditentukan untuk review.
+- [ ] Setelah reload, prototype tetap berada pada kondisi fixture awal dan timer tidak kembali ke nilai `0` karena state lama.
+- [ ] Kontrol reset tidak dapat diakses melalui flow peserta dan tidak dianggap sebagai mekanisme reset attempt produksi.
+- [ ] Evidence mencakup reset dari kondisi timer berjalan, timer `0`, warning Online, terminated, dan pending upload.
+- [ ] Jalankan `npm run build` dan `git diff --check` setelah implementasi.
 
 #### CRAFT-206 — Final cleanup dan handoff
 
