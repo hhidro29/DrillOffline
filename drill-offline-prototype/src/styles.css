@@ -136,7 +136,7 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .recommendation { padding: 12px; color: #5e677b; background: #edf7f8; border-radius: 8px; font-size: 12px; line-height: 18px; }
 .summary-footer { display: flex; gap: 12px; padding: 20px 16px; background: #fff; box-shadow: 0 -2px 8px rgba(0,0,0,.06); }
 .summary-footer .primary-cta, .summary-footer .secondary-cta { flex: 1; }
-.drill-review-root { min-height: 100vh; }
+.drill-review-root { display: flex; justify-content: center; align-items: flex-start; width: 100%; min-height: 100vh; background: #f2f5fa; }
 .drill-menu-overlay { position: fixed; inset: 0; z-index: 50; background: rgba(25,31,40,.35); }
 .drill-side-menu { position: absolute; top: 0; bottom: 0; left: max(calc(50% - 180px), 0px); width: 292px; padding: 18px 16px 24px; overflow-y: auto; background: #fff; box-shadow: 7px 0 20px rgba(0,0,0,.15); }
 .drill-menu-close { position: absolute; top: 10px; right: 12px; width: 32px; height: 32px; color: #6d7788; background: transparent; font-size: 28px; line-height: 28px; }
