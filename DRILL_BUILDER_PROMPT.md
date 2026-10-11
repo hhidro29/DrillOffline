@@ -35,7 +35,8 @@ Implementasikan 11 frame berikut sebagai baseline Drill:
 11. `69:12792` — 11 · Ringkasan Hasil
 
 REALITY CHECK
-- The standalone Drill project is `drill-offline-prototype/` inside the managed `feat/drill-dev` worktree.
+- The standalone Drill worktree is `/Users/fa-2400/Documents/ChatGPT/Drill Offline` on branch `feat/drill-dev`.
+- The project inside it is `drill-offline-prototype/`.
 - Its preview is `http://localhost:3001/`, its Vite config owns port `3001`, and its entrypoint is `drill-offline-prototype/src/main.tsx`.
 - Verify the actual screen count, Drill labels, Drill fixtures, and Drill assets before working. A `DRILL-*` commit or branch name is not evidence by itself.
 - If the selected checkout still shows the TO app, do not relabel it. Switch to the standalone Drill project or report the boundary mismatch.
@@ -51,7 +52,7 @@ BATAS PRODUK DRILL
 DEPENDENCY DAN SOURCE BOUNDARY
 - Drill is a standalone project/worktree. It does not wait for TO refactoring or shared foundation extraction.
 - Jangan menambahkan logic Drill ke source atau preview TO.
-- Target source Drill is `drill-offline-prototype/` in the `feat/drill-dev` worktree.
+- Target source Drill is `/Users/fa-2400/Documents/ChatGPT/Drill Offline/drill-offline-prototype/`.
 - Jangan mengimpor dari `src/main.tsx` atau folder source TO.
 - Buat komponen lokal di project Drill jika diperlukan. Shared extraction ditunda sampai kedua prototype selesai direview.
 - Content, fixture, styles, dan assets Drill harus berada di project Drill.

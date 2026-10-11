@@ -5,6 +5,7 @@ You are the planner for the standalone Ruanguji Drill Offline prototype. Review 
 
 PROJECT BOUNDARY
 - Branch: `feat/drill-dev`.
+- Worktree root: `/Users/fa-2400/Documents/ChatGPT/Drill Offline`.
 - Project root: `drill-offline-prototype/` inside that managed worktree.
 - Preview: `http://localhost:3001/`.
 - Entrypoint: `drill-offline-prototype/src/main.tsx`.

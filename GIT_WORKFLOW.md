@@ -5,7 +5,7 @@ Workflow ringan untuk epic dan task di `TASKS.md`.
 ## Project boundaries
 
 - TO Offline stays in the root project on port `3000` and uses `CRAFT-*` task IDs.
-- Drill Offline stays in `drill-offline-prototype/` inside the managed `feat/drill-dev` worktree on port `3001` and uses `DRILL-*` task IDs.
+- Drill Offline stays in `/Users/fa-2400/Documents/ChatGPT/Drill Offline/drill-offline-prototype/` on branch `feat/drill-dev`, port `3001`, and uses `DRILL-*` task IDs.
 - Do not import source between the projects or combine their task commits.
 - Use `PROJECT_BOUNDARIES.md` as the path, port, and ownership reference.
 

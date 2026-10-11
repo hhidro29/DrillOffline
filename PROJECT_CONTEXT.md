@@ -7,7 +7,7 @@ Dokumen ini adalah titik awal bersama untuk manusia dan agent yang bekerja pada 
 - **Nama kerja:** Ruanguji Offline — TO dan Drill 2026
 - **Jenis produk:** Fitur di dalam produk Ruangguru yang sudah ada
 - **Tujuan proyek:** Membatasi akses internet di perangkat selama peserta mengerjakan tryout agar peserta tidak menggunakan AI.
-- **Status:** Prototype TO Offline tersedia in the root project; standalone Drill Offline prototype is available in `drill-offline-prototype/` on branch `feat/drill-dev` and is ready for planner internal review.
+- **Status:** Prototype TO Offline tersedia in the root project; standalone Drill Offline prototype is available at `/Users/fa-2400/Documents/ChatGPT/Drill Offline/drill-offline-prototype/` on branch `feat/drill-dev` and is ready for planner internal review.
 - **Bahasa kerja dokumen:** Bahasa Indonesia
 
 ## 2. Sumber informasi
@@ -81,7 +81,7 @@ Keduanya memakai pola teknis offline yang mirip, tetapi merupakan flow dan kebut
 TO and Drill are now separated at the project/worktree boundary:
 
 - **TO Offline:** root project, entrypoint `src/main.tsx`, Vite port `3000`, 14-screen flow.
-- **Drill Offline:** `drill-offline-prototype/` on managed branch `feat/drill-dev`, entrypoint `drill-offline-prototype/src/main.tsx`, Vite port `3001`, 11-screen one-session flow.
+- **Drill Offline:** `/Users/fa-2400/Documents/ChatGPT/Drill Offline/drill-offline-prototype/` on branch `feat/drill-dev`, entrypoint `drill-offline-prototype/src/main.tsx`, Vite port `3001`, 11-screen one-session flow.
 - Drill has its own `styles.css`, `src/fixtures/drill.ts`, `public/assets/figma/`, package manifest, and test sidebar.
 - Drill does not import TO source and does not include subtest transition or TO-specific 25-second enforcement.
 - Current Drill implementation and evidence are recorded in `drill-offline-prototype/DRILL_STATUS.md`; planner approval remains separate from TO approval.

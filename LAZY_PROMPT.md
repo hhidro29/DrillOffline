@@ -15,7 +15,7 @@ Kamu adalah lead frontend engineer sekaligus visual QA engineer untuk proyek Rua
 
 SCOPE KERJA
 - `TO`: current project root, entrypoint `src/main.tsx`, preview port `3000`, Figma section `15:7547`.
-- `DRILL`: `drill-offline-prototype/` in the managed `feat/drill-dev` worktree, entrypoint `drill-offline-prototype/src/main.tsx`, preview port `3001`, Figma node `69:14041`.
+- `DRILL`: `/Users/fa-2400/Documents/ChatGPT/Drill Offline/drill-offline-prototype/` on branch `feat/drill-dev`, entrypoint `drill-offline-prototype/src/main.tsx`, preview port `3001`, Figma node `69:14041`.
 - Jangan mengimpor kode dari satu project ke project lain.
 - Jangan menambahkan routing Drill ke TO atau menambahkan logic TO ke Drill.
 

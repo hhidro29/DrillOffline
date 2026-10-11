@@ -15,7 +15,8 @@ The repository now treats TO Offline and Drill Offline as two standalone prototy
 
 ## Drill Offline
 
-- **Project:** `drill-offline-prototype/` inside the managed `feat/drill-dev` worktree
+- **Project root:** `/Users/fa-2400/Documents/ChatGPT/Drill Offline`
+- **Project:** `drill-offline-prototype/` inside the `feat/drill-dev` worktree
 - **Branch:** `feat/drill-dev`
 - **Dev/preview port:** `3001`
 - **Entrypoint:** `drill-offline-prototype/src/main.tsx`
@@ -26,7 +27,7 @@ The repository now treats TO Offline and Drill Offline as two standalone prototy
 - **Scope:** 11-screen, one-session Drill flow with no subtests or TO transition logic
 - **Prompt pair:** [`DRILL_PLANNER_PROMPT.md`](DRILL_PLANNER_PROMPT.md) and [`DRILL_BUILDER_PROMPT.md`](DRILL_BUILDER_PROMPT.md)
 
-The managed Drill worktree location can be found with:
+The Drill worktree is located at `/Users/fa-2400/Documents/ChatGPT/Drill Offline`. Confirm Git registration with:
 
 ```sh
 git worktree list

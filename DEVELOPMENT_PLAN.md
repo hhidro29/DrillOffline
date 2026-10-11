@@ -52,7 +52,7 @@ Gunakan node `69:14041` pada file Figma yang sama. Node ini berisi 11 frame:
 10. `69:13136` — 10 · Unggah dan Kumpulkan Hasil
 11. `69:12792` — 11 · Ringkasan Hasil
 
-The standalone Drill project is now available on branch `feat/drill-dev` under `drill-offline-prototype/`. It has its own `package.json`, `src/main.tsx`, `src/styles.css`, fixtures, local assets, and Vite port `3001`. The TO app remains the separate root project on port `3000`.
+The standalone Drill project is now available at `/Users/fa-2400/Documents/ChatGPT/Drill Offline/drill-offline-prototype/` on branch `feat/drill-dev`. It has its own `package.json`, `src/main.tsx`, `src/styles.css`, fixtures, local assets, and Vite port `3001`. The TO app remains the separate root project on port `3000`.
 
 ## Batas produk Drill
 
@@ -95,7 +95,7 @@ Shared component extraction ditunda. Setelah TO dan Drill selesai direview, plan
 - Tidak ada subtes atau logic TO.
 - Panel tester lokal menyediakan toggle koneksi dan shortcut ke 11 screen Drill, tetapi tidak menjadi bagian student flow.
 - Toggle koneksi dapat digunakan untuk menguji gate Offline saat mulai/mengerjakan dan gate Online saat upload/kumpulkan.
-- Source Drill berdiri sendiri di `drill-offline-prototype/` pada worktree `feat/drill-dev`.
+- Source Drill berdiri sendiri di `/Users/fa-2400/Documents/ChatGPT/Drill Offline/drill-offline-prototype/` pada branch `feat/drill-dev`.
 - Prototype TO tidak berubah.
 - Evidence screenshot dan catatan asumsi tersedia.
 - Seluruh 11 screen sudah melewati visual iteration; screen hasil menjadi baseline audit pertama.
