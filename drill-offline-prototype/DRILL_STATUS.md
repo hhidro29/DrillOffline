@@ -42,6 +42,7 @@
 - Online/Offline simulation now changes behavior, not only active styling: offline guide completion and question attempt require Offline; upload requires Online; changing the mode while a state is open immediately shows or removes the gate.
 - The switch exposes `role="switch"` and `aria-checked`; its label and state remain visible in the open test menu.
 - The offline guide no longer repeats the network state in a red alert; the switch, progress ring, checklist, and disabled/enabled CTA provide the state without changing the gate behavior.
+- Screen 03 sticky `Lanjutkan` now uses the same readiness handler as the inline CTA: it is disabled while Online, enables immediately when switched Offline, and transitions to screen 04 from both top and bottom scroll positions.
 
 ## D-007 — Visual iteration and QA
 
@@ -87,3 +88,4 @@
 - Latest switch iteration verified at the preview viewport: screen 03 changes between blocked and complete guide states, screen 04 changes between disabled and enabled start CTA, screen 09 updates its 0/2 → 1/2 internet checklist, and screen 10 changes between disabled `Nyalakan Internet` and enabled upload. Upload failure → `Coba Lagi` → progress → result summary also passes.
 - Planner final verdict after the latest live pass: Internal Review ready; all 11 states, long-screen scroll, sticky CTAs, network gates, wrong-answer, timeout, upload retry, and summary flow have no remaining P0/P1 mismatch.
 - Follow-up visual pass verified screen 03 at top and bottom scroll positions in both network modes; the guide remains aligned with the reference without a redundant alert, and its sticky CTA stays visible.
+- P0 regression check passed: sticky `Lanjutkan` → screen 04 `Kerjakan Drill` → screen 05 question flow; direct screen 05 jump and reset still preserve Offline/Online state as expected.

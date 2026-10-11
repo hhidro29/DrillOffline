@@ -209,6 +209,12 @@ function App() {
     setScreen(next);
   };
 
+  const completeOfflineGuide = () => {
+    if (network !== 'offline') return;
+    setNetwork('offline');
+    setScreen('ready');
+  };
+
   let content: ReactNode;
   if (screen === 'question') content = <QuestionScreen network={network} timer={timer} answer={answer} onAnswer={setAnswer} onNext={() => setScreen('confirm')} onTimeout={() => setScreen('timeout')} />;
   else if (screen === 'confirm') content = <ConfirmScreen network={network} timer={timer} answer={answer} onBack={() => setScreen('question')} onSubmit={submitAnswer} onTimeout={() => setScreen('timeout')} />;
@@ -218,7 +224,16 @@ function App() {
   else if (screen === 'summary') content = <SummaryScreen onRestart={resetSession} />;
   else {
     const shownState = screen === 'downloading' ? (progress || 26) : screen;
-    content = <main className="app-shell"><Navbar /><div className="content"><HeaderArtwork /><PreparationCard state={screen as PreparationState} network={network} onReady={() => { setNetwork('offline'); setScreen('ready'); }} /></div>{screen === 'ready' ? <ReadyState network={network} /> : <div className="sticky-actions"><button className="primary-cta" disabled={screen === 'offline-guide' || (screen === 'downloading' && network === 'online')} onClick={() => screen === 'download' ? (setProgress(26), setScreen('downloading')) : undefined}>{screen === 'download' ? 'Download Soal' : screen === 'downloading' ? `Mendownload… ${shownState}%` : 'Lanjutkan'}</button></div>}</main>;
+    const stickyDisabled = screen === 'offline-guide' ? network !== 'offline' : screen === 'downloading' && network === 'online';
+    const onStickyClick = () => {
+      if (screen === 'download') {
+        setProgress(26);
+        setScreen('downloading');
+      } else if (screen === 'offline-guide') {
+        completeOfflineGuide();
+      }
+    };
+    content = <main className="app-shell"><Navbar /><div className="content"><HeaderArtwork /><PreparationCard state={screen as PreparationState} network={network} onReady={completeOfflineGuide} /></div>{screen === 'ready' ? <ReadyState network={network} /> : <div className="sticky-actions"><button className="primary-cta" disabled={stickyDisabled} onClick={onStickyClick}>{screen === 'download' ? 'Download Soal' : screen === 'downloading' ? `Mendownload… ${shownState}%` : 'Lanjutkan'}</button></div>}</main>;
   }
   return <div className="drill-review-root" data-network={network}>{content}{menuOpen && <DrillSidebar current={screen} network={network} onClose={() => setMenuOpen(false)} onNavigate={navigateFromMenu} onNetworkChange={setNetwork} onReset={resetSession} onFailUpload={failUpload} />}</div>;
 }
