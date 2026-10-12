@@ -90,11 +90,14 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-232 | [P0] Auto-start persiapan konten dan gate CTA | CRAFT-102, CRAFT-103, CRAFT-201 | Persiapan paket dimulai saat screen 02 dibuka; CTA hanya aktif setelah selesai | Internal Review |
 | CRAFT-233 | Klarifikasi copy review: simpan pengerjaan tryout | CRAFT-109, CRAFT-110 | Terminologi screen review dan konfirmasi konsisten membedakan pengerjaan dari hasil | Internal Review |
 | CRAFT-234 | Arahkan simpan pengerjaan langsung ke pengumpulan | CRAFT-110, CRAFT-112, CRAFT-113 | Konfirmasi simpan masuk ke halaman persiapan pengumpulan tanpa simulasi subtes berikutnya | Internal Review |
+| CRAFT-235 | Perbaiki state indikator koneksi halaman pengumpulan | CRAFT-112, CRAFT-202, CRAFT-222 | Label, warna, dan checklist koneksi mengikuti mode Online/Offline aktual | Internal Review |
+| CRAFT-236 | Tampilkan preview progres pengerjaan sebelum upload | CRAFT-112, CRAFT-203, CRAFT-228 | Halaman pengumpulan menampilkan ringkasan progres lokal per subtes saat belum online | Internal Review |
+| CRAFT-237 | Hapus CTA simulasi Offline dari pop-up koneksi | CRAFT-202, CRAFT-213 | Pop-up peserta tidak menampilkan kontrol reviewer; simulasi tetap tersedia di sidebar | Internal Review |
 
 #### CRAFT-233 — Klarifikasi copy review: simpan pengerjaan tryout
 
 - Scope: screen 09 `Tinjau Jawaban` dan screen 10 `Simpan Pengerjaan — Konfirmasi`
-- Status: `Planned`
+- Status: `Internal Review`
 - Priority: `P1`
 - Owner: builder
 - Source feedback: user feedback 2026-10-12
@@ -135,6 +138,71 @@ Acceptance criteria:
 - [x] `npm run build` dan `git diff --check` berhasil.
 
 Evidence: screen 10 confirmation routes directly to screen 12 with the upload gate; screen 11 remains reachable from the reviewer menu; Online enables screen 12 `Lanjutkan` and screen 13 upload CTA.
+
+#### CRAFT-235 — Perbaiki state indikator koneksi halaman pengumpulan
+
+- Scope: item koneksi pada screen 12 `Nyalakan Internet — Panduan` dan state awal screen 13 bila relevan
+- Status: `Internal Review`
+- Priority: `P1`
+- Owner: builder
+- Source feedback: user feedback 2026-10-12
+
+Acceptance criteria:
+
+- [x] Saat simulator `Online`, item koneksi menampilkan status aktif, styling sukses, dan checklist selesai.
+- [x] Saat simulator `Offline`, item koneksi tidak menampilkan `Internet aktif`, styling kembali ke status belum siap, dan checklist belum selesai.
+- [x] Perubahan Online/Offline memperbarui indikator secara langsung tanpa reload.
+- [x] Status item upload tetap terpisah dan tidak ikut ditandai selesai sebelum upload berhasil.
+- [x] Status CTA pengumpulan tetap mengikuti koneksi dan tidak mengalami regresi.
+- [x] `npm run build` dan `git diff --check` berhasil.
+
+Evidence: at 360 × 740, screen 12 renders `Internet aktif` with the green checklist and enabled `Lanjutkan` in Online mode; switching the reviewer simulator to Offline immediately renders `Nyalakan Koneksi Internet`, the neutral checklist, and a disabled CTA. The upload item remains incomplete in both states.
+
+#### CRAFT-236 — Tampilkan preview progres pengerjaan sebelum upload
+
+- Scope: halaman screen 12 `Kumpulkan hasil TO`, terutama state saat koneksi belum aktif
+- Status: `Internal Review`
+- Priority: `P1`
+- Owner: builder
+- Source feedback: user feedback 2026-10-12 dan referensi visual terlampir
+
+Keputusan UX:
+
+- Saat student belum menghubungkan internet, tampilkan listing preview progres pengerjaan yang tersimpan lokal.
+- Setiap item merepresentasikan subtes yang benar-benar tersedia pada fixture/state TO, bukan mengulang card placeholder.
+- Ringkasan item menampilkan konteks subtes, jumlah soal dijawab, jumlah dilewati, dan total soal.
+- Preview bersifat informatif; tidak membuka hasil, tidak mengirim data, dan tidak menggantikan network gate upload.
+
+Acceptance criteria:
+
+- [x] Screen 12 Offline menampilkan listing preview progres di area yang konsisten dengan referensi visual.
+- [x] Angka `Dijawab`, `Dilewati`, dan `Total` dihitung dari state jawaban lokal yang sedang berjalan.
+- [x] Daftar mengikuti jumlah subtes yang tersedia; tidak ada duplicate placeholder card.
+- [x] Listing tetap terbaca dan dapat discroll pada viewport `360 × 740` tanpa menutupi sticky CTA.
+- [x] Saat koneksi berubah Online, preview tidak memalsukan status upload dan flow auto-upload tetap berjalan.
+- [x] Reset simulasi mengembalikan preview ke fixture awal.
+- [x] `npm run build` dan `git diff --check` berhasil.
+
+Evidence: screen 12 at 360 × 740 shows one local-progress card for the available Geografi SMA subtest. With one answer selected, the card reports `1 Dijawab`, `3 Dilewati`, and `4 Total`; after reset it returns to `0/4/4`. At the bottom of the internal scroll, the preview and guide remain above the sticky disabled CTA (`scrollHeight=1106`, `clientHeight=680`).
+
+#### CRAFT-237 — Hapus CTA simulasi Offline dari pop-up koneksi
+
+- Scope: pop-up `Koneksi internet terdeteksi` pada attempt aktif
+- Status: `Internal Review`
+- Priority: `P1`
+- Owner: builder
+- Source feedback: user feedback 2026-10-12 dan TO-OFFLINE-043
+
+Acceptance criteria:
+
+- [x] CTA `Simulasikan kembali offline` dihapus dari pop-up yang tampil pada flow peserta.
+- [x] Pop-up tetap menampilkan instruksi untuk mematikan koneksi dari perangkat.
+- [x] Reviewer tetap dapat mensimulasikan Offline melalui sidebar reviewer.
+- [x] Perubahan mode Offline dari sidebar tetap menutup pop-up dan melanjutkan flow secara otomatis.
+- [x] Tidak ada regresi pada warning, countdown, termination, atau upload gate.
+- [x] `npm run build` and `git diff --check` berhasil.
+
+Evidence: active-attempt warning now contains only the device instructions and countdown; the reviewer sidebar still exposes Online/Offline controls. The production build and diff check pass after the removal.
 
 #### Evidence terbaru
 

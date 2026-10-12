@@ -4,6 +4,7 @@ export type NetworkMode = 'online' | 'offline';
 export type AttemptStatus = 'not_started' | 'active' | 'reviewing' | 'locked' | 'terminated';
 export type UploadStatus = 'idle' | 'uploading' | 'failed';
 export type SyncStatus = 'saved' | 'pending_sync';
+export type RewardStatus = 'hidden' | 'available';
 
 export type AttemptSnapshot = {
   screen: ScreenId;
@@ -18,6 +19,7 @@ export type AttemptSnapshot = {
   networkWarningSeconds: number | null;
   syncStatus: SyncStatus;
   uploadStatus: UploadStatus;
+  rewardStatus: RewardStatus;
 };
 
 export const INITIAL_ATTEMPT_SECONDS = 272;
