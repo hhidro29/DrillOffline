@@ -83,7 +83,7 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-225 | Audit visual screen 11 — Subtes Berikutnya | CRAFT-111, CRAFT-204, CRAFT-223 | Screen 11 mengikuti frame Figma `8:2032` pada viewport 360 × 740 | Internal Review |
 | CRAFT-226 | Audit dan perbaiki scrollability lintas screen | CRAFT-107–109, CRAFT-204, CRAFT-217 | Scroll ownership, route reset, bottom clearance, dan evidence 14 screen | Internal Review |
 | CRAFT-227 | [P0] Ganti fixture soal dengan konten original bergaya UTBK | CRAFT-007, CRAFT-107, CRAFT-108 | Data-driven question fixture untuk screen 07–08 tanpa Lorem ipsum | Internal Review |
-| CRAFT-228 | [P0] Implementasikan state jawaban dan review end-to-end | CRAFT-224, CRAFT-227 | Pilihan jawaban, ragu-ragu, navigator, review, dan save memakai state nyata | Planned |
+| CRAFT-228 | [P0] Implementasikan state jawaban dan review end-to-end | CRAFT-224, CRAFT-227 | Pilihan jawaban, ragu-ragu, navigator, review, dan save memakai state nyata | Internal Review |
 | CRAFT-229 | [P0] Uji recovery attempt dan persistence prototype | CRAFT-202, CRAFT-203, CRAFT-228 | Reload, timer, pending sync, retry, dan recovery evidence | Planned |
 | CRAFT-230 | [P0] Finalisasi boundary anti-cheat produksi | CRAFT-213, CRAFT-214, CRAFT-215 | Keputusan platform/device enforcement di luar kemampuan React prototype | Blocked |
 | CRAFT-231 | Sediakan reset simulasi untuk timer dan attempt | CRAFT-007, CRAFT-229 | Kontrol reviewer untuk mengembalikan fixture ke kondisi awal tanpa state basi | Planned |
@@ -226,19 +226,21 @@ Acceptance criteria:
 #### CRAFT-228 — State jawaban dan review end-to-end
 
 - Scope: screen 07–10, dengan navigator screen 07–08 menuju screen 09
-- Status: `Planned`
+- Status: `Internal Review`
 - Priority: `P0`
 - Owner: builder
 
 Acceptance criteria:
 
-- [ ] Peserta dapat memilih dan mengganti jawaban pada screen 07–08.
-- [ ] Tombol `Ragu-ragu` mengubah state dan state tersebut terlihat pada navigator/review.
-- [ ] Navigasi soal mempertahankan jawaban dan penanda ragu-ragu.
-- [ ] Screen 09 menghitung soal dijawab, dilewati, dan ragu-ragu dari state aktual; tidak ada angka hardcoded.
-- [ ] Screen 10 menampilkan ringkasan yang sama dengan screen 09 dan menyimpan state saat dikonfirmasi.
-- [ ] State tetap konsisten saat screen 09 dibuka dari screen 07 maupun 08.
-- [ ] Online lock tetap mencegah perubahan jawaban dan transisi review/save sesuai policy attempt.
+- [x] Peserta dapat memilih dan mengganti jawaban pada screen 07–08.
+- [x] Tombol `Ragu-ragu` mengubah state dan state tersebut terlihat pada navigator/review.
+- [x] Navigasi soal mempertahankan jawaban dan penanda ragu-ragu.
+- [x] Screen 09 menghitung soal dijawab, dilewati, dan ragu-ragu dari state aktual; tidak ada angka hardcoded.
+- [x] Screen 10 menampilkan ringkasan yang sama dengan screen 09 dan menyimpan state saat dikonfirmasi.
+- [x] State tetap konsisten saat screen 09 dibuka dari screen 07 maupun 08.
+- [x] Online lock tetap mencegah perubahan jawaban dan transisi review/save sesuai policy attempt.
+
+- Evidence: `evidence/CRAFT-228-answer-replaced.png`, `evidence/CRAFT-228-doubtful-navigator.png`, `evidence/CRAFT-228-review-from-screen07.png`, `evidence/CRAFT-228-review-from-screen08.png`, `evidence/CRAFT-228-save-summary.png`, and `evidence/CRAFT-228-online-locked.png` at 360 × 740.
 
 #### CRAFT-229 — Recovery attempt dan persistence prototype
 

@@ -16,6 +16,8 @@ export type ToOfflineQuestion = {
   status: QuestionAnswerStatus;
 };
 
+export const TO_OFFLINE_TOTAL_QUESTIONS = 4;
+
 /** Original practice content for the two Figma question states. */
 export const TO_OFFLINE_QUESTIONS: readonly ToOfflineQuestion[] = [
   {
