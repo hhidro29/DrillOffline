@@ -48,7 +48,6 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .offline-guide h2 { font-size: 14px; line-height: 22px; }
 .offline-guide h3 { color: #5e677b; font-size: 12px; line-height: 18px; }
 .offline-guide p, .offline-guide li { color: #5e677b; font-size: 12px; line-height: 18px; }
-.guide-continue { align-self: stretch; min-height: 40px; margin-top: 4px; color: #f26d0f; background: #fff; border: 1px solid #f26d0f; border-radius: 999px; font-size: 12px; font-weight: 700; }
 .network-blocked { display: flex; flex-direction: column; gap: 4px; padding: 12px; color: #e52a34; background: #fff1f2; border: 1px solid #e52a34; border-radius: 10px; font-size: 12px; line-height: 18px; }
 .network-blocked span { color: #5e677b; font-size: 11px; }
 .offline-guide ol { display: grid; gap: 4px; margin: 0; padding-left: 18px; }
@@ -103,10 +102,6 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .confirm-answer strong { color: #434856; }
 .confirm-card .prototype-link { margin-top: 24px; }
 .confirm-footer .primary-cta, .confirm-footer .secondary-cta { flex: 1; }
-.confirm-footer-actions { display: flex; gap: 8px; min-width: 248px; }
-.confirm-footer { flex-direction: column; align-items: stretch; height: auto; min-height: 128px; }
-.confirm-footer-actions { flex-direction: row !important; align-items: center; justify-content: flex-end; width: 100%; min-width: 0; }
-.confirm-footer-actions button { flex: 0 0 120px !important; }
 .result-note { display: flex; flex-direction: column; gap: 4px; padding: 16px; color: #e52a34; background: #f9eeef; border: 1px solid #e52a34; border-radius: 12px; }
 .result-note strong { font-size: 14px; line-height: 22px; }
 .result-note span { color: #5e677b; font-size: 12px; line-height: 18px; }
@@ -215,6 +210,11 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .footer-timer .timer-boxes i { display: grid; place-items: center; width: 24px; height: 24px; color: #1480d8; background: #fff; border-radius: 4px; font-style: normal; }
 .footer-timer .timer-boxes em { color: #fff; font-style: normal; }
 .question-footer .secondary-cta { align-self: flex-end; flex: 0 0 44px; min-width: 120px; height: 44px; }
+.question-timer-only { min-height: 60px; height: 60px; padding: 10px 16px; }
+.confirm-screen { display: flex; flex-direction: column; background: #e8f1ff; }
+.confirm-scroll { display: flex; flex: 1; min-height: 0; flex-direction: column; gap: 16px; padding: 16px 16px 12px; overflow-y: auto; }
+.confirm-timer { flex: 0 0 60px; padding: 10px 16px; background: #e8f1ff; }
+.confirm-screen .confirm-footer { flex: 0 0 96px; }
 .confirm-footer, .result-footer { flex-direction: row; align-items: center; justify-content: space-between; height: 70px; padding: 16px; }
 .confirm-footer > div, .result-footer > div { display: flex; flex-direction: column; gap: 4px; }
 .confirm-footer strong, .result-footer strong { font-size: 12px; }
@@ -277,7 +277,11 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .summary-footer .secondary-cta, .summary-footer .primary-cta { height: 44px; }
 .summary-footer .primary-cta { background: linear-gradient(90deg,#ff912e,#ff3048); }
 
-/* Keep end-session confirmation readable on the narrow Figma frame. */
-.confirm-footer { flex-direction: column; align-items: stretch; height: auto; min-height: 128px; }
-.confirm-footer-actions { display: flex; flex-direction: row !important; align-items: center; justify-content: flex-end; gap: 8px; width: 100%; min-width: 0; }
-.confirm-footer-actions button { flex: 0 0 120px !important; }
+.network-interruption-layer { position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; padding: 16px; background: rgba(25,31,40,.45); }
+.network-interruption-card { display: flex; width: min(328px, 100%); flex-direction: column; align-items: center; gap: 12px; padding: 24px 16px 16px; color: #434856; background: #fff; border-radius: 16px; box-shadow: 0 12px 32px rgba(44,49,58,.24); text-align: center; }
+.network-interruption-icon { display: grid; place-items: center; width: 48px; height: 48px; color: #e52a34; background: #fff1f2; border: 1px solid #e52a34; border-radius: 50%; font-size: 24px; font-weight: 800; }
+.network-interruption-card h2 { margin: 0; font-size: 18px; line-height: 26px; }
+.network-interruption-card p { margin: 0; color: #6d7788; font-size: 12px; line-height: 18px; }
+.network-interruption-card .primary-cta { height: 44px; }
+
+.confirm-footer-actions .primary-cta, .confirm-footer-actions .secondary-cta { height: 40px; }

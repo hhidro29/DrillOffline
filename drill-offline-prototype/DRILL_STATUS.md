@@ -42,7 +42,7 @@
 - Online/Offline simulation now changes behavior, not only active styling: offline guide completion and question attempt require Offline; upload requires Online; changing the mode while a state is open immediately shows or removes the gate.
 - The switch exposes `role="switch"` and `aria-checked`; its label and state remain visible in the open test menu.
 - The offline guide no longer repeats the network state in a red alert; the switch, progress ring, checklist, and disabled/enabled CTA provide the state without changing the gate behavior.
-- Screen 03 sticky `Lanjutkan` now uses the same readiness handler as the inline CTA: it is disabled while Online, enables immediately when switched Offline, and transitions to screen 04 from both top and bottom scroll positions.
+- Screen 03 has one primary action: sticky `Lanjutkan`. It is disabled while Online, enables immediately when switched Offline, and transitions to screen 04 from both top and bottom scroll positions.
 
 ## D-007 — Visual iteration and QA
 
@@ -95,3 +95,5 @@
 - Responsive shell pass centers the fixed `360px` Figma frame in wide viewports while preserving the mobile frame geometry. At `1024 × 710`, screens 03, 04, 05, 09, 10, and 11 render at `x=332` with no left-anchored blank-space imbalance; the test drawer aligns to the same shell. At `360 × 740` and `360 × 710`, screens 03, 04, 05, 09, 10, and 11 keep their sticky actions visible and retain the measured Figma gutters without horizontal overflow.
 
 - End-session iteration makes the screen 05 header `Akhiri` action functional. It opens the existing screen 06 confirmation state, freezes the session timer, preserves the selected answer, and exposes `Kembali` plus `Simpan Hasil` actions. Confirming in Offline mode transitions to screen 09; the existing Online upload gate then continues to screen 10, including upload failure → retry → summary. Online mode keeps the submit action disabled. The confirmation footer is stacked on the 360px frame so its copy and actions remain readable.
+
+- Lazy backlog batch verified against Figma nodes `69:10610` (question) and `69:10677` (answer confirmation). Screen 05 no longer renders the non-Figma `Lanjutkan` CTA; it keeps only the timer footer. Screen 03 no longer renders the duplicate inline guide CTA. Screen 06 now uses a dedicated confirmation layout without the question hero or inline network warning, with `Yakin ingin mengakhiri sesi Drill?`, `Kembali`, and `Yakin`; the timer freezes until cancellation. Submit/action sizing is `120 × 40px` on the confirmation footer. Switching Offline → Online from question/confirmation opens a blocking `Koneksi internet terdeteksi` modal; `Kembali ke Offline` restores the attempt and answer state. Verified at `360 × 710`, `360 × 740`, and `1024 × 710`; wide shell remains centered at `x=332`, with no horizontal overflow.
