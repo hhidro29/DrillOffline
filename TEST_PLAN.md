@@ -15,8 +15,8 @@ Dokumen ini menjadi gate sebelum task diberi status `Approved`. Build yang berha
 
 | ID | Flow | Kondisi | Expected UI | Expected transition |
 | --- | --- | --- | --- | --- |
-| SMOKE-001 | Screen 12 | Network `offline` | Step `0/2`, koneksi belum success, CTA disabled | Tetap di screen 12 |
-| SMOKE-002 | Screen 12 | Network `online` | Step `1/2`, koneksi success, CTA enabled | CTA → screen 13 |
+| SMOKE-001 | Screen 12 | Network `offline` | Koneksi belum success, progres tersimpan lokal terlihat, upload menunggu, tanpa CTA `Lanjutkan` | Tetap di screen 12 |
+| SMOKE-002 | Screen 12 | Network berubah ke `online` | Progres upload tampil di screen 12 | Upload berhasil → screen 14, tanpa membuka screen 13 |
 | SMOKE-003 | Screen 07/08 | Attempt active, network berubah online | Overlay tampil `25 detik`, timer berhenti, soal dan navigasi disabled | Tetap di screen pengerjaan |
 | SMOKE-004 | Screen 07/08 | Network kembali offline sebelum 25 detik | Overlay hilang, kontrol aktif, timer lanjut dari nilai yang sama | Lanjut mengerjakan |
 | SMOKE-005 | Screen 07/08 | Network tetap online selama 25 detik | Overlay terminated, input tetap locked, status `pending_sync` | CTA → screen 12 |

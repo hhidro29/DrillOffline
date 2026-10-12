@@ -138,7 +138,7 @@ Acceptance criteria:
 - [x] Gate koneksi dan state upload pada screen 12 tetap berjalan seperti sebelumnya.
 - [x] `npm run build` dan `git diff --check` berhasil.
 
-Evidence: screen 10 confirmation routes directly to screen 12 with the upload gate; screen 11 remains reachable from the reviewer menu; Online enables screen 12 `Lanjutkan` and screen 13 upload CTA.
+Evidence: screen 10 confirmation routes directly to screen 12 with the upload gate; screen 11 remains reachable from the reviewer menu; Online starts upload progress in place on screen 12 and success routes to screen 14. Screen 13 remains available through reviewer direct jump.
 
 #### CRAFT-235 — Perbaiki state indikator koneksi halaman pengumpulan
 
@@ -179,12 +179,13 @@ Acceptance criteria:
 - [x] Screen 12 Offline menampilkan listing preview progres di area yang konsisten dengan referensi visual.
 - [x] Angka `Dijawab`, `Dilewati`, dan `Total` dihitung dari state jawaban lokal yang sedang berjalan.
 - [x] Daftar mengikuti jumlah subtes yang tersedia; tidak ada duplicate placeholder card.
+- [x] Untuk daftar lebih dari tiga subtes, tampilkan tiga pertama dan tombol `Muat lainnya` yang membuka tiga item tambahan; sembunyikan tombol saat semua item sudah tampil.
 - [x] Listing tetap terbaca dan dapat discroll pada viewport `360 × 740` tanpa menutupi sticky CTA.
 - [x] Saat koneksi berubah Online, preview tidak memalsukan status upload dan flow auto-upload tetap berjalan.
 - [x] Reset simulasi mengembalikan preview ke fixture awal.
 - [x] `npm run build` dan `git diff --check` berhasil.
 
-Evidence: screen 12 at 360 × 740 shows one local-progress card for the available Geografi SMA subtest. With one answer selected, the card reports `1 Dijawab`, `3 Dilewati`, and `4 Total`; after reset it returns to `0/4/4`. At the bottom of the internal scroll, the preview and guide remain above the sticky disabled CTA (`scrollHeight=1106`, `clientHeight=680`).
+Evidence: screen 12 at 360 × 740 uses an eight-item demo fixture with distinct subtest names. The first card's answered count follows live answer state; the other seven are sample progress data. The preview shows three cards initially and reveals three more per `Muat lainnya` click, with the final click revealing the remaining two.
 
 #### CRAFT-237 — Hapus CTA simulasi Offline dari pop-up koneksi
 
@@ -207,7 +208,7 @@ Evidence: active-attempt warning now contains only the device instructions and c
 
 #### CRAFT-238 — Arahkan otomatis ke pengumpulan saat waktu habis
 
-- Scope: timer attempt dan transisi timeout ke halaman pengumpulan TO
+- Scope: timer attempt, terminasi network-warning, dan transisi ke halaman pengumpulan TO
 - Status: `Internal Review`
 - Priority: `P1`
 - Owner: builder
@@ -217,13 +218,16 @@ Acceptance criteria:
 
 - [x] Saat timer mencapai `00:00`, jawaban dan state pengerjaan dikunci serta tersimpan.
 - [x] Peserta langsung diarahkan ke halaman pengumpulan tanpa harus menekan CTA `Lanjutkan pengumpulan` pada modal perantara.
-- [x] Halaman pengumpulan mengikuti network state: menunggu koneksi saat Offline dan memulai upload sesuai aturan auto-upload saat Online.
+- [x] Halaman pengumpulan mengikuti network state: menunggu koneksi saat Offline dan langsung memulai upload setiap kali screen 12 menjadi Online.
+- [x] Proses upload berjalan dan menampilkan progres di screen 12; upload berhasil langsung menuju screen 14 tanpa membuka screen 13.
+- [x] Halaman persiapan koneksi screen 12 tidak menampilkan tombol `Lanjutkan`; koneksi aktif otomatis memulai proses upload.
 - [x] Timeout tidak menghapus jawaban, ringkasan progres per subtes, atau timer final.
-- [x] Tidak ada perubahan pada alur terminasi yang dipicu pelanggaran network warning, kecuali memang berbagi transisi yang sesuai.
+- [x] Terminasi setelah toleransi koneksi habis juga langsung membuka halaman pengumpulan; snapshot lama yang masih berada di modal terminasi dipulihkan ke halaman pengumpulan.
+- [x] Panduan menyalakan koneksi disembunyikan di halaman pengumpulan pada semua state koneksi; kontennya tetap tersedia di kode.
 - [x] Reset reviewer mengembalikan attempt dan timer ke kondisi awal.
 - [x] `npm run build` dan `git diff --check` berhasil.
 
-Evidence: browser fixture started on screen 07 in Offline mode with 2 seconds remaining, answer `1=C`, and question 2 marked doubtful. At `00:00`, it entered screen 12 with `attemptStatus=locked`, `syncStatus=pending_sync`, and the answer/progress preview intact; no termination modal or intermediate CTA appeared. Switching the reviewer simulator Online advanced to screen 13 and auto-upload reached screen 14. Reviewer reset returned to screen 1, cleared answers, and restored the fixture timer to 272 seconds. The network warning countdown/termination handler and `NetworkOverlay` remain unchanged; the timeout now uses a separate locked-and-collect transition. `npm run build` and `git diff --check` pass.
+Evidence: timer expiry and network-warning termination enter screen 12 with the answer/progress preview intact. Offline stays on screen 12; turning Online starts upload progress in place and a successful upload opens screen 14 directly. Upload failure remains on screen 12 with a retry action. Confirming `Simpan Pengerjaan` marks the attempt pending synchronization. The connection guide remains in the component and is hidden in all screen 12 connection states. A persisted terminated attempt on screens 07–11 is redirected to screen 12 on restore. Screen 13 remains available for direct reviewer inspection. Build verification is recorded with this revision.
 
 #### Evidence terbaru
 
@@ -912,8 +916,8 @@ flowchart TD
 | 09 Tinjau Jawaban | Semua jawaban tersimpan lokal | Kembali ke soal atau `Simpan Hasil` | Kembali ke mode answering atau masuk screen 10 |
 | 10 Simpan Pengerjaan — Konfirmasi | Ringkasan pengerjaan siap disimpan | Konfirmasi simpan atau kembali | Simpan lokal lalu masuk ke screen 12 untuk pengumpulan; screen 11 tetap preview/direct jump reviewer |
 | 11 Subtes Berikutnya | Subtes sebelumnya selesai | Countdown atau CTA lanjut | Mulai subtes berikutnya, kembali ke screen 07 dengan data subtes baru |
-| 12 Nyalakan Internet — Panduan | Semua subtes selesai, jawaban tersimpan lokal | Peserta menyalakan koneksi | Koneksi online → screen 13 |
-| 13 Unggah & Kumpulkan Hasil | Koneksi online terdeteksi | `Upload & Kumpulkan Tryout` | Upload berjalan → hasil menunggu atau selesai, masuk screen 14 |
+| 12 Nyalakan Internet — Panduan | Semua subtes selesai, jawaban tersimpan lokal | Peserta menyalakan koneksi | Koneksi online → upload berjalan di screen 12; sukses langsung ke screen 14 |
+| 13 Unggah & Kumpulkan Hasil | Screen pendukung untuk inspeksi/recovery | Upload atau coba lagi | Upload berjalan → hasil menunggu atau selesai, masuk screen 14; tidak dilalui jalur utama |
 | 14 Hasil Tryout | Upload selesai atau hasil masih diproses | Tunggu hasil atau buka pembahasan | State `waiting`, `available`, dan akses pembahasan **perlu dicocokkan dengan backend** |
 
 #### State global
@@ -959,8 +963,8 @@ Boundary enforcement: nudge anti-internet dimulai ketika attempt masuk screen pe
 
 **Pengumpulan**
 
-- Screen 12 memandu peserta menyalakan koneksi.
-- Screen 13 mengaktifkan CTA upload setelah online terdeteksi.
+- Screen 12 menunggu koneksi; setelah Online, upload berjalan di halaman yang sama dan progres ditampilkan di sana.
+- Screen 13 tetap tersedia untuk inspeksi reviewer dan pemulihan upload.
 - Jawaban yang gagal dikirim masuk `pending_sync` dan dapat dicoba ulang.
 - Screen 14 membedakan hasil yang masih menunggu dengan hasil yang sudah tersedia.
 

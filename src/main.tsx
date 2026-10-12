@@ -2,6 +2,7 @@ import { StrictMode, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { AlertCircle, Check, ChevronDown, ChevronLeft, ChevronRight, Clock3, Info, LayoutGrid, RotateCcw, Wifi, WifiOff } from 'lucide-react';
 import { getToOfflineQuestion, TO_OFFLINE_TOTAL_QUESTIONS } from './fixtures/toOfflineQuestions';
+import { TO_OFFLINE_SUBTEST_EXAMPLES, type OfflineSubtestSummary } from './fixtures/toOfflineSubtests';
 import { getScrollOwner, INITIAL_ATTEMPT_SECONDS, isAttemptScreen, NETWORK_WARNING_SECONDS, SCREEN_NAMES, STEP_LABELS, type AttemptSnapshot, type AttemptStatus, type Choice, type NetworkMode, type RewardStatus, type ScreenId, type UploadStatus } from './state/contract';
 import './styles.css';
 import './tokens.css';
@@ -65,14 +66,52 @@ function SaveResultModal({ answers, doubtful, timeRemaining, onBack, onSave, dis
   return <div className="save-modal-layer"><div className="save-modal-underlay"><ReviewFigma answers={answers} doubtful={doubtful} timeRemaining={timeRemaining} disabled={disabled} onBack={() => undefined} onSave={() => undefined} /></div><div className="save-modal-overlay" /><section className={`save-modal ${disabled ? 'attempt-locked' : ''}`}><img className="save-warning-image" src={`${A}save-warning.png`} alt="" /><div className="save-modal-copy"><h2>Cek lagi jawabanmu sebelum pindah ke subtes berikutnya, ya!</h2><div className="save-scores"><div><span>Soal Dilewati</span><b>{skippedCount}</b></div><div><span>Soal Ragu-Ragu</span><b>{doubtfulCount}</b></div></div><div className="save-time"><img src={`${A}review-clock.png`} alt="" /><span>Sisa Waktu Pengerjaan</span><b><i>{hours}</i><em>:</em><i>{minutes}</i><em>:</em><i>{seconds}</i></b></div><p>Periksa lagi soal-soal dan jawabanmu dulu, ya!<br />Kamu tidak bisa kembali lagi ke soal tryout<br />jika Tryoutnya sudah dikumpulkan</p></div><div className="save-modal-actions"><Button disabled={disabled} onClick={onBack}>Kembali ke Soal</Button><Button disabled={disabled} variant="secondary" onClick={onSave}>Simpan Pengerjaan</Button></div></section></div>;
 }
 function NextSubtestFigma({ onBack, onNext, disabled = false }: { onBack: () => void; onNext: () => void; disabled?: boolean }) { return <div className={`next-subtest-screen ${disabled ? 'attempt-locked' : ''}`}><div className="next-subtest-hero"><button aria-label="Kembali" disabled={disabled} onClick={onBack}>←</button><strong>Simulasi KSR 2025 Regional Round Geografi SMA</strong></div><section className="next-summary"><b>3/8</b><span>Subtes selesai dikerjakan</span></section><section className="next-card"><h2>Tes selanjutnya</h2><div className="next-rule" /><div className="next-test"><div className="exam-art"><img src={`${A}book-pencil.svg`} alt="" /><img src={`${A}book.svg`} alt="" /><img src={`${A}pencil.svg`} alt="" /></div><div><p>Kompetisi Sains Ruangguru</p><strong>Essai</strong></div></div><div className="next-rule" /><div className="next-stats"><div><img src={`${A}question-count.svg`} alt="" /><span>Jumlah soal<strong>20 soal</strong></span></div><div><img src={`${A}clock.png`} alt="" /><span>Waktu pengerjaan<strong>210 menit</strong></span></div></div></section><div className="next-countdown">Otomatis selanjutnya dalam 45 detik</div><div className="next-progress"><span /></div><div className="next-action"><Button disabled={disabled} onClick={onNext}>Kerjakan Subtes Selanjutnya</Button></div></div>; }
-function OfflineProgressPreview({ answers }: { answers: Record<number, Choice> }) {
-  const answeredCount = Object.values(answers).filter(Boolean).length;
-  const skippedCount = TO_OFFLINE_TOTAL_QUESTIONS - answeredCount;
-  return <section className="offline-progress-preview" aria-label="Ringkasan progres pengerjaan offline"><div className="offline-progress-heading"><div><span className="eyebrow">Subtes 1</span><h3>KSR 2025 National Round</h3><p>Geografi SMA</p></div><span className="local-save-badge">Tersimpan lokal</span></div><div className="offline-progress-metrics"><div><b>{answeredCount}</b><span>Dijawab</span></div><div><b>{skippedCount}</b><span>Dilewati</span></div><div><b>{TO_OFFLINE_TOTAL_QUESTIONS}</b><span>Total</span></div></div></section>;
+function OfflineProgressPreview({ subtests }: { subtests: OfflineSubtestSummary[] }) {
+  const [visibleCount, setVisibleCount] = useState(3);
+  const visibleSubtests = subtests.slice(0, visibleCount);
+  return <section className="offline-progress-list" aria-label="Ringkasan progres pengerjaan offline">
+    {visibleSubtests.map(subtest => {
+      const answeredCount = Math.min(subtest.totalQuestions, subtest.answeredCount);
+      const skippedCount = subtest.totalQuestions - answeredCount;
+      return <article className="offline-progress-preview" key={subtest.id}>
+        <div className="offline-progress-heading"><div><span className="eyebrow">{subtest.label}</span><h3>{subtest.title}</h3><p>{subtest.subject}</p></div><span className="local-save-badge">Tersimpan lokal</span></div>
+        <div className="offline-progress-metrics"><div><b>{answeredCount}</b><span>Dijawab</span></div><div><b>{skippedCount}</b><span>Dilewati</span></div><div><b>{subtest.totalQuestions}</b><span>Total</span></div></div>
+      </article>;
+    })}
+    {visibleCount < subtests.length && <button className="offline-progress-load-more" type="button" onClick={() => setVisibleCount(count => Math.min(count + 3, subtests.length))}>Muat lainnya <ChevronDown size={16} aria-hidden="true" /></button>}
+  </section>;
 }
-function UploadPreparationFigma({ half = false, disabled = false, connectionReady = false, answers, showProgressPreview = false, onUpload, syncStatus = 'saved', uploadStatus = 'idle' }: { half?: boolean; disabled?: boolean; connectionReady?: boolean; answers?: Record<number, Choice>; showProgressPreview?: boolean; onUpload: () => void; syncStatus?: 'saved' | 'pending_sync'; uploadStatus?: UploadStatus }) {
+function UploadPreparationFigma({ half = false, disabled = false, connectionReady = false, answers, subtests, showProgressPreview = false, onUpload, syncStatus = 'saved', uploadStatus = 'idle', network = 'offline' }: { half?: boolean; disabled?: boolean; connectionReady?: boolean; answers?: Record<number, Choice>; subtests?: OfflineSubtestSummary[]; showProgressPreview?: boolean; onUpload: () => void; syncStatus?: 'saved' | 'pending_sync'; uploadStatus?: UploadStatus; network?: NetworkMode }) {
   const firstStepComplete = connectionReady;
-  return <div className="upload-prep-screen"><Hero /><section className="upload-prep-card"><div className="collection-context"><span>TO OFFLINE</span><h2>Kumpulkan hasil TO</h2><p>Aktifkan internet untuk mengirim jawabanmu.</p></div><div className="upload-alert"><img src={`${A}review-alert.svg`} alt="" /><div><strong>Tryout belum dikumpulkan</strong><span>Upload hasil tryout supaya jawabanmu tercatat</span></div></div><div className="upload-items"><div className={firstStepComplete ? 'success' : ''}><img src={`${A}wifi.svg`} alt="" /><span>{firstStepComplete ? 'Internet aktif' : 'Nyalakan Koneksi Internet'}</span><img src={`${A}${firstStepComplete ? 'checklist-ready.svg' : 'checklist.svg'}`} alt="" /></div><div><img src={`${A}test.svg`} alt="" /><span>Upload Hasil Tryout Offline</span><img src={`${A}checklist.svg`} alt="" /></div></div>{showProgressPreview && <OfflineProgressPreview answers={answers ?? {}} />}<div className="divider" />{half ? <><div className="download-panel upload-download"><div className="download-icon"><img src={`${A}download.svg`} alt="" /></div><div className="download-copy"><p>Hasil tryout tersimpan di perangkat</p><p className="download-help">Nyalakan koneksi internet untuk mengunggah jawaban.</p></div></div><p className="reward-note">Jawaban benar/salah, Starchamp, dan XP kamu akan direview setelah TO selesai dan berhasil dikumpulkan saat online.</p>{syncStatus === 'pending_sync' && <div className="sync-status"><RotateCcw size={16} /> Menunggu sinkronisasi hasil tryout</div>}{uploadStatus === 'failed' && <div className="upload-error" role="alert"><AlertCircle size={16} /> Upload gagal. Periksa koneksi lalu coba lagi.</div>}{uploadStatus === 'uploading' && <div className="sync-status upload-progress-status"><RotateCcw size={16} /> Mengunggah hasil tryout...</div>}</> : <div className="upload-guide"><h3>Cara menyalakan koneksi internet perangkat</h3><div className="guide-tabs"><span className="selected">Android</span><span>iOS</span><span>Windows</span><span>MacOS</span></div><img className="upload-guide-image" src={`${A}internet-connection-guide-reversed.gif`} alt="Animasi cara menyalakan koneksi internet pada Android" /><h4>Cara utama: Aktifkan Wi-Fi dan data seluler</h4><ol><li>Geser layar dari atas ke bawah untuk membuka panel pengaturan cepat. Geser lagi jika diperlukan.</li><li>Ketuk ikon Wi-Fi dan Data seluler untuk menyalakan keduanya.</li><li>Pastikan indikator koneksi internet sudah aktif sebelum melanjutkan.</li></ol><h4>Alternatif: Atur Melalui Pengaturan</h4><ol><li>Buka Pengaturan → Wi-Fi, lalu nyalakan Wi-Fi.</li><li>Buka Jaringan seluler / Kartu SIM → nyalakan Data seluler.</li></ol></div>}</section><div className="upload-prep-action"><Button disabled={disabled || uploadStatus === 'uploading'} onClick={onUpload}>{half ? (uploadStatus === 'failed' ? 'Coba Lagi' : uploadStatus === 'uploading' ? 'Mengunggah…' : 'Upload & Kumpulkan Tryout') : 'Lanjutkan'}</Button></div></div>;
+  const firstSubtestAnswered = Object.values(answers ?? {}).filter(Boolean).length;
+  const progressSubtests = subtests ?? TO_OFFLINE_SUBTEST_EXAMPLES.map((subtest, index) => index === 0 ? { ...subtest, answeredCount: firstSubtestAnswered } : subtest);
+  const isRetryAvailable = !half && uploadStatus === 'failed';
+  return <div className="upload-prep-screen">
+    <Hero />
+    <section className="upload-prep-card">
+      <div className="collection-context"><span>TO OFFLINE</span><h2>Kumpulkan hasil TO</h2><p>Aktifkan internet untuk mengirim jawabanmu.</p></div>
+      <div className="upload-alert"><img src={`${A}review-alert.svg`} alt="" /><div><strong>Tryout belum dikumpulkan</strong><span>Upload hasil tryout supaya jawabanmu tercatat</span></div></div>
+      <div className="upload-items">
+        <div className={firstStepComplete ? 'success' : ''}><img src={`${A}wifi.svg`} alt="" /><span>{firstStepComplete ? 'Internet aktif' : 'Nyalakan Koneksi Internet'}</span><img src={`${A}${firstStepComplete ? 'checklist-ready.svg' : 'checklist.svg'}`} alt="" /></div>
+        <div><img src={`${A}test.svg`} alt="" /><span>Upload Hasil Tryout Offline</span><img src={`${A}checklist.svg`} alt="" /></div>
+      </div>
+      {showProgressPreview && <OfflineProgressPreview subtests={progressSubtests} />}
+      <div className="divider" />
+      {half ? <>
+        <div className="download-panel upload-download"><div className="download-icon"><img src={`${A}download.svg`} alt="" /></div><div className="download-copy"><p>Hasil tryout tersimpan di perangkat</p><p className="download-help">Nyalakan koneksi internet untuk mengunggah jawaban.</p></div></div>
+        <p className="reward-note">Jawaban benar/salah, Starchamp, dan XP kamu akan direview setelah TO selesai dan berhasil dikumpulkan saat online.</p>
+        {syncStatus === 'pending_sync' && <div className="sync-status"><RotateCcw size={16} /> Menunggu sinkronisasi hasil tryout</div>}
+        {uploadStatus === 'failed' && <div className="upload-error" role="alert"><AlertCircle size={16} /> Upload gagal. Periksa koneksi lalu coba lagi.</div>}
+        {uploadStatus === 'uploading' && <div className="sync-status upload-progress-status"><RotateCcw size={16} /> Mengunggah hasil tryout...</div>}
+      </> : <>
+        <div className="upload-guide" hidden><h3>Cara menyalakan koneksi internet perangkat</h3><div className="guide-tabs"><span className="selected">Android</span><span>iOS</span><span>Windows</span><span>MacOS</span></div><img className="upload-guide-image" src={`${A}internet-connection-guide-reversed.gif`} alt="Animasi cara menyalakan koneksi internet pada Android" /><h4>Cara utama: Aktifkan Wi-Fi dan data seluler</h4><ol><li>Geser layar dari atas ke bawah untuk membuka panel pengaturan cepat. Geser lagi jika diperlukan.</li><li>Ketuk ikon Wi-Fi dan Data seluler untuk menyalakan keduanya.</li><li>Pastikan indikator koneksi internet sudah aktif sebelum melanjutkan.</li></ol><h4>Alternatif: Atur Melalui Pengaturan</h4><ol><li>Buka Pengaturan → Wi-Fi, lalu nyalakan Wi-Fi.</li><li>Buka Jaringan seluler / Kartu SIM → nyalakan Data seluler.</li></ol></div>
+        {uploadStatus === 'uploading' && <div className="upload-progress-panel" role="status"><div className="upload-progress-copy"><RotateCcw size={16} /> Mengunggah hasil tryout...</div><div className="upload-progress-track"><span /></div></div>}
+        {syncStatus === 'pending_sync' && uploadStatus !== 'uploading' && uploadStatus !== 'failed' && network === 'offline' && <div className="sync-status"><RotateCcw size={16} /> Menunggu koneksi internet untuk mengunggah</div>}
+        {uploadStatus === 'failed' && <div className="upload-error" role="alert"><AlertCircle size={16} /> Upload gagal. Periksa koneksi lalu coba lagi.</div>}
+      </>}
+    </section>
+    <div className="upload-prep-action" hidden={!half && !isRetryAvailable}><Button disabled={disabled || uploadStatus === 'uploading'} onClick={onUpload}>{half ? (uploadStatus === 'failed' ? 'Coba Lagi' : uploadStatus === 'uploading' ? 'Mengunggah…' : 'Upload & Kumpulkan Tryout') : 'Coba Lagi'}</Button></div>
+  </div>;
 }
 function ResultFigma({ rewardStatus = 'available' }: { rewardStatus?: RewardStatus }) { return <div className="result-figma-screen"><div className="result-hero"><strong>Hasil Tryout</strong><span>Tryout UTBK Episode 8</span></div><section className="result-profile"><img src={`${A}result-account.png`} alt="" /><div><span>Putri Anjani</span><strong>PutriAnjani@gmail.com</strong></div></section><section className="result-waiting"><img src={`${A}result-waiting.png`} alt="" /><h2>Hasil tryout-mu sedang disiapkan</h2><p>Hasil rasionalisasi akan diumumkan pada tanggal<br /><b>29 Januari 2022</b></p></section><section className="result-summary"><div className="result-summary-head"><strong>Rangkuman penilaian</strong><span>Lihat Detail</span></div><div className="result-score"><div><b>120</b><span>Benar</span></div><div><b>40</b><span>Salah</span></div><div><b>20</b><span>Dilewati</span></div></div><div className="result-time"><img src={`${A}review-clock.png`} alt="" /><span>Waktu pengerjaan</span><b>03:32:21</b></div>{rewardStatus === 'available' && <div className="result-rewards"><div><b>+120</b><span>Starchamp</span></div><div><b>+80</b><span>XP</span></div></div>}</section><div className="result-action"><Button onClick={() => undefined}>Lihat Pembahasan</Button></div></div>; }
 function OfflineGuide({ turnOn = false }: { turnOn?: boolean }) { const title = turnOn ? 'Turn on your internet connection' : 'Turn off your internet connection'; return <section className="card guide-card"><div className={`network-illustration ${turnOn ? 'online' : ''}`}><WifiOff size={36} /></div><h2>{title}</h2><p>{turnOn ? 'Your answers are saved. Turn on Wi-Fi or mobile data to upload your result.' : 'To prevent interruptions, turn off Wi-Fi and mobile data before starting.'}</p><div className="platform-tabs"><span className="selected">Android</span><span>iOS</span><span>Windows</span><span>macOS</span></div><div className="guide-list"><div><b>1</b><span>Open your device settings.</span></div><div><b>2</b><span>Turn {turnOn ? 'on' : 'off'} Wi-Fi and mobile data.</span></div><div><b>3</b><span>Return here when the connection status changes.</span></div></div><div className={`connection-pill ${turnOn ? 'online' : ''}`}>{turnOn ? <Wifi size={16} /> : <WifiOff size={16} />} {turnOn ? 'Internet connection detected' : 'Waiting for offline mode'}</div></section>; }
@@ -81,7 +120,7 @@ function ReviewCard({ answers, doubtful }: { answers: Record<number, Choice>; do
 function ResultCard() { return <section className="card result-card"><div className="result-icon"><Check size={25} /></div><p className="eyebrow">Tryout submitted</p><h2>Your result is being prepared</h2><p>We are processing your answers. You can check back here shortly.</p><div className="result-status"><span className="pulse" /> Processing result</div><Button variant="secondary" onClick={() => undefined}>View discussion when ready <ChevronRight size={16} /></Button></section>; }
 
 function App() {
-  const [screen, setScreen] = useState<ScreenId>(1); const [reviewOrigin, setReviewOrigin] = useState<7 | 8>(7); const [consent, setConsent] = useState(false); const [downloadProgress, setDownloadProgress] = useState(0); const [answers, setAnswers] = useState<Record<number, Choice>>({}); const [doubtful, setDoubtful] = useState<Set<number>>(new Set()); const [network, setNetwork] = useState<NetworkMode>('online'); const networkRef = useRef<NetworkMode>(network); const [attemptStatus, setAttemptStatus] = useState<AttemptStatus>('not_started'); const [timeRemaining, setTimeRemaining] = useState(INITIAL_ATTEMPT_SECONDS); const [networkWarningSeconds, setNetworkWarningSeconds] = useState<number | null>(null); const [syncStatus, setSyncStatus] = useState<'saved' | 'pending_sync'>('saved'); const [uploadStatus, setUploadStatus] = useState<UploadStatus>('idle'); const [rewardStatus, setRewardStatus] = useState<RewardStatus>('hidden'); const uploadRunRef = useRef(0); const [menuOpen, setMenuOpen] = useState(false); const [restored, setRestored] = useState(false);
+  const [screen, setScreen] = useState<ScreenId>(1); const [reviewerPreview, setReviewerPreview] = useState(false); const [reviewOrigin, setReviewOrigin] = useState<7 | 8>(7); const [consent, setConsent] = useState(false); const [downloadProgress, setDownloadProgress] = useState(0); const [answers, setAnswers] = useState<Record<number, Choice>>({}); const [doubtful, setDoubtful] = useState<Set<number>>(new Set()); const [network, setNetwork] = useState<NetworkMode>('online'); const networkRef = useRef<NetworkMode>(network); const [attemptStatus, setAttemptStatus] = useState<AttemptStatus>('not_started'); const [timeRemaining, setTimeRemaining] = useState(INITIAL_ATTEMPT_SECONDS); const [networkWarningSeconds, setNetworkWarningSeconds] = useState<number | null>(null); const [syncStatus, setSyncStatus] = useState<'saved' | 'pending_sync'>('saved'); const [uploadStatus, setUploadStatus] = useState<UploadStatus>('idle'); const [rewardStatus, setRewardStatus] = useState<RewardStatus>('hidden'); const uploadRunRef = useRef(0); const [menuOpen, setMenuOpen] = useState(false); const [restored, setRestored] = useState(false);
   useEffect(() => {
     try {
       const raw = window.sessionStorage.getItem('ruanguji-to-offline-attempt');
@@ -123,54 +162,54 @@ function App() {
       container.scrollTop = 0;
     });
   }, [screen]);
-  useEffect(() => { if ((screen !== 2 && screen !== 3) || downloadProgress >= 100) return; const timer = window.setInterval(() => setDownloadProgress(value => Math.min(100, value + 20)), 350); return () => window.clearInterval(timer); }, [screen, downloadProgress]);
-  useEffect(() => { if (downloadProgress === 100 && (screen === 2 || screen === 3)) { const timer = window.setTimeout(() => setScreen(4), 400); return () => window.clearTimeout(timer); } }, [downloadProgress, screen]);
-  useEffect(() => { if (screen === 5 && network === 'online') setScreen(4); }, [network, screen]);
+  useEffect(() => { if ((screen !== 2 && screen !== 3) || reviewerPreview || downloadProgress >= 100) return; const timer = window.setInterval(() => setDownloadProgress(value => Math.min(100, value + 20)), 350); return () => window.clearInterval(timer); }, [screen, reviewerPreview, downloadProgress]);
+  useEffect(() => { if (!reviewerPreview && downloadProgress === 100 && (screen === 2 || screen === 3)) { const timer = window.setTimeout(() => setScreen(4), 400); return () => window.clearTimeout(timer); } }, [downloadProgress, reviewerPreview, screen]);
+  useEffect(() => { if (!reviewerPreview && screen === 5 && network === 'online') setScreen(4); }, [network, reviewerPreview, screen]);
   // The attempt boundary covers answering, review, save confirmation, and the
   // next-subtest transition. Upload preparation starts after this boundary.
   const attemptScreen = isAttemptScreen(screen);
-  const attemptLocked = attemptScreen && network === 'online' && attemptStatus !== 'terminated';
+  const attemptLocked = attemptScreen && !reviewerPreview && network === 'online' && attemptStatus !== 'terminated';
   useEffect(() => {
-    if (!attemptScreen || attemptStatus === 'terminated' || network === 'offline') {
+    // Recover older persisted attempts that were left on the termination modal.
+    if (restored && attemptScreen && !reviewerPreview && attemptStatus === 'terminated') setScreen(12);
+  }, [restored, attemptScreen, attemptStatus, reviewerPreview]);
+  useEffect(() => {
+    if (!attemptScreen || reviewerPreview || attemptStatus === 'terminated' || network === 'offline') {
       setNetworkWarningSeconds(null);
       return;
     }
     setNetworkWarningSeconds(value => value ?? NETWORK_WARNING_SECONDS);
-  }, [attemptStatus, attemptScreen, network]);
+  }, [attemptStatus, attemptScreen, network, reviewerPreview]);
   useEffect(() => {
-    if (!attemptScreen || attemptStatus === 'terminated' || network !== 'online' || networkWarningSeconds === null) return;
+    if (!attemptScreen || reviewerPreview || attemptStatus === 'terminated' || network !== 'online' || networkWarningSeconds === null) return;
     const timer = window.setInterval(() => setNetworkWarningSeconds(value => {
       if (value === null) return value;
       if (value <= 1) {
         setAttemptStatus('terminated');
         setSyncStatus('pending_sync');
+        setScreen(12);
         return null;
       }
       return value - 1;
     }), 1000);
     return () => window.clearInterval(timer);
-  }, [attemptScreen, attemptStatus, network, networkWarningSeconds]);
+  }, [attemptScreen, attemptStatus, network, networkWarningSeconds, reviewerPreview]);
   useEffect(() => {
-    if (!attemptScreen || attemptStatus === 'terminated' || network !== 'offline') return;
+    if (!attemptScreen || reviewerPreview || attemptStatus === 'terminated' || network !== 'offline') return;
     const timer = window.setInterval(() => setTimeRemaining(value => {
       if (value <= 0) return 0;
       return value - 1;
     }), 1000);
     return () => window.clearInterval(timer);
-  }, [attemptScreen, attemptStatus, network]);
+  }, [attemptScreen, attemptStatus, network, reviewerPreview]);
   useEffect(() => {
-    if (!attemptScreen || timeRemaining !== 0 || attemptStatus === 'terminated' || attemptStatus === 'locked') return;
+    if (!attemptScreen || reviewerPreview || timeRemaining !== 0 || attemptStatus === 'terminated' || attemptStatus === 'locked') return;
     setAttemptStatus('locked');
     setSyncStatus('pending_sync');
     setScreen(12);
-  }, [attemptScreen, attemptStatus, timeRemaining]);
-  useEffect(() => {
-    if (screen === 12 && network === 'online' && attemptStatus === 'locked' && syncStatus === 'pending_sync' && timeRemaining === 0) {
-      setScreen(13);
-    }
-  }, [attemptStatus, network, screen, syncStatus, timeRemaining]);
+  }, [attemptScreen, attemptStatus, timeRemaining, reviewerPreview]);
   const activeStep = useMemo(() => screen <= 1 ? 0 : screen <= 3 ? 1 : screen <= 6 ? 2 : 3, [screen]); const nextQuestion = (question: number) => { setAttemptStatus(question === 1 ? 'active' : 'reviewing'); if (question === 2) setReviewOrigin(8); setScreen(question === 1 ? 8 : 9); }; const openReview = (question: 1 | 2) => { if (attemptLocked) return; setReviewOrigin(question === 1 ? 7 : 8); setAttemptStatus('reviewing'); setScreen(9); }; const setAnswer = (question: number, choice: Choice) => setAnswers(current => ({ ...current, [question]: choice })); const toggleDoubtful = (question: number, value: boolean) => setDoubtful(current => { const next = new Set(current); value ? next.add(question) : next.delete(question); return next; });
-  const startAttempt = () => { setAttemptStatus('active'); setTimeRemaining(INITIAL_ATTEMPT_SECONDS); setSyncStatus('saved'); setUploadStatus('idle'); setScreen(7); };
+  const startAttempt = () => { setReviewerPreview(false); setAttemptStatus('active'); setTimeRemaining(INITIAL_ATTEMPT_SECONDS); setSyncStatus('saved'); setUploadStatus('idle'); setScreen(7); };
   const startUpload = () => {
     if (network !== 'online' || uploadStatus === 'uploading') return;
     const uploadRun = ++uploadRunRef.current;
@@ -189,12 +228,19 @@ function App() {
     }, 900);
     };
   useEffect(() => {
-    if (screen === 13 && network === 'online' && uploadStatus === 'idle') startUpload();
-  }, [screen, network, uploadStatus]);
-  const setNetworkMode = (mode: NetworkMode) => { setNetwork(mode); setMenuOpen(false); };
+    if (!reviewerPreview && screen === 12 && network === 'online' && uploadStatus === 'idle') {
+      setSyncStatus('pending_sync');
+      startUpload();
+    }
+  }, [network, reviewerPreview, screen, uploadStatus]);
+  useEffect(() => {
+    if (!reviewerPreview && screen === 13 && network === 'online' && uploadStatus === 'idle') startUpload();
+  }, [reviewerPreview, screen, network, uploadStatus]);
+  const setNetworkMode = (mode: NetworkMode) => { setReviewerPreview(false); setNetwork(mode); setMenuOpen(false); };
   const resetSimulation = () => {
     uploadRunRef.current += 1;
     window.sessionStorage.removeItem('ruanguji-to-offline-attempt');
+    setReviewerPreview(false);
     setScreen(1);
     setReviewOrigin(7);
     setConsent(false);
@@ -217,17 +263,17 @@ function App() {
     case 4: return <><Hero /><OfflinePreparationCard connectionReady={network === 'offline'} /><div className="after-guide-action"><Button disabled={network !== 'offline'} onClick={() => setScreen(6)}>Kerjakan Tryout</Button></div></>;
     case 5: return <><Hero /><ReadyPreparationCard /><div className="single-action"><Button onClick={() => setScreen(6)}>Kerjakan Tryout</Button></div></>;
     case 6: return <StartTryoutModal onClose={() => setScreen(5)} onStart={startAttempt} />;
-    case 7: return <QuestionOneFigma answers={answers} doubtfulQuestions={doubtful} choice={answers[1] ?? null} doubtful={doubtful.has(1)} onChoiceChange={choice => setAnswer(1, choice)} onDoubtfulChange={value => toggleDoubtful(1, value)} timeRemaining={timeRemaining} disabled={attemptLocked || attemptStatus === 'terminated'} onOpenMenu={() => setMenuOpen(true)} onOpenNavigator={() => openReview(1)} onBack={() => setScreen(6)} onNext={() => setScreen(8)} />;
-    case 8: return <QuestionOneFigma question={2} answers={answers} doubtfulQuestions={doubtful} choice={answers[2] ?? null} doubtful={doubtful.has(2)} onChoiceChange={choice => setAnswer(2, choice)} onDoubtfulChange={value => toggleDoubtful(2, value)} timeRemaining={timeRemaining} disabled={attemptLocked || attemptStatus === 'terminated'} onOpenMenu={() => setMenuOpen(true)} onOpenNavigator={() => openReview(2)} onBack={() => setScreen(7)} onNext={() => nextQuestion(2)} />;
+    case 7: return <QuestionOneFigma answers={answers} doubtfulQuestions={doubtful} choice={answers[1] ?? null} doubtful={doubtful.has(1)} onChoiceChange={choice => setAnswer(1, choice)} onDoubtfulChange={value => toggleDoubtful(1, value)} timeRemaining={timeRemaining} disabled={attemptLocked || (!reviewerPreview && attemptStatus === 'terminated')} onOpenMenu={() => setMenuOpen(true)} onOpenNavigator={() => openReview(1)} onBack={() => setScreen(6)} onNext={() => setScreen(8)} />;
+    case 8: return <QuestionOneFigma question={2} answers={answers} doubtfulQuestions={doubtful} choice={answers[2] ?? null} doubtful={doubtful.has(2)} onChoiceChange={choice => setAnswer(2, choice)} onDoubtfulChange={value => toggleDoubtful(2, value)} timeRemaining={timeRemaining} disabled={attemptLocked || (!reviewerPreview && attemptStatus === 'terminated')} onOpenMenu={() => setMenuOpen(true)} onOpenNavigator={() => openReview(2)} onBack={() => setScreen(7)} onNext={() => nextQuestion(2)} />;
     case 9: return <ReviewFigma answers={answers} doubtful={doubtful} timeRemaining={timeRemaining} disabled={attemptLocked} onBack={() => { if (attemptLocked) return; setAttemptStatus('active'); setScreen(reviewOrigin); }} onSave={() => { if (attemptLocked) return; setAttemptStatus('locked'); setScreen(10); }} />;
-    case 10: return <SaveResultModal answers={answers} doubtful={doubtful} timeRemaining={timeRemaining} disabled={attemptLocked} onBack={() => { if (attemptLocked) return; setAttemptStatus('reviewing'); setScreen(9); }} onSave={() => { if (attemptLocked) return; setAttemptStatus('locked'); setScreen(12); }} />;
+    case 10: return <SaveResultModal answers={answers} doubtful={doubtful} timeRemaining={timeRemaining} disabled={attemptLocked} onBack={() => { if (attemptLocked) return; setAttemptStatus('reviewing'); setScreen(9); }} onSave={() => { if (attemptLocked) return; setReviewerPreview(false); setAttemptStatus('locked'); setSyncStatus('pending_sync'); setScreen(12); }} />;
     case 11: return <NextSubtestFigma disabled={attemptLocked} onBack={() => setScreen(10)} onNext={startAttempt} />;
-    case 12: return <UploadPreparationFigma answers={answers} showProgressPreview connectionReady={network === 'online'} disabled={network !== 'online'} onUpload={() => { setUploadStatus('idle'); setScreen(13); }} />;
-    case 13: return <UploadPreparationFigma half connectionReady={network === 'online'} disabled={network !== 'online'} syncStatus={syncStatus} uploadStatus={uploadStatus} onUpload={startUpload} />;
+    case 12: return <UploadPreparationFigma answers={answers} showProgressPreview connectionReady={network === 'online'} disabled={network !== 'online'} network={network} syncStatus={syncStatus} uploadStatus={uploadStatus} onUpload={() => { setSyncStatus('pending_sync'); setUploadStatus('idle'); startUpload(); }} />;
+    case 13: return <UploadPreparationFigma half connectionReady={network === 'online'} disabled={network !== 'online'} network={network} syncStatus={syncStatus} uploadStatus={uploadStatus} onUpload={startUpload} />;
     case 14: return <ResultFigma rewardStatus={rewardStatus} />;
   } };
   const scrollOwner = getScrollOwner(screen);
-  return <main className={`app-shell ${screen === 6 ? 'modal-shell' : ''} ${screen >= 7 && screen <= 8 ? 'question-shell' : ''} ${screen === 11 ? 'next-subtest-shell' : ''}`}><Navbar onMenu={() => setMenuOpen(true)} /><div data-screen-id={screen} data-scroll-owner={scrollOwner} className={`screen-content ${screen === 9 ? 'review-content' : ''} ${screen === 14 ? 'result-content' : ''} ${screen === 12 || screen === 13 ? 'upload-content' : ''}`}>{renderScreen()}</div>{attemptScreen && (networkWarningSeconds !== null || attemptStatus === 'terminated') && <NetworkOverlay secondsRemaining={networkWarningSeconds} terminated={attemptStatus === 'terminated'} onContinue={() => { setAttemptStatus('locked'); setScreen(12); }} />}{menuOpen && <div className="menu-overlay" onClick={() => setMenuOpen(false)}><aside className="side-menu" onClick={event => event.stopPropagation()}><button className="menu-close" onClick={() => setMenuOpen(false)}>×</button><h2>TO Offline demo</h2><p>Jump to a screen for review.</p><div className="menu-network"><span>Connection simulation</span><div><button onClick={() => setNetworkMode('offline')} className={network === 'offline' ? 'active' : ''}><WifiOff size={14} /> Offline</button><button onClick={() => setNetworkMode('online')} className={network === 'online' ? 'active' : ''}><Wifi size={14} /> Online</button></div></div><button className="menu-item reset-simulation" onClick={resetSimulation}>↻ Reset Simulasi</button>{Object.keys(screenNames).map(key => { const id = Number(key) as ScreenId; return <button className={`menu-item ${id === screen ? 'current' : ''}`} key={id} onClick={() => { setScreen(id); setMenuOpen(false); }}>{String(id).padStart(2, '0')} {screenNames[id]}</button>; })}</aside></div>}</main>;
+  return <main className={`app-shell ${screen === 6 ? 'modal-shell' : ''} ${screen >= 7 && screen <= 8 ? 'question-shell' : ''} ${screen === 11 ? 'next-subtest-shell' : ''}`}><Navbar onMenu={() => setMenuOpen(true)} /><div data-screen-id={screen} data-scroll-owner={scrollOwner} className={`screen-content ${screen === 9 ? 'review-content' : ''} ${screen === 14 ? 'result-content' : ''} ${screen === 12 || screen === 13 ? 'upload-content' : ''}`}>{renderScreen()}</div>{attemptScreen && !reviewerPreview && (networkWarningSeconds !== null || attemptStatus === 'terminated') && <NetworkOverlay secondsRemaining={networkWarningSeconds} terminated={attemptStatus === 'terminated'} onContinue={() => { setAttemptStatus('locked'); setScreen(12); }} />}{menuOpen && <div className="menu-overlay" onClick={() => setMenuOpen(false)}><aside className="side-menu" onClick={event => event.stopPropagation()}><button className="menu-close" onClick={() => setMenuOpen(false)}>×</button><h2>TO Offline demo</h2><p>Jump to a screen for review.</p><div className="menu-network"><span>Connection simulation</span><div><button onClick={() => setNetworkMode('offline')} className={network === 'offline' ? 'active' : ''}><WifiOff size={14} /> Offline</button><button onClick={() => setNetworkMode('online')} className={network === 'online' ? 'active' : ''}><Wifi size={14} /> Online</button></div></div><button className="menu-item reset-simulation" onClick={resetSimulation}>↻ Reset Simulasi</button>{Object.keys(screenNames).map(key => { const id = Number(key) as ScreenId; return <button className={`menu-item ${id === screen ? 'current' : ''}`} key={id} onClick={() => { setReviewerPreview(true); setScreen(id); setMenuOpen(false); }}>{String(id).padStart(2, '0')} {screenNames[id]}</button>; })}</aside></div>}</main>;
 }
 
 createRoot(document.getElementById('root')!).render(<StrictMode><App /></StrictMode>);
