@@ -79,14 +79,14 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-221 | Kunci visual state screen 07 vs 08 | CRAFT-107, CRAFT-108, CRAFT-220 | State question navigator konsisten tanpa layout drift | Internal Review |
 | CRAFT-222 | Audit framing dan state screen 12 | CRAFT-112, CRAFT-204, CRAFT-216 | Screen upload preparation stabil dari scroll 0 dan sesuai Figma | Internal Review |
 | CRAFT-223 | Perbaiki delivery asset Figma | CRAFT-004, CRAFT-006 | Semua asset lokal tersedia di dev dan production preview | Approved |
-| CRAFT-224 | Wire touchpoint navigator soal ke screen 09 | CRAFT-220, CRAFT-221, CRAFT-109 | Ikon grid pada screen 07/08 membuka screen 09 dengan state attempt tetap utuh | Internal Review |
+| CRAFT-224 | Wire touchpoint navigator soal ke screen 09 | CRAFT-220, CRAFT-221, CRAFT-109 | Ikon grid pada screen 07/08 membuka screen 09 dengan state attempt tetap utuh | Approved |
 | CRAFT-225 | Audit visual screen 11 — Subtes Berikutnya | CRAFT-111, CRAFT-204, CRAFT-223 | Screen 11 mengikuti frame Figma `8:2032` pada viewport 360 × 740 | Internal Review |
 | CRAFT-226 | Audit dan perbaiki scrollability lintas screen | CRAFT-107–109, CRAFT-204, CRAFT-217 | Scroll ownership, route reset, bottom clearance, dan evidence 14 screen | Internal Review |
-| CRAFT-227 | [P0] Ganti fixture soal dengan konten original bergaya UTBK | CRAFT-007, CRAFT-107, CRAFT-108 | Data-driven question fixture untuk screen 07–08 tanpa Lorem ipsum | Internal Review |
-| CRAFT-228 | [P0] Implementasikan state jawaban dan review end-to-end | CRAFT-224, CRAFT-227 | Pilihan jawaban, ragu-ragu, navigator, review, dan save memakai state nyata | Internal Review |
-| CRAFT-229 | [P0] Uji recovery attempt dan persistence prototype | CRAFT-202, CRAFT-203, CRAFT-228 | Reload, timer, pending sync, retry, dan recovery evidence | Internal Review |
+| CRAFT-227 | [P0] Ganti fixture soal dengan konten original bergaya UTBK | CRAFT-007, CRAFT-107, CRAFT-108 | Data-driven question fixture untuk screen 07–08 tanpa Lorem ipsum | Approved |
+| CRAFT-228 | [P0] Implementasikan state jawaban dan review end-to-end | CRAFT-224, CRAFT-227 | Pilihan jawaban, ragu-ragu, navigator, review, dan save memakai state nyata | Approved |
+| CRAFT-229 | [P0] Uji recovery attempt dan persistence prototype | CRAFT-202, CRAFT-203, CRAFT-228 | Reload, timer, pending sync, retry, dan recovery evidence | Approved |
 | CRAFT-230 | [P0] Finalisasi boundary anti-cheat produksi | CRAFT-213, CRAFT-214, CRAFT-215 | Keputusan platform/device enforcement di luar kemampuan React prototype | Blocked |
-| CRAFT-231 | Sediakan reset simulasi untuk timer dan attempt | CRAFT-007, CRAFT-229 | Kontrol reviewer untuk mengembalikan fixture ke kondisi awal tanpa state basi | Internal Review |
+| CRAFT-231 | Sediakan reset simulasi untuk timer dan attempt | CRAFT-007, CRAFT-229 | Kontrol reviewer untuk mengembalikan fixture ke kondisi awal tanpa state basi | Approved |
 
 #### Evidence terbaru
 
@@ -110,7 +110,7 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 #### CRAFT-224 — Question navigator menuju screen 09
 
 - Screens: `CRAFT-107` dan `CRAFT-108` → `CRAFT-109` / nodes `8:2053`, `8:2154`, `13:3198`
-- Status: `Internal Review`
+- Status: `Approved`
 - Owner: builder
 
 Acceptance criteria:
@@ -124,6 +124,7 @@ Acceptance criteria:
 - [x] `npm run build` dan `git diff --check` lulus.
 
 Evidence: screen 07 grid → screen 09 → `Kembali ke Soal` returns to screen 07; screen 08 grid → screen 09 → `Kembali ke Soal` returns to screen 08; online mode exposes a disabled question navigator and locks the attempt controls.
+- Planner review 2026-10-12: Approved after live verification of both navigator entry points, review route, return-to-origin behavior, and timer continuity at 360 × 740.
 
 #### CRAFT-225 — Screen 11 visual parity
 
@@ -211,7 +212,7 @@ Acceptance criteria:
 #### CRAFT-227 — Fixture soal original bergaya UTBK
 
 - Scope: screen 07–08 dan data yang dipakai screen 09
-- Status: `Internal Review`
+- Status: `Approved`
 - Priority: `P0`
 - Owner: builder
 
@@ -222,11 +223,12 @@ Acceptance criteria:
 - [x] Fixture disimpan sebagai data terstruktur, bukan hardcode markup per screen.
 - [x] Tidak menyalin soal UTBK asli dari internet tanpa sumber berlisensi atau izin penggunaan.
 - [x] Copy, panjang teks, dan opsi cukup realistis untuk menguji scroll screen 07–08.
+- Planner review 2026-10-12: Approved after reviewing top/bottom evidence for screens 07–08. Horizontal clipping and nested-scroll carryover were fixed in `8847467`; `npm run build` and `git diff --check` pass.
 
 #### CRAFT-228 — State jawaban dan review end-to-end
 
 - Scope: screen 07–10, dengan navigator screen 07–08 menuju screen 09
-- Status: `Internal Review`
+- Status: `Approved`
 - Priority: `P0`
 - Owner: builder
 
@@ -241,11 +243,12 @@ Acceptance criteria:
 - [x] Online lock tetap mencegah perubahan jawaban dan transisi review/save sesuai policy attempt.
 
 - Evidence: `evidence/CRAFT-228-answer-replaced.png`, `evidence/CRAFT-228-doubtful-navigator.png`, `evidence/CRAFT-228-review-from-screen07.png`, `evidence/CRAFT-228-review-from-screen08.png`, `evidence/CRAFT-228-save-summary.png`, and `evidence/CRAFT-228-online-locked.png` at 360 × 740.
+- Planner review 2026-10-12: Approved after reviewing answer replacement, doubtful marker, both review origins, dynamic save summary, online lock, and live timer consistency. `npm run build` and `git diff --check` pass.
 
 #### CRAFT-229 — Recovery attempt dan persistence prototype
 
 - Scope: active attempt screen 07–11 dan upload preparation screen 12–13
-- Status: `Internal Review`
+- Status: `Approved`
 - Priority: `P0`
 - Owner: builder
 
@@ -260,6 +263,7 @@ Acceptance criteria:
 
 - Evidence: `evidence/CRAFT-229-reload-active.png`, `evidence/CRAFT-229-reload-terminated.png`, `evidence/CRAFT-229-upload-failure.png`, and `evidence/CRAFT-229-retry-success.png` at 360 × 740.
 - Persistence note: sessionStorage supports prototype recovery only. It is user-editable, browser-scoped, and can be cleared or tampered with; production enforcement and submission integrity require a trusted device/runtime and server-side validation.
+- Planner review 2026-10-12: Approved after reviewing active/terminated reload, failed upload, retry success, persisted warning/upload state, and single-run upload guard. `npm run build` and `git diff --check` pass.
 
 #### CRAFT-230 — Boundary anti-cheat produksi
 
@@ -278,7 +282,7 @@ Acceptance criteria:
 #### CRAFT-231 — Reset simulasi untuk timer dan attempt
 
 - Scope: menu demo/reviewer dan state persistence prototype
-- Status: `Internal Review`
+- Status: `Approved`
 - Priority: `P1` (developer/reviewer productivity; bukan fitur peserta)
 - Owner: builder
 
@@ -294,6 +298,7 @@ Acceptance criteria:
 - [x] Jalankan `npm run build` dan `git diff --check` setelah implementasi.
 
 - Evidence: `evidence/CRAFT-231-reset-running.png`, `evidence/CRAFT-231-reset-terminated.png`, `evidence/CRAFT-231-reset-warning-online.png`, and `evidence/CRAFT-231-reset-pending-upload.png` at 360 × 740.
+- Planner review 2026-10-12: Approved after reviewing all four reset states, the reviewer-only menu boundary, storage clearing, timer reset, and fresh reload state. `npm run build` and `git diff --check` pass.
 
 #### CRAFT-206 — Final cleanup dan handoff
 
@@ -781,12 +786,14 @@ Boundary enforcement: nudge anti-internet dimulai ketika attempt masuk screen pe
 
 ### CRAFT-003 — Token visual
 
-- [ ] Warna background, text, border, primary, warning, dan error.
-- [ ] Font family, weight, size, line height, dan letter spacing.
-- [ ] Spacing utama: page padding, card padding, gap, dan button padding.
-- [ ] Radius card, alert, checkbox, dan button.
-- [ ] Shadow card dan sticky action bar.
-- [ ] Ukuran dan alignment icon.
+- [x] Warna background, text, border, primary, warning, dan error.
+- [x] Font family, weight, size, line height, dan letter spacing.
+- [x] Spacing utama: page padding, card padding, gap, dan button padding.
+- [x] Radius card, alert, checkbox, dan button.
+- [x] Shadow card dan sticky action bar.
+- [x] Ukuran dan alignment icon.
+
+Token catalog: `src/tokens.css`; audit notes: `FOUNDATION_AUDIT.md`.
 
 ### CRAFT-004 — Asset map
 
@@ -812,30 +819,34 @@ Semua file di bawah bersumber dari section Figma `15:7547`. Salinan untuk delive
 
 ### CRAFT-005 — Komponen reusable
 
-- [ ] `AppShell` dan mobile viewport wrapper.
-- [ ] `Navbar`.
-- [ ] `HeaderBackground`.
-- [ ] `PreparationHeader` dengan step indicator.
-- [ ] `ProgressChecklist` dan checklist item.
-- [ ] `Card`.
-- [ ] `Alert` atau `Notice`.
-- [ ] `Button` primary, secondary, disabled, dan loading.
-- [ ] `Checkbox`.
-- [ ] `Chip` atau tab platform.
-- [ ] `StickyActionBar`.
-- [ ] `QuestionNavigator` dan `QuestionCard`.
-- [ ] `Timer`.
-- [ ] `NetworkOverlay`.
-- [ ] `UploadProgress` dan `SyncStatus`.
+- [x] `AppShell` dan mobile viewport wrapper.
+- [x] `Navbar`.
+- [x] `Hero` sebagai `HeaderBackground`.
+- [x] Header persiapan dengan step indicator di `PreparationCard`, `OfflinePreparationCard`, dan `ReadyPreparationCard`.
+- [x] Checklist item di preparation/upload cards.
+- [x] `.card` wrapper.
+- [x] `Notice` dan alert variants.
+- [x] `Button` primary, secondary, disabled, dan loading.
+- [x] Native checkbox styling in rules and doubtful controls.
+- [x] Platform and guide tabs.
+- [x] `StickyActions`.
+- [x] Question navigator and question card composition in `QuestionOneFigma`.
+- [x] Timer formatting and timer boxes in `QuestionOneFigma`.
+- [x] `NetworkOverlay`.
+- [x] Upload progress and `SyncStatus` states in `UploadPreparationFigma`.
+
+Component map and prop boundaries: `FOUNDATION_AUDIT.md`.
 
 ### CRAFT-006 — App shell dan routing prototype
 
-- [ ] Satu entry point untuk semua screen.
-- [ ] Gunakan React sebagai stack prototype.
-- [ ] State screen yang bisa dipilih saat review.
-- [ ] Navigation antar-screen menggunakan CTA dari desain.
-- [ ] Data demo terpusat agar isi screen konsisten.
-- [ ] Komponen visual tidak bergantung pada screen tertentu.
+- [x] Satu entry point untuk semua screen.
+- [x] Gunakan React sebagai stack prototype.
+- [x] State screen yang bisa dipilih saat review.
+- [x] Navigation antar-screen menggunakan CTA dari desain.
+- [x] Data demo terpusat agar isi screen konsisten.
+- [x] Komponen visual tidak bergantung pada screen tertentu.
+
+Shell and routing audit: `FOUNDATION_AUDIT.md`.
 
 ## CRAFT-007 — State contract dan fixture path
 
@@ -846,6 +857,8 @@ Semua file di bawah bersumber dari section Figma `15:7547`. Salinan untuk delive
 - Upload boundary: screens 12–13 use a separate connection gate. Upload exposes `idle | uploading | failed`; failed uploads keep `pending_sync` and expose retry.
 - Fixture path for browser review: screen 01 consent → screen 02 download → screen 03 progress → screen 04 offline gate → screen 05 readiness → screen 06 start → screens 07–11 attempt boundary → screen 12 online gate → screen 13 upload/retry → screen 14 result waiting.
 - Acceptance evidence is tracked in `TEST_PLAN.md`; visual sign-off is performed by the planner after builder evidence is submitted.
+
+Contract source and fixture path audit: `src/state/contract.ts`, `src/fixtures/toOfflineQuestions.ts`, and `FOUNDATION_AUDIT.md`.
 
 ### CRAFT-202/203/214/216 review notes
 
