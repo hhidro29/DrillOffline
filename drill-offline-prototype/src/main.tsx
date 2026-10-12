@@ -1,4 +1,4 @@
-import { StrictMode, useEffect, useState, type ReactNode } from 'react';
+import { StrictMode, useEffect, useRef, useState, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { drillFixture, type PreparationState } from './fixtures/drill';
 import './styles.css';
@@ -181,6 +181,7 @@ function App() {
   const [networkPromptOpen, setNetworkPromptOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [offlineReward, setOfflineReward] = useState<OfflineReward>({ xp: 0, starchamp: 0 });
+  const uploadTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const onStart = () => setScreen('question');
@@ -248,17 +249,27 @@ function App() {
   };
   const upload = () => {
     if (network !== 'online') return;
+    if (uploadTimerRef.current !== null) window.clearTimeout(uploadTimerRef.current);
     setUploadStatus('uploading');
     finalizeOfflineReward();
-    window.setTimeout(() => setScreen('summary'), 700);
+    uploadTimerRef.current = window.setTimeout(() => {
+      uploadTimerRef.current = null;
+      setScreen('summary');
+    }, 700);
   };
   useEffect(() => {
     if (screen !== 'upload' || network !== 'online' || uploadStatus !== 'ready') return;
     const autoUpload = window.setTimeout(upload, 260);
     return () => window.clearTimeout(autoUpload);
   }, [screen, network, uploadStatus]);
-  const failUpload = () => setUploadStatus('failed');
-  const resetSession = () => { setAnswer(null); setTimer(15 * 60); setProgress(0); setUploadStatus('ready'); setOfflineReward({ xp: 0, starchamp: 0 }); setNetwork('online'); setSessionEnded(false); setFinishRequested(false); setNetworkPromptOpen(false); setToastMessage(null); setScreen('download'); };
+  const failUpload = () => {
+    if (uploadTimerRef.current !== null) {
+      window.clearTimeout(uploadTimerRef.current);
+      uploadTimerRef.current = null;
+    }
+    setUploadStatus('failed');
+  };
+  const resetSession = () => { if (uploadTimerRef.current !== null) { window.clearTimeout(uploadTimerRef.current); uploadTimerRef.current = null; } setAnswer(null); setTimer(15 * 60); setProgress(0); setUploadStatus('ready'); setOfflineReward({ xp: 0, starchamp: 0 }); setNetwork('online'); setSessionEnded(false); setFinishRequested(false); setNetworkPromptOpen(false); setToastMessage(null); setScreen('download'); };
   const navigateFromMenu = (next: DrillScreen) => {
     if (next === 'question') { setAnswer(null); setTimer(15 * 60); setSessionEnded(false); setFinishRequested(false); }
     if (next === 'confirm') { setAnswer(0); setTimer(15 * 60); setSessionEnded(false); setFinishRequested(false); }

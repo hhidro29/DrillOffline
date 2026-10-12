@@ -103,3 +103,5 @@
 - DRILL-038/044 collection iteration routes `Yakin` into the turn-on-internet and collection states, then starts upload automatically once Online. Upload progress remains visible, the manual `Kumpulkan` action is retained as fallback/reviewer control, and successful upload reaches the summary.
 - DRILL-039/043 question status iteration combines the question progress (`1/10`) and `Mode Offline` marker in the same horizontal info card. The separate lower-screen Offline pill was removed so the marker no longer covers the question, options, or footer.
 - DRILL-045 collection visual iteration reuses the preparation hierarchy: shared header artwork, prep card, checklist rows, divider, education notice, status panel, and sticky action spacing. Collection-specific copy and upload status preserve the distinct submission context.
+
+- Final audit regression fix: automatic upload completion now tracks and cancels its pending timer when reviewer forces an upload failure or resets the session. The failed state remains available for `Coba Lagi` instead of jumping to Summary from a stale auto-upload callback; retry resumes progress and reaches processed results.
