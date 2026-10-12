@@ -54,7 +54,7 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-107 | Craft screen 07 — Pengerjaan — Soal 1 | CRAFT-006 | Frame `8:2053` | Internal Review |
 | CRAFT-108 | Craft screen 08 — Pengerjaan — Soal 2 | CRAFT-006 | Frame `8:2154` | Internal Review |
 | CRAFT-109 | Craft screen 09 — Tinjau Jawaban | CRAFT-006 | Frame `13:3198` | Internal Review |
-| CRAFT-110 | Craft screen 10 — Simpan Hasil — Konfirmasi | CRAFT-006 | Frame `15:7308` | Internal Review |
+| CRAFT-110 | Craft screen 10 — Simpan Pengerjaan — Konfirmasi | CRAFT-006 | Frame `15:7308` | Internal Review |
 | CRAFT-111 | Craft screen 11 — Subtes Berikutnya | CRAFT-006 | Frame `8:2032` | Internal Review |
 | CRAFT-112 | Craft screen 12 — Nyalakan Internet — Panduan | CRAFT-006 | Frame `15:9660` | Internal Review |
 | CRAFT-113 | Craft screen 13 — Unggah & Kumpulkan Hasil | CRAFT-006 | Frame `15:9810` | Internal Review |
@@ -88,6 +88,53 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-230 | [P0] Finalisasi boundary anti-cheat produksi | CRAFT-213, CRAFT-214, CRAFT-215 | Keputusan platform/device enforcement di luar kemampuan React prototype | Blocked |
 | CRAFT-231 | Sediakan reset simulasi untuk timer dan attempt | CRAFT-007, CRAFT-229 | Kontrol reviewer untuk mengembalikan fixture ke kondisi awal tanpa state basi | Approved |
 | CRAFT-232 | [P0] Auto-start persiapan konten dan gate CTA | CRAFT-102, CRAFT-103, CRAFT-201 | Persiapan paket dimulai saat screen 02 dibuka; CTA hanya aktif setelah selesai | Internal Review |
+| CRAFT-233 | Klarifikasi copy review: simpan pengerjaan tryout | CRAFT-109, CRAFT-110 | Terminologi screen review dan konfirmasi konsisten membedakan pengerjaan dari hasil | Internal Review |
+| CRAFT-234 | Arahkan simpan pengerjaan langsung ke pengumpulan | CRAFT-110, CRAFT-112, CRAFT-113 | Konfirmasi simpan masuk ke halaman persiapan pengumpulan tanpa simulasi subtes berikutnya | Internal Review |
+
+#### CRAFT-233 — Klarifikasi copy review: simpan pengerjaan tryout
+
+- Scope: screen 09 `Tinjau Jawaban` dan screen 10 `Simpan Pengerjaan — Konfirmasi`
+- Status: `Planned`
+- Priority: `P1`
+- Owner: builder
+- Source feedback: user feedback 2026-10-12
+
+Acceptance criteria:
+
+- [x] Judul `Simpan Hasil Tryout Sekarang?` berubah menjadi `Simpan Pengerjaan Tryout Sekarang?`.
+- [x] Copy instruksi menggunakan `Simpan Pengerjaan`, bukan `Simpan Hasil`.
+- [x] CTA screen 09 dan modal konfirmasi menggunakan label `Simpan Pengerjaan`.
+- [x] Copy tentang tryout yang dikumpulkan tetap dipertahankan karena merujuk pada proses submit.
+- [x] Istilah `Hasil Tryout` pada screen 14 dan konteks hasil setelah submit tidak berubah.
+- [x] Behavior tombol, state online/offline, dan transisi flow tidak berubah.
+- [x] `npm run build` dan `git diff --check` berhasil.
+
+Evidence: browser review confirmed the updated title, instruction, and both CTA labels on screens 09–10; screen 14 still renders `Hasil Tryout`.
+
+#### CRAFT-234 — Arahkan simpan pengerjaan langsung ke pengumpulan
+
+- Scope: transisi dari screen 10 `Simpan Pengerjaan — Konfirmasi` ke screen 12 `Nyalakan Internet — Panduan`
+- Status: `Planned`
+- Priority: `P1`
+- Owner: builder
+- Source feedback: user feedback 2026-10-12
+
+Keputusan flow:
+
+- CTA konfirmasi simpan pengerjaan langsung mengarah ke halaman persiapan pengumpulan/upload.
+- Screen 11 `Subtes Berikutnya` tidak menjadi bagian dari jalur utama prototype; tetap tersedia untuk preview atau direct jump reviewer.
+- Tidak ada simulasi perpindahan ke subtes lain setelah pengerjaan disimpan.
+
+Acceptance criteria:
+
+- [x] Menekan CTA konfirmasi `Simpan Pengerjaan` dari screen 10 membuka screen 12.
+- [x] State attempt tersimpan sebelum transisi ke halaman pengumpulan.
+- [x] Screen 11 tidak muncul pada jalur utama setelah konfirmasi simpan.
+- [x] Direct jump/review ke screen 11 tetap tidak rusak.
+- [x] Gate koneksi dan state upload pada screen 12 tetap berjalan seperti sebelumnya.
+- [x] `npm run build` dan `git diff --check` berhasil.
+
+Evidence: screen 10 confirmation routes directly to screen 12 with the upload gate; screen 11 remains reachable from the reviewer menu; Online enables screen 12 `Lanjutkan` and screen 13 upload CTA.
 
 #### Evidence terbaru
 
@@ -96,9 +143,9 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 - Kontrol `Open network simulator` tersedia di header screen pengerjaan karena navbar utama disembunyikan pada frame Figma tersebut.
 - Audit E2E menemukan network enforcement belum mencakup seluruh attempt: screen 09–11 masih dapat dipakai saat Online. Screen 05–06 dicatat sebagai pre-check UX terpisah, bukan boundary nudge anti-cheat. Detail threat model dicatat di `SECURITY_AUDIT.md`.
 - Defect `screen 12 tetap 0/2 saat simulator Online` ditemukan melalui screenshot review dan diperbaiki dengan state-driven rendering.
-- Verifikasi tambahan: screen 12 Online menampilkan `1/2` dan CTA aktif; screen 12 Offline menampilkan `0/2` dan CTA disabled.
-- Defect `screen 04 tetap 1/2 saat simulator Offline` diperbaiki dengan state-driven step count, checklist, success styling, dan CTA.
-- Browser smoke evidence: screen 08 Online menampilkan overlay `25 detik` dan disabled controls; screen 09 Online menampilkan overlay dan disabled `Kembali ke Soal`/`Simpan Hasil` controls.
+- Historical verification before CRAFT-232: screen 12 Online rendered `1/2` and Offline rendered `0/2`; those counters were removed in the CRAFT-232 pass while checklist and CTA state were retained.
+- Historical defect `screen 04 tetap 1/2 saat simulator Offline` was resolved with state-driven checklist success styling and CTA gating; the visible step counter was removed in CRAFT-232.
+- Browser smoke evidence: screen 08 Online menampilkan overlay `25 detik` dan disabled controls; screen 09 Online menampilkan overlay dan disabled `Kembali ke Soal`/`Simpan Pengerjaan` controls.
 - Upload recovery now has visible `uploading`, `failed`, `pending_sync`, and `Coba Lagi` states before screen 14 is reachable.
 - User visual feedback for screen 04: CTA `Lanjutkan` was converted to a floating action with no full-width sticky panel. Tracked in `CRAFT-216`.
 - User behavior decision for screens 04–05: changing the simulator to offline automatically advances from screen 04 to screen 05; changing it back to online on screen 05 automatically returns to screen 04. Implemented in `src/main.tsx` and verified at `360 × 740`.
@@ -318,6 +365,7 @@ Keputusan UX yang sedang diajukan:
 - CTA menggunakan label `Lanjutkan` dan disabled selama status `downloading`.
 - Setelah status `completed`, prototype langsung masuk ke screen 04, yaitu panduan mematikan koneksi internet.
 - Screen 04 memiliki CTA sticky/floating berlabel TO `Kerjakan Tryout`; CTA disabled saat koneksi masih Online dan enabled saat koneksi sudah Offline.
+- Counter tahap `0/2`, `1/2`, dan `2/2` dihapus dari UI flow utama; status kesiapan cukup dikomunikasikan melalui checklist dan state visual.
 - Loading copy menggunakan bahasa seperti `Mempersiapkan konten untukmu`; kata `download` tidak perlu menjadi headline/loading copy utama.
 - Progress harus terlihat agar user memahami proses sedang berjalan dan mengapa CTA belum dapat digunakan.
 - Jika halaman di-reload saat proses berjalan, behavior persistence atau restart download harus ditetapkan sebelum dianggap selesai.
@@ -334,7 +382,8 @@ Acceptance criteria:
 - [x] Progress/loading terlihat dan CTA `Lanjutkan` tidak dapat digunakan sebelum status `completed`.
 - [x] Setelah 100%, flow otomatis masuk ke screen 04 dan menampilkan CTA sticky/floating `Kerjakan Tryout`.
 - [x] CTA `Kerjakan Tryout` disabled saat Online dan enabled saat Offline; perubahan mode simulasi memperbarui CTA secara langsung.
-- [ ] Reload, direct jump reviewer, dan reset simulasi tidak meninggalkan progress atau status download yang basi.
+- [x] Counter tahap tidak tampil pada screen persiapan; checklist tetap menunjukkan item yang selesai dan belum selesai.
+- [x] Reload, direct jump reviewer, dan reset simulasi tidak meninggalkan progress atau status download yang basi.
 - [x] State `downloading` dan `completed` memiliki evidence pada viewport target `360 × 740`; behavior gagal/retry masih menjadi open item.
 - [x] Loading copy memakai `Mempersiapkan konten untukmu` atau copy setara yang tidak menjadikan kata `download` sebagai headline.
 - [x] Copy dan visual progress tidak mengesankan proses ringan; ukuran paket atau durasi simulasi dicatat sebagai asumsi bila data produk belum tersedia.
@@ -344,7 +393,8 @@ Evidence implementasi:
 
 - Screen 02 pada `http://127.0.0.1:3000/`: progress dimulai otomatis pada `0%`/`20%` dan CTA `Lanjutkan` disabled.
 - Setelah progress `100%`: otomatis masuk screen 04; CTA `Kerjakan Tryout` disabled saat Online.
-- Toggle simulasi ke Offline: step count berubah menjadi `2/2`, CTA aktif, dan klik CTA membuka modal konfirmasi mulai tryout.
+- Toggle simulasi ke Offline: checklist kedua berubah ke state sukses, CTA aktif, dan klik CTA membuka modal konfirmasi mulai tryout.
+- Browser verification 2026-10-12: no `0/2`, `1/2`, or `2/2` counters are rendered on screens 02–05 or 12–13; screen 02 starts at `0%` with disabled `Lanjutkan`, completes automatically to screen 04, and the Offline gate opens the start modal. Reset and direct jump to screen 03 restart the preparation fixture without stale progress.
 - Verification: `npm run build` dan `git diff --check` berhasil.
 
 #### CRAFT-206 — Final cleanup dan handoff
@@ -750,10 +800,10 @@ flowchart TD
   G --> H[07 Pengerjaan - Soal 1]
   H --> I[08 Pengerjaan - Soal 2]
   I --> J[09 Tinjau Jawaban]
-  J --> K[10 Simpan Hasil - Konfirmasi]
-  K -->|Masih ada subtes| L[11 Subtes Berikutnya]
-  L -->|Lanjut / countdown selesai| H
-  K -->|Subtes terakhir - asumsi| M[12 Nyalakan Internet - Panduan]
+  J --> K[10 Simpan Pengerjaan - Konfirmasi]
+  K --> M[12 Nyalakan Internet - Panduan]
+  K -.->|Preview/direct jump only| L[11 Subtes Berikutnya]
+  L -.->|Reviewer preview| H
   M --> N[13 Unggah & Kumpulkan Hasil]
   N --> O[14 Hasil Tryout]
 ```
@@ -771,7 +821,7 @@ flowchart TD
 | 07 Pengerjaan — Soal 1 | Timer berjalan, koneksi offline | Pilih jawaban, tandai ragu-ragu, navigasi | Jawaban tersimpan lokal; navigasi ke screen 08 atau soal lain |
 | 08 Pengerjaan — Soal 2 | Timer berjalan, jawaban dapat berubah | Navigasi soal atau selesai mengerjakan | Masuk ke screen 09 untuk meninjau jawaban |
 | 09 Tinjau Jawaban | Semua jawaban tersimpan lokal | Kembali ke soal atau `Simpan Hasil` | Kembali ke mode answering atau masuk screen 10 |
-| 10 Simpan Hasil — Konfirmasi | Ringkasan jawaban siap disimpan | Konfirmasi simpan atau kembali | Simpan lokal; subtes berikutnya → screen 11, subtes terakhir → screen 12 **asumsi** |
+| 10 Simpan Pengerjaan — Konfirmasi | Ringkasan pengerjaan siap disimpan | Konfirmasi simpan atau kembali | Simpan lokal lalu masuk ke screen 12 untuk pengumpulan; screen 11 tetap preview/direct jump reviewer |
 | 11 Subtes Berikutnya | Subtes sebelumnya selesai | Countdown atau CTA lanjut | Mulai subtes berikutnya, kembali ke screen 07 dengan data subtes baru |
 | 12 Nyalakan Internet — Panduan | Semua subtes selesai, jawaban tersimpan lokal | Peserta menyalakan koneksi | Koneksi online → screen 13 |
 | 13 Unggah & Kumpulkan Hasil | Koneksi online terdeteksi | `Upload & Kumpulkan Tryout` | Upload berjalan → hasil menunggu atau selesai, masuk screen 14 |
@@ -827,8 +877,7 @@ Boundary enforcement: nudge anti-internet dimulai ketika attempt masuk screen pe
 
 #### Keputusan yang masih terbuka
 
-1. Apakah screen 10 menuju screen 11 untuk semua subtes kecuali subtes terakhir, lalu menuju screen 12 hanya setelah subtes terakhir?
-2. Apakah countdown pada screen 11 dapat dibatalkan atau hanya dapat dilewati melalui CTA?
+1. Apakah countdown pada screen 11 dapat dibatalkan atau hanya dapat dilewati melalui CTA? Screen 11 tetap preview-only dalam prototype.
 3. State error download dan upload yang perlu ditampilkan di prototype belum memiliki screen khusus di section ini.
 4. Apakah hasil pada screen 14 langsung tersedia setelah upload atau selalu masuk state menunggu?
 5. Apakah event `NETWORK_RECOVERED`, koneksi terdeteksi, dan terminasi harus terlihat di UI peserta atau hanya dikirim ke dashboard pengawas?
