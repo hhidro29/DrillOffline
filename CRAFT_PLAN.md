@@ -87,6 +87,7 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-229 | [P0] Uji recovery attempt dan persistence prototype | CRAFT-202, CRAFT-203, CRAFT-228 | Reload, timer, pending sync, retry, dan recovery evidence | Approved |
 | CRAFT-230 | [P0] Finalisasi boundary anti-cheat produksi | CRAFT-213, CRAFT-214, CRAFT-215 | Keputusan platform/device enforcement di luar kemampuan React prototype | Blocked |
 | CRAFT-231 | Sediakan reset simulasi untuk timer dan attempt | CRAFT-007, CRAFT-229 | Kontrol reviewer untuk mengembalikan fixture ke kondisi awal tanpa state basi | Approved |
+| CRAFT-232 | [P0] Auto-start persiapan konten dan gate CTA | CRAFT-102, CRAFT-103, CRAFT-201 | Persiapan paket dimulai saat screen 02 dibuka; CTA hanya aktif setelah selesai | Internal Review |
 
 #### Evidence terbaru
 
@@ -301,6 +302,50 @@ Acceptance criteria:
 
 - Evidence: `evidence/CRAFT-231-reset-running.png`, `evidence/CRAFT-231-reset-terminated.png`, `evidence/CRAFT-231-reset-warning-online.png`, and `evidence/CRAFT-231-reset-pending-upload.png` at 360 × 740.
 - Planner review 2026-10-12: Approved after reviewing all four reset states, the reviewer-only menu boundary, storage clearing, timer reset, and fresh reload state. `npm run build` and `git diff --check` pass.
+
+#### CRAFT-232 — Auto-start persiapan konten dan gate CTA
+
+- Scope: screen 02–03, lifecycle download paket, dan CTA menuju persiapan offline
+- Status: `Internal Review`
+- Priority: `P0`
+- Owner: builder setelah keputusan UX dikonfirmasi
+- Source feedback: user discussion dan referensi visual screen `6:419` / `7:978`
+
+Keputusan UX yang sedang diajukan:
+
+- Saat screen 02 dibuka, proses persiapan konten langsung dimulai tanpa klik tambahan dari user.
+- State progress screen 03 tetap dipertahankan sebagai state visual/behavior, tetapi dipicu otomatis oleh lifecycle screen 02.
+- CTA menggunakan label `Lanjutkan` dan disabled selama status `downloading`.
+- Setelah status `completed`, prototype langsung masuk ke screen 04, yaitu panduan mematikan koneksi internet.
+- Screen 04 memiliki CTA sticky/floating berlabel TO `Kerjakan Tryout`; CTA disabled saat koneksi masih Online dan enabled saat koneksi sudah Offline.
+- Loading copy menggunakan bahasa seperti `Mempersiapkan konten untukmu`; kata `download` tidak perlu menjadi headline/loading copy utama.
+- Progress harus terlihat agar user memahami proses sedang berjalan dan mengapa CTA belum dapat digunakan.
+- Jika halaman di-reload saat proses berjalan, behavior persistence atau restart download harus ditetapkan sebelum dianggap selesai.
+
+Open decision sebelum implementasi:
+
+- Apakah screen 02 dan screen 03 tetap dipresentasikan sebagai dua route/frame terpisah, atau satu screen dengan state berubah in-place? Rekomendasi prototype: satu entry screen dengan state progress agar tidak ada flicker, sambil tetap mempertahankan mapping state ke frame Figma.
+- Apakah screen 05 `Siap Mengerjakan` tetap dipertahankan sebagai frame review terpisah, atau CTA pada screen 04 langsung memulai tryout setelah koneksi Offline? Rekomendasi: pertahankan frame 05 untuk parity/direct review, tetapi flow utama dapat memakai CTA sticky screen 04 sebagai gate menuju kesiapan.
+- Apakah download gagal memiliki retry/error state pada prototype, atau cukup dicatat sebagai residual risk untuk milestone ini?
+
+Acceptance criteria:
+
+- [x] Masuk ke screen 02 otomatis memulai persiapan konten; tidak ada CTA `Download Soal` yang harus ditekan.
+- [x] Progress/loading terlihat dan CTA `Lanjutkan` tidak dapat digunakan sebelum status `completed`.
+- [x] Setelah 100%, flow otomatis masuk ke screen 04 dan menampilkan CTA sticky/floating `Kerjakan Tryout`.
+- [x] CTA `Kerjakan Tryout` disabled saat Online dan enabled saat Offline; perubahan mode simulasi memperbarui CTA secara langsung.
+- [ ] Reload, direct jump reviewer, dan reset simulasi tidak meninggalkan progress atau status download yang basi.
+- [x] State `downloading` dan `completed` memiliki evidence pada viewport target `360 × 740`; behavior gagal/retry masih menjadi open item.
+- [x] Loading copy memakai `Mempersiapkan konten untukmu` atau copy setara yang tidak menjadikan kata `download` sebagai headline.
+- [x] Copy dan visual progress tidak mengesankan proses ringan; ukuran paket atau durasi simulasi dicatat sebagai asumsi bila data produk belum tersedia.
+- [x] Jalankan `npm run build` dan `git diff --check` setelah implementasi.
+
+Evidence implementasi:
+
+- Screen 02 pada `http://127.0.0.1:3000/`: progress dimulai otomatis pada `0%`/`20%` dan CTA `Lanjutkan` disabled.
+- Setelah progress `100%`: otomatis masuk screen 04; CTA `Kerjakan Tryout` disabled saat Online.
+- Toggle simulasi ke Offline: step count berubah menjadi `2/2`, CTA aktif, dan klik CTA membuka modal konfirmasi mulai tryout.
+- Verification: `npm run build` dan `git diff --check` berhasil.
 
 #### CRAFT-206 — Final cleanup dan handoff
 
@@ -919,6 +964,7 @@ Setiap task `CRAFT-101` sampai `CRAFT-114` menggunakan checklist ini.
 19. `CRAFT-223` — Perbaiki delivery asset Figma.
 20. `CRAFT-224` — Wire touchpoint navigator soal ke screen 09.
 21. `CRAFT-225` — Audit visual screen 11 — Subtes Berikutnya.
+22. `CRAFT-232` — Auto-start persiapan konten dan gate CTA.
 
 ## Format catatan review
 
