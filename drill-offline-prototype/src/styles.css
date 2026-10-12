@@ -187,6 +187,7 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .timer-chip b em { font-style: normal; }
 .question-info { height: 70px; margin: -54px 16px 0; padding: 0 12px; border-radius: 20px; }
 .question-info > strong { font-size: 16px; }
+.question-offline-status { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; padding: 6px 10px; color: #247642; background: #e5f6e5; border: 1px solid #4caf50; border-radius: 999px; font-size: 11px; font-weight: 700; }
 .xp { display: inline-flex; gap: 8px; align-items: center; margin-right: auto; margin-left: 16px; color: #434856; font-size: 16px; }
 .xp-mark { display: grid; place-items: center; width: 24px; height: 24px; color: #fff; background: linear-gradient(135deg,#75dc48,#20a4b0); border-radius: 50%; font-size: 9px; font-weight: 700; }
 .score { gap: 8px; font-size: 16px; }
@@ -215,7 +216,6 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .footer-timer .timer-boxes em { color: #fff; font-style: normal; }
 .question-footer .secondary-cta { align-self: flex-end; flex: 0 0 44px; min-width: 120px; height: 44px; }
 .question-timer-only { min-height: 60px; height: 60px; padding: 10px 16px; }
-.offline-mode-indicator { position: absolute; right: 16px; bottom: 68px; left: 16px; z-index: 3; display: flex; align-items: center; justify-content: center; gap: 6px; height: 24px; color: #247642; background: #e5f6e5; border: 1px solid #4caf50; border-radius: 999px; font-size: 11px; font-weight: 700; }
 .offline-mode-dot { width: 7px; height: 7px; background: #4caf50; border-radius: 50%; }
 .confirm-screen { display: flex; flex-direction: column; background: #e8f1ff; }
 .confirm-scroll { display: flex; flex: 1; min-height: 0; flex-direction: column; gap: 16px; padding: 16px 16px 12px; overflow-y: auto; }
@@ -303,24 +303,15 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .offline-toast span { display: grid; place-items: center; width: 18px; height: 18px; background: #fff; border-radius: 50%; color: #247642; font-size: 12px; }
 
 .collection-screen { display: flex; flex-direction: column; background: #eef4ff; }
-.collection-content { flex: 1; min-height: 0; padding: 28px 16px 96px; overflow-y: auto; }
+.collection-content { position: relative; flex: 1; min-height: 0; padding: 24px 12px 100px; overflow-y: auto; background: #f2f5fa; }
+.collection-content .header-art { z-index: 0; }
 .collection-kicker { margin: 6px 4px 12px; color: #3658d8; font-size: 11px; font-weight: 800; letter-spacing: 1.2px; }
-.collection-card { display: flex; flex-direction: column; gap: 18px; padding: 20px 16px; background: #fff; border: 1px solid #dfe6f4; border-radius: 20px; box-shadow: 0 10px 24px rgba(54,88,216,.08); }
-.collection-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-.collection-heading h1 { margin: 0; color: #2c313a; font-size: 22px; line-height: 30px; }
-.collection-heading p { margin: 6px 0 0; color: #6d7788; font-size: 12px; line-height: 18px; }
-.collection-heading > img { width: 44px; height: 44px; padding: 10px; background: #eef1ff; border-radius: 14px; }
-.collection-connection { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 14px; }
-.collection-connection > img { width: 24px; height: 24px; }
-.collection-connection > span { display: flex; flex: 1; flex-direction: column; gap: 2px; }
-.collection-connection strong { font-size: 13px; line-height: 18px; }
-.collection-connection small { color: #6d7788; font-size: 11px; line-height: 16px; }
-.collection-connection > b { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; font-size: 13px; }
-.collection-connection-blocked { background: #f2f5fa; }
-.collection-connection-blocked > b { color: #fff; background: #9aa5b5; }
-.collection-connection-ready { background: #e5f6e5; }
-.collection-connection-ready > b { color: #fff; background: #4caf50; }
-.collection-status { display: flex; flex-direction: column; gap: 8px; padding: 16px; background: #f7f8fa; border: 1px solid #e1e5eb; border-radius: 14px; }
+.collection-card { gap: 16px; padding: 12px; }
+.collection-card .prep-heading h1 { width: 100%; }
+.collection-intro { margin: -8px 0 0; color: #6d7788; font-size: 12px; line-height: 18px; }
+.collection-card .checklist-item { min-height: 34px; }
+.collection-reward-notice { margin: 0; }
+.collection-status { display: flex; flex-direction: column; gap: 8px; padding: 12px; background: #f2f5fa; border: 1px solid #dadfea; border-radius: 12px; }
 .collection-status strong { color: #434856; font-size: 14px; line-height: 20px; }
 .collection-status p { margin: 0; color: #6d7788; font-size: 12px; line-height: 18px; }
 .collection-status-failed { background: #fff1f2; border-color: #e52a34; }

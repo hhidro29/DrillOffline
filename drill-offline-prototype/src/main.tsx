@@ -97,11 +97,11 @@ function formatTime(seconds: number) {
   return `${minutes}:${remainder}`;
 }
 
-function QuestionHero({ timer, answered, result, onFinish }: { timer: number; answered: boolean; result?: 'wrong' | 'timeout'; onFinish?: () => void }) {
+function QuestionHero({ timer, answered, result, onFinish, network }: { timer: number; answered: boolean; result?: 'wrong' | 'timeout'; onFinish?: () => void; network?: NetworkMode }) {
   return <>
     <div className="question-breadcrumb"><span>Home</span><b>›</b><span>•••</span><b>›</b><strong>Drill Soal</strong></div>
     <div className="question-hero"><div className="question-hero-title"><strong>Drill Soal</strong><span>{drillFixture.subject} - Kelas 12 Kurikulum Merdeka</span></div><button className="finish-button" onClick={onFinish}>Akhiri</button><div className={`timer-chip ${result ? 'timer-chip-result' : ''}`}><span><span className="timer-glyph">◴</span>Waktu kamu tersisa</span><b><i>{result === 'timeout' ? '00' : '00'}</i><em>:</em><i>{result === 'timeout' ? '00' : formatTime(timer).split(':')[0]}</i><em>:</em><i>{result === 'timeout' ? '00' : formatTime(timer).split(':')[1]}</i></b></div></div>
-    <div className="question-info"><strong>{result === 'timeout' ? '5' : '1'}/{drillFixture.questionCount}</strong></div>
+    <div className="question-info"><strong>{result === 'timeout' ? '5' : '1'}/{drillFixture.questionCount}</strong>{network === 'offline' && <span className="question-offline-status"><span className="offline-mode-dot" />Mode Offline</span>}</div>
   </>;
 }
 
@@ -116,7 +116,7 @@ function QuestionCard({ answer, disabled, onAnswer }: { answer: number | null; d
 
 function QuestionScreen({ network, timer, answer, onAnswer, onFinish }: { network: NetworkMode; timer: number; answer: number | null; onAnswer: (index: number) => void; onFinish: () => void }) {
   const blocked = network !== 'offline';
-  return <main className="drill-screen question-screen"><Navbar /><QuestionHero timer={timer} answered={answer !== null} onFinish={onFinish} /><div className="question-scroll"><QuestionCard answer={answer} disabled={blocked} onAnswer={blocked ? undefined : onAnswer} /></div>{!blocked && <div className="offline-mode-indicator" role="status"><span className="offline-mode-dot" />Mode Offline</div>}<footer className="question-footer question-timer-only"><div className="footer-timer"><span><span className="timer-glyph">◴</span>Waktu kamu tersisa</span><TimerBoxes timer={timer} /></div></footer></main>;
+  return <main className="drill-screen question-screen"><Navbar /><QuestionHero timer={timer} answered={answer !== null} onFinish={onFinish} network={network} /><div className="question-scroll"><QuestionCard answer={answer} disabled={blocked} onAnswer={blocked ? undefined : onAnswer} /></div><footer className="question-footer question-timer-only"><div className="footer-timer"><span><span className="timer-glyph">◴</span>Waktu kamu tersisa</span><TimerBoxes timer={timer} /></div></footer></main>;
 }
 
 function ConfirmScreen({ network, timer, answer, onBack, onSubmit, finishRequested = false }: { network: NetworkMode; timer: number; answer: number | null; onBack: () => void; onSubmit: () => void; finishRequested?: boolean }) {
@@ -157,7 +157,7 @@ function OnlineGuide({ network }: { network: NetworkMode }) {
 
 function UploadScreen({ status, network, onUpload }: { status: 'ready' | 'uploading' | 'failed'; network: NetworkMode; onUpload: () => void }) {
   const blocked = network !== 'online';
-  return <main className="drill-screen collection-screen"><Navbar /><div className="collection-content"><div className="collection-kicker">DRILL SOAL OFFLINE</div><section className="collection-card"><div className="collection-heading"><div><h1>Kumpulkan hasil Drill</h1><p>Aktifkan internet untuk mengirim jawabanmu.</p></div><img src={asset('test.svg')} alt="" /></div><p className="offline-reward-notice collection-reward-notice">Jawaban benar/salah, Starchamp, dan XP akan direview setelah kamu mengumpulkan Drill saat online.</p><div className={`collection-connection ${blocked ? 'collection-connection-blocked' : 'collection-connection-ready'}`}><img src={asset('wifi.svg')} alt="" /><span><strong>{blocked ? 'Internet belum aktif' : 'Internet sudah aktif'}</strong><small>{blocked ? 'Nyalakan internet untuk mengaktifkan tombol kumpulkan.' : 'Hasilmu siap dikirim.'}</small></span><b>{blocked ? '!' : '✓'}</b></div><div className={`collection-status ${status === 'failed' ? 'collection-status-failed' : ''}`}><strong>{status === 'uploading' ? 'Mengunggah hasil drill…' : status === 'failed' ? 'Upload belum berhasil' : blocked ? 'Menunggu koneksi internet' : 'Siap dikumpulkan'}</strong><p>{status === 'uploading' ? 'Tunggu sampai proses upload selesai.' : status === 'failed' ? 'Periksa koneksi internet lalu coba lagi.' : blocked ? 'Setelah internet aktif, tekan Kumpulkan.' : 'Tekan Kumpulkan untuk menyelesaikan sesi.'}</p>{status === 'uploading' && <div className="progress-track"><span style={{ width: '68%' }} /></div>}{status === 'failed' && <div className="upload-error" role="alert"><img src={asset('upload-alert-icon.svg')} alt="" />Upload gagal. Coba lagi untuk melanjutkan.</div>}</div></section></div><div className="sticky-actions collection-actions"><button className="primary-cta" disabled={blocked || status === 'uploading'} onClick={onUpload}>{status === 'uploading' ? 'Mengunggah…' : status === 'failed' ? 'Coba Lagi' : 'Kumpulkan'}</button></div></main>;
+  return <main className="drill-screen preparation-screen collection-screen"><Navbar /><div className="content collection-content"><HeaderArtwork /><div className="collection-kicker">DRILL SOAL OFFLINE</div><section className="prep-card collection-card"><div className="prep-heading"><h1>Kumpulkan hasil Drill</h1></div><p className="collection-intro">Aktifkan internet untuk mengirim jawabanmu.</p><div className="upload-alert"><img className="upload-alert-icon" src={asset('upload-alert-icon.svg')} alt="" /><div><strong>Drill belum dikumpulkan</strong><span>Hasil jawabanmu akan diproses setelah dikirim.</span></div></div><div className="checklist"><ChecklistItem icon="wifi.svg" status={!blocked ? 'complete' : 'pending'}>Nyalakan Koneksi Internet</ChecklistItem><ChecklistItem icon="test.svg" status={status === 'uploading' ? 'complete' : 'pending'}>Upload Hasil Drill Offline</ChecklistItem></div><div className="divider" /><p className="offline-reward-notice collection-reward-notice">Jawaban benar/salah, Starchamp, dan XP akan direview setelah kamu mengumpulkan Drill saat online.</p><div className={`collection-status ${status === 'failed' ? 'collection-status-failed' : ''}`}><strong>{status === 'uploading' ? 'Mengunggah hasil drill…' : status === 'failed' ? 'Upload belum berhasil' : blocked ? 'Menunggu koneksi internet' : 'Siap dikumpulkan'}</strong><p>{status === 'uploading' ? 'Tunggu sampai proses upload selesai.' : status === 'failed' ? 'Periksa koneksi internet lalu coba lagi.' : blocked ? 'Nyalakan internet untuk mengaktifkan pengumpulan.' : 'Pengumpulan akan dimulai otomatis.'}</p>{status === 'uploading' && <div className="progress-track"><span style={{ width: '68%' }} /></div>}{status === 'failed' && <div className="upload-error" role="alert"><img src={asset('upload-alert-icon.svg')} alt="" />Upload gagal. Coba lagi untuk melanjutkan.</div>}</div></section></div><div className="sticky-actions collection-actions"><button className="primary-cta" disabled={blocked || status === 'uploading'} onClick={onUpload}>{status === 'uploading' ? 'Mengunggah…' : status === 'failed' ? 'Coba Lagi' : 'Kumpulkan'}</button></div></main>;
 }
 
 function SummaryScreen({ onRestart, reward }: { onRestart: () => void; reward: OfflineReward }) {
@@ -252,6 +252,11 @@ function App() {
     finalizeOfflineReward();
     window.setTimeout(() => setScreen('summary'), 700);
   };
+  useEffect(() => {
+    if (screen !== 'upload' || network !== 'online' || uploadStatus !== 'ready') return;
+    const autoUpload = window.setTimeout(upload, 260);
+    return () => window.clearTimeout(autoUpload);
+  }, [screen, network, uploadStatus]);
   const failUpload = () => setUploadStatus('failed');
   const resetSession = () => { setAnswer(null); setTimer(15 * 60); setProgress(0); setUploadStatus('ready'); setOfflineReward({ xp: 0, starchamp: 0 }); setNetwork('online'); setSessionEnded(false); setFinishRequested(false); setNetworkPromptOpen(false); setToastMessage(null); setScreen('download'); };
   const navigateFromMenu = (next: DrillScreen) => {

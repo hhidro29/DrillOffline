@@ -92,7 +92,7 @@
 - **Task:** Setelah user memilih `Yakin` pada konfirmasi mengakhiri sesi Drill, arahkan user ke flow pengumpulan/upload jawaban.
 - **Flow yang diinginkan:** Konfirmasi akhiri sesi → halaman pengumpulan hasil → user menyalakan internet → tombol `Kumpulkan` aktif → upload jawaban.
 - **Acceptance criteria:** CTA `Yakin` tidak langsung membuka hasil akhir; user masuk ke proses upload/pengumpulan dan tetap harus menyelesaikan upload sebelum melihat hasil.
-- **Status:** Backlog — belum diimplementasikan
+- **Status:** Implemented locally
 
 ### DRILL-039 — Tambahkan penanda Drill sedang dikerjakan dalam mode Offline
 
@@ -100,7 +100,7 @@
 - **Task:** Tampilkan penanda yang jelas bahwa sesi Drill sedang dikerjakan dalam mode Offline pada screen soal.
 - **Flow yang diinginkan:** Selama user mengerjakan soal tanpa koneksi internet, label `Mode Offline` tetap terlihat dan tidak bergantung pada isi soal.
 - **Acceptance criteria:** Penanda terlihat pada area header/progress atau area status yang mudah ditemukan, tidak menutupi nomor soal, timer, soal, maupun footer, dan tetap tersedia saat konten soal discroll.
-- **Status:** Backlog — perlu validasi penempatan visual
+- **Status:** Implemented locally
 
 ### DRILL-040 — Mulai download otomatis saat link Drill dibuka
 
@@ -128,7 +128,21 @@
 - **Task:** Tempatkan nomor progress soal dan status mode jaringan dalam satu komponen horizontal pada screen pengerjaan.
 - **Layout:** `1/10` berada di sisi kiri; `Mode Offline` berada di sisi kanan dalam komponen yang sama.
 - **Acceptance criteria:** Tidak ada lagi pill `Mode Offline` terpisah di bagian bawah yang menutupi area soal; komponen tetap terlihat jelas tanpa mengganggu timer, soal, opsi jawaban, atau footer.
-- **Status:** Backlog — belum diimplementasikan
+- **Status:** Implemented locally
+
+### DRILL-044 — Auto-upload saat internet aktif di halaman pengumpulan
+
+- **Referensi:** Screenshot 12.11.21.
+- **Task:** Saat koneksi internet sudah aktif pada halaman pengumpulan, mulai proses upload jawaban secara otomatis tanpa menunggu klik `Kumpulkan`.
+- **Acceptance criteria:** Deteksi Online memicu state upload; tampilkan progress upload; setelah selesai lanjut ke hasil. Tombol manual tidak menjadi langkah wajib pada happy path.
+- **Status:** Implemented locally
+
+### DRILL-045 — Selaraskan visual halaman pengumpulan dengan persiapan Drill
+
+- **Referensi:** Screenshot 12.11.21 dan screen persiapan Drill Offline.
+- **Task:** Revisi layout, hierarchy, spacing, card, checklist/status, warna, dan sticky action halaman pengumpulan agar konsisten dengan screen awal persiapan mengerjakan Drill Offline.
+- **Acceptance criteria:** Halaman tetap memiliki konteks pengumpulan dan status koneksi, tetapi memakai bahasa visual dan komponen yang selaras dengan persiapan; layout tetap berbeda secukupnya agar user tidak salah mengira sedang berada di langkah persiapan.
+- **Status:** Implemented locally
 
 ## Notes
 
