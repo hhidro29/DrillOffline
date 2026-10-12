@@ -2,18 +2,13 @@ import { StrictMode, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { AlertCircle, Check, ChevronLeft, ChevronRight, Clock3, Info, LayoutGrid, RotateCcw, Wifi, WifiOff } from 'lucide-react';
 import { getToOfflineQuestion, TO_OFFLINE_TOTAL_QUESTIONS } from './fixtures/toOfflineQuestions';
+import { getScrollOwner, INITIAL_ATTEMPT_SECONDS, isAttemptScreen, SCREEN_NAMES, STEP_LABELS, type AttemptSnapshot, type AttemptStatus, type Choice, type NetworkMode, type ScreenId, type UploadStatus } from './state/contract';
 import './styles.css';
+import './tokens.css';
 
 const A = '/assets/figma/';
-const INITIAL_ATTEMPT_SECONDS = 272;
-type ScreenId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14;
-type Choice = 'A' | 'B' | 'C' | 'D' | null;
-type NetworkMode = 'online' | 'offline';
-type AttemptStatus = 'not_started' | 'active' | 'reviewing' | 'locked' | 'terminated';
-type UploadStatus = 'idle' | 'uploading' | 'failed';
-type AttemptSnapshot = { screen: ScreenId; reviewOrigin: 7 | 8; consent: boolean; downloadProgress: number; answers: Record<number, Choice>; doubtful: number[]; network: NetworkMode; attemptStatus: AttemptStatus; timeRemaining: number; networkWarningSeconds: number | null; syncStatus: 'saved' | 'pending_sync'; uploadStatus: UploadStatus };
-const screenNames: Record<ScreenId, string> = { 1: 'Rules & consent', 2: 'Download package', 3: 'Downloading package', 4: 'Turn off internet', 5: 'Ready to start', 6: 'Start tryout', 7: 'Question 1', 8: 'Question 2', 9: 'Review answers', 10: 'Save result', 11: 'Next subtest', 12: 'Turn on internet', 13: 'Upload result', 14: 'Tryout result' };
-const stepLabels = ['Rules', 'Download', 'Offline', 'Ready'];
+const screenNames = SCREEN_NAMES;
+const stepLabels = STEP_LABELS;
 
 function Button({ children, disabled, variant = 'primary', onClick, icon }: { children: React.ReactNode; disabled?: boolean; variant?: 'primary' | 'secondary' | 'ghost'; onClick?: () => void; icon?: React.ReactNode }) { return <button className={`button button-${variant}`} disabled={disabled} onClick={onClick}>{icon}{children}</button>; }
 function Navbar({ onMenu }: { onMenu: () => void }) { return <nav className="navbar"><button className="icon-button" onClick={onMenu} aria-label="Open menu"><img src={`${A}navbar-more.svg`} alt="" /></button><div className="navbar-brand"><img src={`${A}ruangguru-logo.svg`} className="logo" alt="Ruangguru" /></div><button className="account">Akun Saya <img src={`${A}dropdown.svg`} alt="" /></button></nav>; }
@@ -125,7 +120,7 @@ function App() {
   useEffect(() => { if (downloadProgress === 100 && screen === 3) window.setTimeout(() => setScreen(4), 400); }, [downloadProgress, screen]);
   // The attempt boundary covers answering, review, save confirmation, and the
   // next-subtest transition. Upload preparation starts after this boundary.
-  const attemptScreen = screen >= 7 && screen <= 11;
+  const attemptScreen = isAttemptScreen(screen);
   const attemptLocked = attemptScreen && network === 'online' && attemptStatus !== 'terminated';
   useEffect(() => {
     if (!attemptScreen || attemptStatus === 'terminated' || network === 'offline') {
@@ -211,7 +206,7 @@ function App() {
     case 13: return <UploadPreparationFigma half disabled={network !== 'online'} syncStatus={syncStatus} uploadStatus={uploadStatus} onUpload={startUpload} />;
     case 14: return <ResultFigma />;
   } };
-  const scrollOwner = screen === 4 || screen === 7 || screen === 8 ? 'document' : screen === 9 || screen === 12 ? 'internal' : 'fixed';
+  const scrollOwner = getScrollOwner(screen);
   return <main className={`app-shell ${screen === 6 ? 'modal-shell' : ''} ${screen >= 7 && screen <= 8 ? 'question-shell' : ''} ${screen === 11 ? 'next-subtest-shell' : ''}`}><Navbar onMenu={() => setMenuOpen(true)} /><div data-screen-id={screen} data-scroll-owner={scrollOwner} className={`screen-content ${screen === 9 ? 'review-content' : ''} ${screen === 14 ? 'result-content' : ''} ${screen === 12 || screen === 13 ? 'upload-content' : ''}`}>{renderScreen()}</div>{attemptScreen && (networkWarningSeconds !== null || attemptStatus === 'terminated') && <NetworkOverlay secondsRemaining={networkWarningSeconds} terminated={attemptStatus === 'terminated'} onBackOffline={() => setNetworkMode('offline')} onContinue={() => { setAttemptStatus('locked'); setScreen(12); }} />}{menuOpen && <div className="menu-overlay" onClick={() => setMenuOpen(false)}><aside className="side-menu" onClick={event => event.stopPropagation()}><button className="menu-close" onClick={() => setMenuOpen(false)}>×</button><h2>TO Offline demo</h2><p>Jump to a screen for review.</p><div className="menu-network"><span>Connection simulation</span><div><button onClick={() => setNetworkMode('offline')} className={network === 'offline' ? 'active' : ''}><WifiOff size={14} /> Offline</button><button onClick={() => setNetworkMode('online')} className={network === 'online' ? 'active' : ''}><Wifi size={14} /> Online</button></div></div><button className="menu-item reset-simulation" onClick={resetSimulation}>↻ Reset Simulasi</button>{Object.keys(screenNames).map(key => { const id = Number(key) as ScreenId; return <button className={`menu-item ${id === screen ? 'current' : ''}`} key={id} onClick={() => { setScreen(id); setMenuOpen(false); }}>{String(id).padStart(2, '0')} {screenNames[id]}</button>; })}</aside></div>}</main>;
 }
 
