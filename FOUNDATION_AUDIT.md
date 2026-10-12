@@ -81,6 +81,11 @@ the initial fixture state.
 - `git diff --check` passes.
 - Existing visual and state evidence remains in `evidence/`, including the
   approved CRAFT-227/228/229/231 captures.
+- Browser smoke review at `http://localhost:3000/` confirmed the preparation
+  path: consent gates screen 01, download progresses from screen 02 to 03,
+  screen 04 switches from `1/2` disabled to `2/2` enabled when Offline is
+  selected, screen 05 opens the start confirmation, and screen 06 starts the
+  attempt at screen 07. The review menu remains a reviewer-only route selector.
 
 No task status is changed to `Approved` by this audit. Planner review is still
 required for all five foundation tasks.
