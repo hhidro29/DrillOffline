@@ -6,7 +6,7 @@ Catatan ini melacak perubahan yang sudah dipush ke branch GitHub dan perubahan l
 
 - Branch: `feat/drill-dev`
 - Remote: `origin/feat/drill-dev`
-- Commit remote terbaru: `ed1aef7` — `DRILL-024: add connection guides and deployment log`
+- Commit remote terbaru: `20206a2` — `DRILL-025: simplify network interruption copy`
 - Branch lokal dan remote sinkron pada commit tersebut.
 - Build lokal pada `ed1aef7` berhasil.
 - Push ke branch memicu integrasi deployment Vercel. Status deployment live perlu dikonfirmasi di Vercel; file ini tidak mengklaim deployment sukses tanpa pemeriksaan di sana.
@@ -24,17 +24,13 @@ Catatan ini melacak perubahan yang sudah dipush ke branch GitHub dan perubahan l
 | `DRILL-022`–`DRILL-023` | Alur akhiri sesi, konfirmasi, upload hasil, dan penyelarasan screen soal/konfirmasi ke Figma. | Sudah dipush |
 | `7f4338e` | Menambahkan tipe React yang diperlukan agar `npm run build` lolos di Vercel. | Sudah dipush; build lokal berhasil |
 | `ed1aef7` — `DRILL-024` | Accordion instruksi koneksi, pop-up akhir sesi, transisi otomatis saat koneksi aktif, GIF panduan asli dan reverse, serta deployment log. | Sudah dipush; build lokal berhasil |
+| `20206a2` — `DRILL-025` | Copy pop-up koneksi disederhanakan menjadi satu blok teks; countdown 25 detik tetap tampil terpisah. How-to koneksi tampil langsung tanpa accordion. | Sudah dipush; build lokal berhasil |
 
 Rentang commit Drill tersebut tercatat pada branch remote dari `95044e9` sampai `7f4338e` (termasuk catatan review/audit `a417062`, `b66e58d`, dan `9a7f716`).
 
 ## Belum dipush
 
-- Menghapus accordion dari how-to mematikan dan menyalakan koneksi internet; kedua panduan sekarang tampil langsung.
-- Timer tetap terlihat dan berjalan pada screen pengerjaan saat pop-up `Koneksi internet terdeteksi` terbuka; diverifikasi di preview lokal.
-- Menambahkan countdown grace period 25 detik pada pop-up koneksi; saat mencapai 00:00 sesi otomatis masuk ke langkah pengumpulan/upload.
-- Menyederhanakan copy countdown menjadi satu blok teks: `Matikan koneksi internet untuk melanjutkan. Jika waktu habis, sesi akan otomatis dikumpulkan.`
-
-File yang berubah sejak commit `ed1aef7`: `src/main.tsx`, `src/styles.css`, dan `DEPLOYMENT_LOG.md`.
+Tidak ada perubahan lokal yang belum dipush saat log ini diperbarui.
 
 ## Cara memperbarui log
 
