@@ -84,7 +84,7 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-226 | Audit dan perbaiki scrollability lintas screen | CRAFT-107–109, CRAFT-204, CRAFT-217 | Scroll ownership, route reset, bottom clearance, dan evidence 14 screen | Internal Review |
 | CRAFT-227 | [P0] Ganti fixture soal dengan konten original bergaya UTBK | CRAFT-007, CRAFT-107, CRAFT-108 | Data-driven question fixture untuk screen 07–08 tanpa Lorem ipsum | Internal Review |
 | CRAFT-228 | [P0] Implementasikan state jawaban dan review end-to-end | CRAFT-224, CRAFT-227 | Pilihan jawaban, ragu-ragu, navigator, review, dan save memakai state nyata | Internal Review |
-| CRAFT-229 | [P0] Uji recovery attempt dan persistence prototype | CRAFT-202, CRAFT-203, CRAFT-228 | Reload, timer, pending sync, retry, dan recovery evidence | Planned |
+| CRAFT-229 | [P0] Uji recovery attempt dan persistence prototype | CRAFT-202, CRAFT-203, CRAFT-228 | Reload, timer, pending sync, retry, dan recovery evidence | Internal Review |
 | CRAFT-230 | [P0] Finalisasi boundary anti-cheat produksi | CRAFT-213, CRAFT-214, CRAFT-215 | Keputusan platform/device enforcement di luar kemampuan React prototype | Blocked |
 | CRAFT-231 | Sediakan reset simulasi untuk timer dan attempt | CRAFT-007, CRAFT-229 | Kontrol reviewer untuk mengembalikan fixture ke kondisi awal tanpa state basi | Planned |
 
@@ -245,18 +245,21 @@ Acceptance criteria:
 #### CRAFT-229 — Recovery attempt dan persistence prototype
 
 - Scope: active attempt screen 07–11 dan upload preparation screen 12–13
-- Status: `Planned`
+- Status: `Internal Review`
 - Priority: `P0`
 - Owner: builder
 
 Acceptance criteria:
 
-- [ ] Reload saat mengerjakan tidak menghapus screen, jawaban, ragu-ragu, timer, network state, atau attempt status.
-- [ ] Perubahan Online/Offline setelah reload tetap mengikuti enforcement dan warning policy.
-- [ ] Attempt terminated tetap masuk `pending_sync` dan tidak dapat kembali mengedit jawaban.
-- [ ] Upload gagal mempertahankan pending state dan retry berhasil tanpa duplicate submission di simulasi.
-- [ ] Evidence mencakup reload active attempt, reload terminated attempt, upload failure, dan retry.
-- [ ] Batas persistence client-side dan residual risk produksi dicatat, bukan dianggap sebagai trust boundary.
+- [x] Reload saat mengerjakan tidak menghapus screen, jawaban, ragu-ragu, timer, network state, atau attempt status.
+- [x] Perubahan Online/Offline setelah reload tetap mengikuti enforcement dan warning policy.
+- [x] Attempt terminated tetap masuk `pending_sync` dan tidak dapat kembali mengedit jawaban.
+- [x] Upload gagal mempertahankan pending state dan retry berhasil tanpa duplicate submission di simulasi.
+- [x] Evidence mencakup reload active attempt, reload terminated attempt, upload failure, dan retry.
+- [x] Batas persistence client-side dan residual risk produksi dicatat, bukan dianggap sebagai trust boundary.
+
+- Evidence: `evidence/CRAFT-229-reload-active.png`, `evidence/CRAFT-229-reload-terminated.png`, `evidence/CRAFT-229-upload-failure.png`, and `evidence/CRAFT-229-retry-success.png` at 360 × 740.
+- Persistence note: sessionStorage supports prototype recovery only. It is user-editable, browser-scoped, and can be cleared or tampered with; production enforcement and submission integrity require a trusted device/runtime and server-side validation.
 
 #### CRAFT-230 — Boundary anti-cheat produksi
 
