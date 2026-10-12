@@ -153,15 +153,22 @@ function App() {
   useEffect(() => {
     if (!attemptScreen || attemptStatus === 'terminated' || network !== 'offline') return;
     const timer = window.setInterval(() => setTimeRemaining(value => {
-      if (value <= 1) {
-        setAttemptStatus('terminated');
-        setSyncStatus('pending_sync');
-        return 0;
-      }
+      if (value <= 0) return 0;
       return value - 1;
     }), 1000);
     return () => window.clearInterval(timer);
   }, [attemptScreen, attemptStatus, network]);
+  useEffect(() => {
+    if (!attemptScreen || timeRemaining !== 0 || attemptStatus === 'terminated' || attemptStatus === 'locked') return;
+    setAttemptStatus('locked');
+    setSyncStatus('pending_sync');
+    setScreen(12);
+  }, [attemptScreen, attemptStatus, timeRemaining]);
+  useEffect(() => {
+    if (screen === 12 && network === 'online' && attemptStatus === 'locked' && syncStatus === 'pending_sync' && timeRemaining === 0) {
+      setScreen(13);
+    }
+  }, [attemptStatus, network, screen, syncStatus, timeRemaining]);
   const activeStep = useMemo(() => screen <= 1 ? 0 : screen <= 3 ? 1 : screen <= 6 ? 2 : 3, [screen]); const nextQuestion = (question: number) => { setAttemptStatus(question === 1 ? 'active' : 'reviewing'); if (question === 2) setReviewOrigin(8); setScreen(question === 1 ? 8 : 9); }; const openReview = (question: 1 | 2) => { if (attemptLocked) return; setReviewOrigin(question === 1 ? 7 : 8); setAttemptStatus('reviewing'); setScreen(9); }; const setAnswer = (question: number, choice: Choice) => setAnswers(current => ({ ...current, [question]: choice })); const toggleDoubtful = (question: number, value: boolean) => setDoubtful(current => { const next = new Set(current); value ? next.add(question) : next.delete(question); return next; });
   const startAttempt = () => { setAttemptStatus('active'); setTimeRemaining(INITIAL_ATTEMPT_SECONDS); setSyncStatus('saved'); setUploadStatus('idle'); setScreen(7); };
   const startUpload = () => {

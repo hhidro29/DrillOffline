@@ -93,6 +93,7 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-235 | Perbaiki state indikator koneksi halaman pengumpulan | CRAFT-112, CRAFT-202, CRAFT-222 | Label, warna, dan checklist koneksi mengikuti mode Online/Offline aktual | Internal Review |
 | CRAFT-236 | Tampilkan preview progres pengerjaan sebelum upload | CRAFT-112, CRAFT-203, CRAFT-228 | Halaman pengumpulan menampilkan ringkasan progres lokal per subtes saat belum online | Internal Review |
 | CRAFT-237 | Hapus CTA simulasi Offline dari pop-up koneksi | CRAFT-202, CRAFT-213 | Pop-up peserta tidak menampilkan kontrol reviewer; simulasi tetap tersedia di sidebar | Internal Review |
+| CRAFT-238 | Arahkan otomatis ke pengumpulan saat waktu habis | CRAFT-203, CRAFT-214 | Timeout mengunci jawaban dan langsung membuka flow pengumpulan tanpa CTA perantara | Internal Review |
 
 #### CRAFT-233 — Klarifikasi copy review: simpan pengerjaan tryout
 
@@ -203,6 +204,26 @@ Acceptance criteria:
 - [x] `npm run build` and `git diff --check` berhasil.
 
 Evidence: active-attempt warning now contains only the device instructions and countdown; the reviewer sidebar still exposes Online/Offline controls. The production build and diff check pass after the removal.
+
+#### CRAFT-238 — Arahkan otomatis ke pengumpulan saat waktu habis
+
+- Scope: timer attempt dan transisi timeout ke halaman pengumpulan TO
+- Status: `Internal Review`
+- Priority: `P1`
+- Owner: builder
+- Source feedback: user feedback 2026-10-12
+
+Acceptance criteria:
+
+- [x] Saat timer mencapai `00:00`, jawaban dan state pengerjaan dikunci serta tersimpan.
+- [x] Peserta langsung diarahkan ke halaman pengumpulan tanpa harus menekan CTA `Lanjutkan pengumpulan` pada modal perantara.
+- [x] Halaman pengumpulan mengikuti network state: menunggu koneksi saat Offline dan memulai upload sesuai aturan auto-upload saat Online.
+- [x] Timeout tidak menghapus jawaban, ringkasan progres per subtes, atau timer final.
+- [x] Tidak ada perubahan pada alur terminasi yang dipicu pelanggaran network warning, kecuali memang berbagi transisi yang sesuai.
+- [x] Reset reviewer mengembalikan attempt dan timer ke kondisi awal.
+- [x] `npm run build` dan `git diff --check` berhasil.
+
+Evidence: browser fixture started on screen 07 in Offline mode with 2 seconds remaining, answer `1=C`, and question 2 marked doubtful. At `00:00`, it entered screen 12 with `attemptStatus=locked`, `syncStatus=pending_sync`, and the answer/progress preview intact; no termination modal or intermediate CTA appeared. Switching the reviewer simulator Online advanced to screen 13 and auto-upload reached screen 14. Reviewer reset returned to screen 1, cleared answers, and restored the fixture timer to 272 seconds. The network warning countdown/termination handler and `NetworkOverlay` remain unchanged; the timeout now uses a separate locked-and-collect transition. `npm run build` and `git diff --check` pass.
 
 #### Evidence terbaru
 
