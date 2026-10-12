@@ -295,3 +295,6 @@ button:disabled { cursor: not-allowed; }
 .result-waiting h2 { position: absolute; top: 160px; right: 24px; left: 24px; margin: 0; text-align: center; }
 .result-waiting p { position: absolute; top: 192px; right: 24px; left: 24px; margin: 0; text-align: center; }
 .result-action { bottom: -2px; }
+.menu-item.reset-simulation { margin-bottom: 8px; color: #a15b2f; background: #fff6ee; font-weight: 700; }
+.menu-overlay { z-index: 40; }
+.question-menu { z-index: 41; }

@@ -5,6 +5,7 @@ import { getToOfflineQuestion, TO_OFFLINE_TOTAL_QUESTIONS } from './fixtures/toO
 import './styles.css';
 
 const A = '/assets/figma/';
+const INITIAL_ATTEMPT_SECONDS = 272;
 type ScreenId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14;
 type Choice = 'A' | 'B' | 'C' | 'D' | null;
 type NetworkMode = 'online' | 'offline';
@@ -79,7 +80,7 @@ function ReviewCard({ answers, doubtful }: { answers: Record<number, Choice>; do
 function ResultCard() { return <section className="card result-card"><div className="result-icon"><Check size={25} /></div><p className="eyebrow">Tryout submitted</p><h2>Your result is being prepared</h2><p>We are processing your answers. You can check back here shortly.</p><div className="result-status"><span className="pulse" /> Processing result</div><Button variant="secondary" onClick={() => undefined}>View discussion when ready <ChevronRight size={16} /></Button></section>; }
 
 function App() {
-  const [screen, setScreen] = useState<ScreenId>(1); const [reviewOrigin, setReviewOrigin] = useState<7 | 8>(7); const [consent, setConsent] = useState(false); const [downloadProgress, setDownloadProgress] = useState(0); const [answers, setAnswers] = useState<Record<number, Choice>>({}); const [doubtful, setDoubtful] = useState<Set<number>>(new Set()); const [network, setNetwork] = useState<NetworkMode>('online'); const networkRef = useRef<NetworkMode>(network); const [attemptStatus, setAttemptStatus] = useState<AttemptStatus>('not_started'); const [timeRemaining, setTimeRemaining] = useState(272); const [networkWarningSeconds, setNetworkWarningSeconds] = useState<number | null>(null); const [syncStatus, setSyncStatus] = useState<'saved' | 'pending_sync'>('saved'); const [uploadStatus, setUploadStatus] = useState<UploadStatus>('idle'); const uploadRunRef = useRef(0); const [menuOpen, setMenuOpen] = useState(false); const [restored, setRestored] = useState(false);
+  const [screen, setScreen] = useState<ScreenId>(1); const [reviewOrigin, setReviewOrigin] = useState<7 | 8>(7); const [consent, setConsent] = useState(false); const [downloadProgress, setDownloadProgress] = useState(0); const [answers, setAnswers] = useState<Record<number, Choice>>({}); const [doubtful, setDoubtful] = useState<Set<number>>(new Set()); const [network, setNetwork] = useState<NetworkMode>('online'); const networkRef = useRef<NetworkMode>(network); const [attemptStatus, setAttemptStatus] = useState<AttemptStatus>('not_started'); const [timeRemaining, setTimeRemaining] = useState(INITIAL_ATTEMPT_SECONDS); const [networkWarningSeconds, setNetworkWarningSeconds] = useState<number | null>(null); const [syncStatus, setSyncStatus] = useState<'saved' | 'pending_sync'>('saved'); const [uploadStatus, setUploadStatus] = useState<UploadStatus>('idle'); const uploadRunRef = useRef(0); const [menuOpen, setMenuOpen] = useState(false); const [restored, setRestored] = useState(false);
   useEffect(() => {
     try {
       const raw = window.sessionStorage.getItem('ruanguji-to-offline-attempt');
@@ -159,7 +160,7 @@ function App() {
     return () => window.clearInterval(timer);
   }, [attemptScreen, attemptStatus, network]);
   const activeStep = useMemo(() => screen <= 1 ? 0 : screen <= 3 ? 1 : screen <= 6 ? 2 : 3, [screen]); const nextQuestion = (question: number) => { setAttemptStatus(question === 1 ? 'active' : 'reviewing'); if (question === 2) setReviewOrigin(8); setScreen(question === 1 ? 8 : 9); }; const openReview = (question: 1 | 2) => { if (attemptLocked) return; setReviewOrigin(question === 1 ? 7 : 8); setAttemptStatus('reviewing'); setScreen(9); }; const setAnswer = (question: number, choice: Choice) => setAnswers(current => ({ ...current, [question]: choice })); const toggleDoubtful = (question: number, value: boolean) => setDoubtful(current => { const next = new Set(current); value ? next.add(question) : next.delete(question); return next; });
-  const startAttempt = () => { setAttemptStatus('active'); setTimeRemaining(272); setSyncStatus('saved'); setUploadStatus('idle'); setScreen(7); };
+  const startAttempt = () => { setAttemptStatus('active'); setTimeRemaining(INITIAL_ATTEMPT_SECONDS); setSyncStatus('saved'); setUploadStatus('idle'); setScreen(7); };
   const startUpload = () => {
     if (network !== 'online' || uploadStatus === 'uploading') return;
     const uploadRun = ++uploadRunRef.current;
@@ -177,6 +178,23 @@ function App() {
     }, 900);
   };
   const setNetworkMode = (mode: NetworkMode) => { setNetwork(mode); setMenuOpen(false); };
+  const resetSimulation = () => {
+    uploadRunRef.current += 1;
+    window.sessionStorage.removeItem('ruanguji-to-offline-attempt');
+    setScreen(1);
+    setReviewOrigin(7);
+    setConsent(false);
+    setDownloadProgress(0);
+    setAnswers({});
+    setDoubtful(new Set());
+    setNetwork('online');
+    setAttemptStatus('not_started');
+    setTimeRemaining(INITIAL_ATTEMPT_SECONDS);
+    setNetworkWarningSeconds(null);
+    setSyncStatus('saved');
+    setUploadStatus('idle');
+    setMenuOpen(false);
+  };
   const renderScreen = () => { switch (screen) {
     case 1: return <><Hero /><ExamCard /><RulesCard checked={consent} setChecked={setConsent} /><StickyActions primary="Lanjutkan" secondary="Kembali" disabled={!consent} onPrimary={() => setScreen(2)} onSecondary={() => setMenuOpen(true)} /></>;
     case 2: return <><Hero /><PreparationCard /><div className="preparation-spacer" /><div className="single-action"><Button onClick={() => { setDownloadProgress(26); setScreen(3); }}>Download Soal</Button></div></>;
@@ -194,7 +212,7 @@ function App() {
     case 14: return <ResultFigma />;
   } };
   const scrollOwner = screen === 4 || screen === 7 || screen === 8 ? 'document' : screen === 9 || screen === 12 ? 'internal' : 'fixed';
-  return <main className={`app-shell ${screen === 6 ? 'modal-shell' : ''} ${screen >= 7 && screen <= 8 ? 'question-shell' : ''} ${screen === 11 ? 'next-subtest-shell' : ''}`}><Navbar onMenu={() => setMenuOpen(true)} /><div data-screen-id={screen} data-scroll-owner={scrollOwner} className={`screen-content ${screen === 9 ? 'review-content' : ''} ${screen === 14 ? 'result-content' : ''} ${screen === 12 || screen === 13 ? 'upload-content' : ''}`}>{renderScreen()}</div>{attemptScreen && (networkWarningSeconds !== null || attemptStatus === 'terminated') && <NetworkOverlay secondsRemaining={networkWarningSeconds} terminated={attemptStatus === 'terminated'} onBackOffline={() => setNetworkMode('offline')} onContinue={() => { setAttemptStatus('locked'); setScreen(12); }} />}{menuOpen && <div className="menu-overlay" onClick={() => setMenuOpen(false)}><aside className="side-menu" onClick={event => event.stopPropagation()}><button className="menu-close" onClick={() => setMenuOpen(false)}>×</button><h2>TO Offline demo</h2><p>Jump to a screen for review.</p><div className="menu-network"><span>Connection simulation</span><div><button onClick={() => setNetworkMode('offline')} className={network === 'offline' ? 'active' : ''}><WifiOff size={14} /> Offline</button><button onClick={() => setNetworkMode('online')} className={network === 'online' ? 'active' : ''}><Wifi size={14} /> Online</button></div></div>{Object.keys(screenNames).map(key => { const id = Number(key) as ScreenId; return <button className={`menu-item ${id === screen ? 'current' : ''}`} key={id} onClick={() => { setScreen(id); setMenuOpen(false); }}>{String(id).padStart(2, '0')} {screenNames[id]}</button>; })}</aside></div>}</main>;
+  return <main className={`app-shell ${screen === 6 ? 'modal-shell' : ''} ${screen >= 7 && screen <= 8 ? 'question-shell' : ''} ${screen === 11 ? 'next-subtest-shell' : ''}`}><Navbar onMenu={() => setMenuOpen(true)} /><div data-screen-id={screen} data-scroll-owner={scrollOwner} className={`screen-content ${screen === 9 ? 'review-content' : ''} ${screen === 14 ? 'result-content' : ''} ${screen === 12 || screen === 13 ? 'upload-content' : ''}`}>{renderScreen()}</div>{attemptScreen && (networkWarningSeconds !== null || attemptStatus === 'terminated') && <NetworkOverlay secondsRemaining={networkWarningSeconds} terminated={attemptStatus === 'terminated'} onBackOffline={() => setNetworkMode('offline')} onContinue={() => { setAttemptStatus('locked'); setScreen(12); }} />}{menuOpen && <div className="menu-overlay" onClick={() => setMenuOpen(false)}><aside className="side-menu" onClick={event => event.stopPropagation()}><button className="menu-close" onClick={() => setMenuOpen(false)}>×</button><h2>TO Offline demo</h2><p>Jump to a screen for review.</p><div className="menu-network"><span>Connection simulation</span><div><button onClick={() => setNetworkMode('offline')} className={network === 'offline' ? 'active' : ''}><WifiOff size={14} /> Offline</button><button onClick={() => setNetworkMode('online')} className={network === 'online' ? 'active' : ''}><Wifi size={14} /> Online</button></div></div><button className="menu-item reset-simulation" onClick={resetSimulation}>↻ Reset Simulasi</button>{Object.keys(screenNames).map(key => { const id = Number(key) as ScreenId; return <button className={`menu-item ${id === screen ? 'current' : ''}`} key={id} onClick={() => { setScreen(id); setMenuOpen(false); }}>{String(id).padStart(2, '0')} {screenNames[id]}</button>; })}</aside></div>}</main>;
 }
 
 createRoot(document.getElementById('root')!).render(<StrictMode><App /></StrictMode>);

@@ -86,7 +86,7 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | CRAFT-228 | [P0] Implementasikan state jawaban dan review end-to-end | CRAFT-224, CRAFT-227 | Pilihan jawaban, ragu-ragu, navigator, review, dan save memakai state nyata | Internal Review |
 | CRAFT-229 | [P0] Uji recovery attempt dan persistence prototype | CRAFT-202, CRAFT-203, CRAFT-228 | Reload, timer, pending sync, retry, dan recovery evidence | Internal Review |
 | CRAFT-230 | [P0] Finalisasi boundary anti-cheat produksi | CRAFT-213, CRAFT-214, CRAFT-215 | Keputusan platform/device enforcement di luar kemampuan React prototype | Blocked |
-| CRAFT-231 | Sediakan reset simulasi untuk timer dan attempt | CRAFT-007, CRAFT-229 | Kontrol reviewer untuk mengembalikan fixture ke kondisi awal tanpa state basi | Planned |
+| CRAFT-231 | Sediakan reset simulasi untuk timer dan attempt | CRAFT-007, CRAFT-229 | Kontrol reviewer untuk mengembalikan fixture ke kondisi awal tanpa state basi | Internal Review |
 
 #### Evidence terbaru
 
@@ -278,20 +278,22 @@ Acceptance criteria:
 #### CRAFT-231 — Reset simulasi untuk timer dan attempt
 
 - Scope: menu demo/reviewer dan state persistence prototype
-- Status: `Planned`
+- Status: `Internal Review`
 - Priority: `P1` (developer/reviewer productivity; bukan fitur peserta)
 - Owner: builder
 
 Acceptance criteria:
 
-- [ ] Menu demo memiliki aksi `Reset Simulasi` yang terlihat jelas sebagai kontrol preview, bukan bagian dari UI peserta.
-- [ ] Reset mengembalikan timer ke durasi fixture awal yang didefinisikan oleh satu constant/config, bukan angka yang tersebar di komponen.
-- [ ] Reset juga membersihkan attempt status, network warning, jawaban, penanda ragu-ragu, sync/upload status, dan progress download agar state tidak saling mewarisi.
-- [ ] Reset menghapus snapshot `sessionStorage` yang relevan lalu mengembalikan prototype ke entry state yang ditentukan untuk review.
-- [ ] Setelah reload, prototype tetap berada pada kondisi fixture awal dan timer tidak kembali ke nilai `0` karena state lama.
-- [ ] Kontrol reset tidak dapat diakses melalui flow peserta dan tidak dianggap sebagai mekanisme reset attempt produksi.
-- [ ] Evidence mencakup reset dari kondisi timer berjalan, timer `0`, warning Online, terminated, dan pending upload.
-- [ ] Jalankan `npm run build` dan `git diff --check` setelah implementasi.
+- [x] Menu demo memiliki aksi `Reset Simulasi` yang terlihat jelas sebagai kontrol preview, bukan bagian dari UI peserta.
+- [x] Reset mengembalikan timer ke durasi fixture awal yang didefinisikan oleh satu constant/config, bukan angka yang tersebar di komponen.
+- [x] Reset juga membersihkan attempt status, network warning, jawaban, penanda ragu-ragu, sync/upload status, dan progress download agar state tidak saling mewarisi.
+- [x] Reset menghapus snapshot `sessionStorage` yang relevan lalu mengembalikan prototype ke entry state yang ditentukan untuk review.
+- [x] Setelah reload, prototype tetap berada pada kondisi fixture awal dan timer tidak kembali ke nilai `0` karena state lama.
+- [x] Kontrol reset tidak dapat diakses melalui flow peserta dan tidak dianggap sebagai mekanisme reset attempt produksi.
+- [x] Evidence mencakup reset dari kondisi timer berjalan, timer `0`, warning Online, terminated, dan pending upload.
+- [x] Jalankan `npm run build` dan `git diff --check` setelah implementasi.
+
+- Evidence: `evidence/CRAFT-231-reset-running.png`, `evidence/CRAFT-231-reset-terminated.png`, `evidence/CRAFT-231-reset-warning-online.png`, and `evidence/CRAFT-231-reset-pending-upload.png` at 360 × 740.
 
 #### CRAFT-206 — Final cleanup dan handoff
 
