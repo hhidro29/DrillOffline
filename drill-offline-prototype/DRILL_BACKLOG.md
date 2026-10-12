@@ -148,3 +148,9 @@
 
 - Item berstatus `Implemented locally` sudah tersedia di source dan belum dipush; item berstatus `Backlog` masih menunggu command implementasi.
 - Perubahan berstatus `Implemented locally` sudah dikerjakan di source dan menunggu review/push terpisah.
+
+### DRILL-046 — Rapikan visual collection Offline terbaru
+
+- **Task:** Perbarui hierarchy, spacing, dan pending/completed checklist state berdasarkan screenshot collection terbaru; hilangkan copy yang berulang atau memberi kesan langkah sudah selesai saat Offline.
+- **Acceptance criteria:** Pending checklist memakai indikator kosong; koneksi dan upload hanya complete pada state yang benar; card dan sticky CTA tetap selaras dengan preparation; Online auto-upload, retry, summary, scroll, dan overflow tidak regresi.
+- **Status:** Implemented locally

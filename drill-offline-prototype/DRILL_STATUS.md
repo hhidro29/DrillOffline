@@ -105,3 +105,5 @@
 - DRILL-045 collection visual iteration reuses the preparation hierarchy: shared header artwork, prep card, checklist rows, divider, education notice, status panel, and sticky action spacing. Collection-specific copy and upload status preserve the distinct submission context.
 
 - Final audit regression fix: automatic upload completion now tracks and cancels its pending timer when reviewer forces an upload failure or resets the session. The failed state remains available for `Coba Lagi` instead of jumping to Summary from a stale auto-upload callback; retry resumes progress and reaches processed results.
+
+- DRILL-046 visual collection pass updates the latest Offline screenshot state: pending checklist rows now use empty indicators instead of grey checkmarks, collection copy has one clear message per status, and the shared prep/card hierarchy remains intact. Online auto-upload, retry, processed summary, scroll, and overflow behavior remain unchanged.
