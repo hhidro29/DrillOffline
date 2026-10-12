@@ -103,6 +103,10 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .confirm-answer strong { color: #434856; }
 .confirm-card .prototype-link { margin-top: 24px; }
 .confirm-footer .primary-cta, .confirm-footer .secondary-cta { flex: 1; }
+.confirm-footer-actions { display: flex; gap: 8px; min-width: 248px; }
+.confirm-footer { flex-direction: column; align-items: stretch; height: auto; min-height: 128px; }
+.confirm-footer-actions { flex-direction: row !important; align-items: center; justify-content: flex-end; width: 100%; min-width: 0; }
+.confirm-footer-actions button { flex: 0 0 120px !important; }
 .result-note { display: flex; flex-direction: column; gap: 4px; padding: 16px; color: #e52a34; background: #f9eeef; border: 1px solid #e52a34; border-radius: 12px; }
 .result-note strong { font-size: 14px; line-height: 22px; }
 .result-note span { color: #5e677b; font-size: 12px; line-height: 18px; }
@@ -136,6 +140,11 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .recommendation { padding: 12px; color: #5e677b; background: #edf7f8; border-radius: 8px; font-size: 12px; line-height: 18px; }
 .summary-footer { display: flex; gap: 12px; padding: 20px 16px; background: #fff; box-shadow: 0 -2px 8px rgba(0,0,0,.06); }
 .summary-footer .primary-cta, .summary-footer .secondary-cta { flex: 1; }
+
+/* End-session confirmation uses a stacked footer so its copy and dual actions remain readable on the 360px frame. */
+.confirm-footer { flex-direction: column; align-items: stretch; height: auto; min-height: 128px; }
+.confirm-footer-actions { display: flex; flex-direction: row !important; align-items: center; justify-content: flex-end; gap: 8px; width: 100%; min-width: 0; }
+.confirm-footer-actions button { flex: 0 0 120px !important; }
 .drill-review-root { display: flex; justify-content: center; align-items: flex-start; width: 100%; min-height: 100vh; background: #f2f5fa; }
 .drill-menu-overlay { position: fixed; inset: 0; z-index: 50; background: rgba(25,31,40,.35); }
 .drill-side-menu { position: absolute; top: 0; bottom: 0; left: max(calc(50% - 180px), 0px); width: 292px; padding: 18px 16px 24px; overflow-y: auto; background: #fff; box-shadow: 7px 0 20px rgba(0,0,0,.15); }
@@ -267,3 +276,8 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .summary-footer { height: 84px; padding: 20px; }
 .summary-footer .secondary-cta, .summary-footer .primary-cta { height: 44px; }
 .summary-footer .primary-cta { background: linear-gradient(90deg,#ff912e,#ff3048); }
+
+/* Keep end-session confirmation readable on the narrow Figma frame. */
+.confirm-footer { flex-direction: column; align-items: stretch; height: auto; min-height: 128px; }
+.confirm-footer-actions { display: flex; flex-direction: row !important; align-items: center; justify-content: flex-end; gap: 8px; width: 100%; min-width: 0; }
+.confirm-footer-actions button { flex: 0 0 120px !important; }
