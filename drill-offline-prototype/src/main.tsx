@@ -51,16 +51,32 @@ function DownloadPanel({ progress }: { progress?: number }) {
   </div>;
 }
 
+type GuidePlatform = 'Android' | 'iOS' | 'Windows' | 'MacOS';
+const GUIDE_STEPS: Record<GuidePlatform, { mainTitle: string; main: string[]; alternativeTitle: string; alternative: string[]; note: string }> = {
+  Android: { mainTitle: 'Cara utama: Aktifkan mode terbang (Airplane Mode)', main: ['Geser layar dari atas ke bawah untuk membuka panel pengaturan cepat. Geser lagi jika diperlukan.', 'Ketuk ikon pesawat untuk mengaktifkan Mode pesawat / Airplane Mode.', 'Pastikan Wi-Fi dan data seluler mati agar internet benar-benar terputus.'], alternativeTitle: 'Alternatif: Matikan lewat Pengaturan', alternative: ['Buka Pengaturan → Wi-Fi, lalu matikan Wi-Fi.', 'Buka Jaringan seluler / Kartu SIM → matikan Data seluler. Jika memakai dua SIM, pastikan data pada keduanya mati.'], note: 'Nama menu dapat berbeda sesuai merek dan versi Android.' },
+  iOS: { mainTitle: 'Cara utama: Aktifkan Mode pesawat', main: ['Geser dari sudut kanan atas ke bawah untuk membuka Pusat Kontrol. Pada iPhone dengan tombol Utama, geser dari bawah ke atas.', 'Ketuk Mode pesawat. Pastikan Wi-Fi ikut mati; jika masih aktif, ketuk ikon Wi-Fi untuk mematikannya.'], alternativeTitle: 'Alternatif: Matikan lewat Pengaturan', alternative: ['Buka Pengaturan → Wi-Fi, lalu matikan Wi-Fi.', 'Buka Pengaturan → Seluler (atau Layanan Seluler), lalu matikan Data Seluler.'], note: 'Nama menu dapat berbeda menurut versi iOS.' },
+  Windows: { mainTitle: 'Cara utama: Matikan Wi-Fi lewat Pengaturan', main: ['Buka Pengaturan → Jaringan & internet → Wi-Fi.', 'Matikan sakelar Wi-Fi dan pastikan statusnya menunjukkan Wi-Fi nonaktif.'], alternativeTitle: 'Alternatif: Gunakan Pengaturan cepat', alternative: ['Pilih ikon jaringan di taskbar untuk membuka Pengaturan cepat, lalu matikan Wi-Fi.', 'Jika memakai kabel jaringan, cabut kabel Ethernet agar perangkat benar-benar offline.'], note: 'Letak menu dapat berbeda menurut versi Windows.' },
+  MacOS: { mainTitle: 'Cara utama: Matikan Wi-Fi dari bar menu', main: ['Pilih Pusat Kontrol atau ikon Wi-Fi di bar menu.', 'Pilih Wi-Fi, lalu matikan koneksinya.', 'Jika memakai kabel jaringan, cabut kabel Ethernet agar perangkat benar-benar offline.'], alternativeTitle: 'Alternatif: Matikan lewat Pengaturan Sistem', alternative: ['Buka menu Apple → Pengaturan Sistem → Wi-Fi.', 'Matikan Wi-Fi. Pastikan perangkat tidak terhubung melalui Ethernet atau hotspot.'], note: 'Nama dan letak menu dapat berbeda menurut versi macOS.' },
+};
+const GUIDE_IMAGES: Record<GuidePlatform, string> = {
+  Android: 'offline-guide-android.jpg',
+  iOS: 'offline-guide-ios.jpg',
+  Windows: 'offline-guide-windows.jpg',
+  MacOS: 'offline-guide-macos.jpg',
+};
+
 function OfflineGuide() {
+  const [platform, setPlatform] = useState<GuidePlatform>('Android');
+  const guide = GUIDE_STEPS[platform];
   return <div className="offline-guide">
     <h2>Cara mematikan koneksi internet perangkat</h2>
-    <div className="guide-tabs"><button className="selected">Android</button><button>iOS</button><button>Windows</button><button>MacOS</button></div>
-    <img className="guide-image guide-gif" src={asset('offline-connection-guide.gif')} alt="Panduan mematikan koneksi internet di Android" />
-    <h3>Cara utama: Aktifkan mode terbang (Airplane Mode)</h3>
-    <ol><li>Geser layar dari atas ke bawah untuk membuka panel pengaturan cepat. Geser lagi jika diperlukan.</li><li>Ketuk ikon pesawat untuk mengaktifkan Mode pesawat / Airplane Mode.</li><li>Pastikan Wi-Fi dan data seluler mati agar internet benar-benar terputus.</li></ol>
-    <h3>Alternatif: Matikan lewat Pengaturan</h3>
-    <ol><li>Buka Pengaturan → Wi-Fi, lalu matikan Wi-Fi.</li><li>Buka Jaringan seluler / Kartu SIM → matikan Data seluler. Jika memakai dua SIM, pastikan data pada keduanya tidak aktif.</li></ol>
-    <p>Nama menu dapat berbeda sesuai merek dan versi Android.</p>
+    <div className="guide-tabs" role="group" aria-label="Pilih jenis perangkat">{(Object.keys(GUIDE_STEPS) as GuidePlatform[]).map(item => <button key={item} type="button" className={platform === item ? 'selected' : ''} aria-pressed={platform === item} onClick={() => setPlatform(item)}>{item}</button>)}</div>
+    <img className="guide-image" src={asset(GUIDE_IMAGES[platform])} alt={`Panduan mematikan koneksi internet pada ${platform}`} />
+    <h3>{guide.mainTitle}</h3>
+    <ol>{guide.main.map(step => <li key={step}>{step}</li>)}</ol>
+    <h3>{guide.alternativeTitle}</h3>
+    <ol>{guide.alternative.map(step => <li key={step}>{step}</li>)}</ol>
+    <p>{guide.note}</p>
   </div>;
 }
 
