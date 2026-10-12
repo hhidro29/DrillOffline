@@ -1,0 +1,136 @@
+# Drill Offline — Backlog
+
+> Backlog ini menampung masukan review dan status implementasinya. Perubahan yang berstatus lokal sudah tersedia di prototype, tetapi belum dipush.
+
+## Latest review batch
+
+### DRILL-026 — Perbarui copy alternatif pengaturan internet
+
+- **Referensi:** Gambar 1.
+- **Task:** Perbarui heading dan langkah alternatif agar jelas bahwa koneksi internet dapat dimatikan lewat menu Pengaturan perangkat.
+- **Acceptance criteria:** Copy menyebut Wi-Fi dan data seluler dengan bahasa yang ringkas dan konsisten di flow mematikan maupun menyalakan koneksi.
+- **Status:** Implemented locally
+
+### DRILL-027 — Hapus copy yang ditandai pada Gambar 2
+
+- **Referensi:** Gambar 2.
+- **Task:** Hapus komponen copy yang ditandai dari tampilan.
+- **Catatan:** Target copy perlu dikonfirmasi saat implementasi karena Gambar 4 juga mendefinisikan subcopy pada pop-up koneksi.
+- **Status:** Implemented locally
+
+### DRILL-028 — Sembunyikan XP dan statistik jawaban selama pengerjaan
+
+- **Referensi:** Gambar 3.
+- **Task:** Hilangkan total XP, jumlah benar, dan jumlah salah dari header screen pengerjaan.
+- **Acceptance criteria:** Nilai benar/salah dan XP baru muncul pada hasil akhir setelah koneksi internet aktif dan hasil berhasil diproses.
+- **Status:** Implemented locally
+
+### DRILL-029 — Rapikan urutan informasi pop-up koneksi
+
+- **Referensi:** Gambar 4.
+- **Task:** Susun informasi pop-up dengan urutan: title → timer → subcopy.
+- **Acceptance criteria:** Bagian penting pada subcopy dibuat bold, tanpa menambah blok teks yang tidak diperlukan.
+- **Status:** Implemented locally
+
+### DRILL-030 — Toast saat kembali Offline
+
+- **Task:** Tampilkan toast ketika user berhasil mematikan internet dan kembali ke mode Offline setelah pop-up koneksi ditutup.
+- **Contoh copy:** `Koneksi internet mati. Kamu kembali ke mode Offline.`
+- **Status:** Implemented locally
+
+### DRILL-031 — Indikator mode Offline
+
+- **Task:** Tambahkan indikator persisten di bagian bawah screen pengerjaan untuk menunjukkan bahwa user sedang berada di mode Offline.
+- **Acceptance criteria:** Indikator tidak menutupi soal, timer, atau CTA; tetap terlihat saat area soal discroll.
+- **Status:** Implemented locally
+
+### DRILL-032 — Hapus inline error state koneksi
+
+- **Referensi:** Gambar 5.
+- **Task:** Hilangkan blok error inline pada screen soal.
+- **Acceptance criteria:** Saat koneksi menyala, cukup tampilkan pop-up koneksi; state soal tidak menampilkan error card tambahan.
+- **Status:** Implemented locally
+
+### DRILL-033 — Redesain halaman pengumpulan
+
+- **Referensi:** Gambar 6.
+- **Task:** Buat layout halaman pengumpulan yang berbeda dari halaman persiapan agar tidak terasa familiar dan tidak membingungkan user.
+- **Flow:** User masuk halaman pengumpulan → menyalakan internet → tombol `Kumpulkan` aktif → user menekan tombol tersebut.
+- **Acceptance criteria:** Checklist dan layout baru tidak mengulang struktur halaman persiapan; tombol `Kumpulkan` disabled sebelum internet aktif dan enabled setelah internet aktif.
+- **Status:** Implemented locally
+
+## Existing flow decisions to carry into implementation
+
+### DRILL-034 — Tambahkan istilah Airplane Mode
+
+- **Task:** Dampingi istilah `Mode Terbang` dengan `Airplane Mode` pada heading dan langkah terkait.
+- **Status:** Implemented locally
+
+### DRILL-035 — Hapus copy pembuka panduan mematikan internet
+
+- **Task:** Hapus teks pembuka `Matikan koneksi internet perangkat untuk melanjutkan mengerjakan drill secara offline.` di bawah heading panduan.
+- **Status:** Implemented locally
+
+### DRILL-036 — Auto-submit grace timeout langsung ke hasil
+
+- **Task:** Jika countdown 25 detik saat internet terdeteksi habis, jangan masuk ke state pengumpulan manual.
+- **Flow:** Kunci jawaban → upload otomatis karena internet sudah aktif → tampilkan loading singkat → langsung ke hasil; jika upload gagal, tampilkan retry tanpa kembali ke soal.
+- **Status:** Implemented locally
+
+### DRILL-037 — Hapus CTA `Kembali ke Offline` dari pop-up koneksi
+
+- **Referensi:** Screenshot 11.44.13.
+- **Task:** Hilangkan button `Kembali ke Offline` dari pop-up saat koneksi internet terdeteksi.
+- **Flow yang diinginkan:** User mematikan internet dari perangkat; aplikasi mendeteksi koneksi kembali Offline dan melanjutkan flow secara otomatis tanpa perlu menekan button di pop-up.
+- **Tester cheat:** Tambahkan kontrol khusus di sidebar tester untuk mensimulasikan event `Kembali ke Offline` saat review prototype. Kontrol ini hanya untuk tester dan tidak tampil di user flow.
+- **Acceptance criteria:** Pop-up tidak memiliki CTA; state berubah ketika event Offline terdeteksi; kontrol tester dapat memicu event yang sama secara deterministik.
+- **Status:** Implemented locally
+
+### DRILL-038 — Arahkan CTA `Yakin` ke proses upload jawaban
+
+- **Referensi:** Screenshot 11.45.49.
+- **Task:** Setelah user memilih `Yakin` pada konfirmasi mengakhiri sesi Drill, arahkan user ke flow pengumpulan/upload jawaban.
+- **Flow yang diinginkan:** Konfirmasi akhiri sesi → halaman pengumpulan hasil → user menyalakan internet → tombol `Kumpulkan` aktif → upload jawaban.
+- **Acceptance criteria:** CTA `Yakin` tidak langsung membuka hasil akhir; user masuk ke proses upload/pengumpulan dan tetap harus menyelesaikan upload sebelum melihat hasil.
+- **Status:** Backlog — belum diimplementasikan
+
+### DRILL-039 — Tambahkan penanda Drill sedang dikerjakan dalam mode Offline
+
+- **Referensi:** Screenshot 11.46.44.
+- **Task:** Tampilkan penanda yang jelas bahwa sesi Drill sedang dikerjakan dalam mode Offline pada screen soal.
+- **Flow yang diinginkan:** Selama user mengerjakan soal tanpa koneksi internet, label `Mode Offline` tetap terlihat dan tidak bergantung pada isi soal.
+- **Acceptance criteria:** Penanda terlihat pada area header/progress atau area status yang mudah ditemukan, tidak menutupi nomor soal, timer, soal, maupun footer, dan tetap tersedia saat konten soal discroll.
+- **Status:** Backlog — perlu validasi penempatan visual
+
+### DRILL-040 — Mulai download otomatis saat link Drill dibuka
+
+- **Referensi:** Screenshot 11.47.31.
+- **Task:** Ketika student membuka link Drill dan masuk ke halaman persiapan, sistem langsung memulai proses download paket soal tanpa menunggu klik `Download Soal`.
+- **Acceptance criteria:** Halaman tetap menampilkan status/progress download; button manual tidak diperlukan untuk memulai proses; setelah download selesai user lanjut ke panduan mematikan koneksi internet.
+- **Status:** Implemented locally
+
+### DRILL-041 — Akumulasi Starchamp selama Offline
+
+- **Task:** Ubah mekanisme reward saat Drill dikerjakan dalam mode Offline. Poin Starchamp tidak diberikan secara langsung per soal, tetapi diakumulasikan dan diproses setelah sesi selesai dikumpulkan saat internet aktif.
+- **Acceptance criteria:** Selama Offline tidak ada reward Starchamp real-time; data benar/salah dan reward tersimpan untuk diproses setelah upload; hasil akhir menampilkan akumulasi yang sudah diproses.
+- **Status:** Implemented locally
+
+### DRILL-042 — Edukasi pemrosesan nilai, Starchamp, dan XP di akhir sesi
+
+- **Task:** Tambahkan edukasi bahwa status benar/salah, poin Starchamp, dan XP belum direview saat Offline dan baru diproses setelah user menyalakan internet serta mengumpulkan Drill.
+- **Contoh copy:** `Jawaban, Starchamp, dan XP kamu akan direview setelah sesi selesai dan Drill berhasil dikumpulkan saat online.`
+- **Acceptance criteria:** Copy terlihat sebelum atau saat mulai mengerjakan, menggunakan bahasa ringkas, dan tidak menjanjikan nilai/reward sebelum proses upload selesai.
+- **Status:** Implemented locally
+
+### DRILL-043 — Gabungkan progress soal dan indikator Offline
+
+- **Referensi:** Screenshot 11.59.52.
+- **Task:** Tempatkan nomor progress soal dan status mode jaringan dalam satu komponen horizontal pada screen pengerjaan.
+- **Layout:** `1/10` berada di sisi kiri; `Mode Offline` berada di sisi kanan dalam komponen yang sama.
+- **Acceptance criteria:** Tidak ada lagi pill `Mode Offline` terpisah di bagian bawah yang menutupi area soal; komponen tetap terlihat jelas tanpa mengganggu timer, soal, opsi jawaban, atau footer.
+- **Status:** Backlog — belum diimplementasikan
+
+## Notes
+
+- Item berstatus `Implemented locally` sudah tersedia di source dan belum dipush; item berstatus `Backlog` masih menunggu command implementasi.
+- Perubahan berstatus `Implemented locally` sudah dikerjakan di source dan menunggu review/push terpisah.
