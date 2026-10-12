@@ -144,7 +144,7 @@ button:disabled { cursor: not-allowed; }
 .next-action { position: absolute; top: 676px; right: 0; bottom: 0; left: 0; z-index: 1; height: 64px; padding: 10px 12px; background: #fff; box-shadow: 0 -16px 20px 4px rgba(129,134,142,.16); }
 .next-action .button { width: 100%; }
 
-.upload-prep-screen { position: relative; display: flex; flex-direction: column; gap: 0; width: 100%; height: 680px; padding: 24px 12px 0; overflow-x: hidden; overflow-y: auto; scrollbar-width: none; }
+.upload-prep-screen { position: relative; display: flex; flex-direction: column; gap: 0; width: 100%; height: 680px; padding: 24px 12px 80px; overflow-x: hidden; overflow-y: auto; scrollbar-width: none; }
 .upload-prep-screen::-webkit-scrollbar { display: none; }
 .upload-prep-screen > .hero { left: -12px; width: 360px; }
 .upload-prep-card { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 16px; width: 100%; padding: 14px 12px; background: #fff; border-radius: 12px; box-shadow: 0 12px 24px rgba(134,129,129,.12); }
@@ -163,11 +163,11 @@ button:disabled { cursor: not-allowed; }
 .upload-guide h3, .upload-guide h4 { margin: 0; color: #434856; font-size: 12px; line-height: 18px; }
 .upload-guide h3 { font-size: 14px; }
 .upload-guide .guide-tabs { margin: 0; }
-.upload-guide-image { width: 100%; height: 205px; background: #d9d9d9; border-radius: 12px; }
+.upload-guide-image { display: block; width: 100%; height: 205px; flex: 0 0 205px; background: #d9d9d9; border-radius: 12px; }
 .upload-guide ol { margin: 0; padding-left: 18px; font-size: 11px; line-height: 16px; }
 .upload-download { margin-top: 0; }
 .upload-prep-action { position: absolute; right: -12px; bottom: 0; left: -12px; z-index: 3; width: 360px; padding: 12px; background: #fff; box-shadow: 0 -16px 20px 4px rgba(129,134,142,.16); }
-.upload-prep-screen:has(.upload-guide) .upload-prep-action { position: sticky; right: -12px; bottom: 0; left: -12px; flex: 0 0 auto; margin: -68px -12px 0; }
+.upload-prep-screen:has(.upload-guide) .upload-prep-action { position: sticky; right: -12px; bottom: -80px; left: -12px; flex: 0 0 auto; margin: 0 -12px -80px; }
 .upload-prep-action .button { width: 100%; }
 
 .result-figma-screen { position: relative; width: 100%; height: 644px; min-height: 644px; padding: 80px 12px 80px; overflow: hidden; background: #f2f9ff; }
@@ -226,7 +226,7 @@ button:disabled { cursor: not-allowed; }
 .guide-tabs { display: flex; gap: 12px; margin: 3px 0 5px; }
 .guide-tabs span { display: grid; place-items: center; height: 28px; padding: 4px 12px; color: #2c313a; background: #fff; border: 1px solid #dadfea; border-radius: 9999px; font-size: 12px; font-weight: 600; }
 .guide-tabs .selected { color: #1480d8; background: #e0eefa; border-color: #2196f3; }
-.guide-image { width: 100%; height: 248px; object-fit: cover; background: #d9d9d9; border-radius: 12px; }
+.guide-image { display: block; width: 100%; height: 248px; object-fit: cover; border-radius: 12px; }
 .guide-copy ol { display: grid; gap: 0; margin: 0; padding-left: 18px; color: #5e677b; font-size: 12px; line-height: 18px; }
 .screen-content:has(.after-guide-action) { padding-bottom: 132px; }
 .after-guide-action { position: fixed; bottom: 24px; left: 50%; z-index: 8; display: flex; gap: 8px; width: min(312px, calc(100vw - 48px)); padding: 0; transform: translateX(-50%); }.after-guide-action .button { width: 100%; box-shadow: 0 4px 12px rgba(242,109,15,.18); }
