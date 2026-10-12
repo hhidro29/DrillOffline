@@ -1,16 +1,14 @@
 # User Actions
 
-## USER-ACTION-001 — Review prototype against source Figma
+## USER-ACTION-001 — Report visual mismatch when noticed
 
-- Status: Functional review complete; visual review still needs Figma comparison.
+- Status: Planner-owned review workflow
 - Task terkait: `CRAFT-101`–`CRAFT-114`
 - Screen/node: Section `15:7547`
-- Hambatan: The prototype is implemented and self-reviewed at 360 × 740, but final visual approval still needs a human comparison against the source Figma frames.
-- Yang perlu dilakukan user: Open the local preview and compare each screen with its mapped Figma node; call out any exact spacing, copy, or asset mismatch.
-- Alasan: Final visual sign-off depends on the source design review and product judgment.
-- Hasil yang dibutuhkan: A list of requested visual changes, or approval of the current pass.
-- Cara verifikasi: Mark this action complete after the screen inventory has no remaining visual mismatch notes.
-- Dampak: Screen tasks remain `Ready for Review` until sign-off.
+- Yang perlu dilakukan user: Tidak perlu menelusuri semua screen satu per satu. Jika menemukan visual yang tidak sesuai, kirim screenshot atau catatan singkat; planner akan mengaudit, membuat task perubahan, dan meminta builder mengerjakannya.
+- Hasil yang dibutuhkan: Bukti mismatch bila ada; keputusan `Approved` atau `Changes Requested` ditentukan planner berdasarkan evidence.
+- Cara verifikasi: Planner menutup review setelah semua mismatch penting ditangani atau dicatat sebagai residual risk.
+- Dampak: Screen tasks berada di `Internal Review` sampai planner memutuskan `Approved` atau `Changes Requested`; status ini bukan backlog aktif.
 
 ## USER-ACTION-002 — Confirm unresolved offline product behavior
 

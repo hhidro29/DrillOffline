@@ -39,12 +39,12 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 | --- | --- | --- | --- | --- |
 | CRAFT-000 | Kunci scope dan aturan visual | — | Aturan craft disepakati | Done |
 | CRAFT-001 | Inventarisasi 14 screen dan node Figma | CRAFT-000 | Screen inventory | Done |
-| CRAFT-002 | Petakan flow, state, dan transisi | CRAFT-001 | Flow/state map | Internal Review |
-| CRAFT-003 | Ekstrak token visual | CRAFT-001 | Token warna, typography, spacing, radius, shadow | Internal Review |
+| CRAFT-002 | Petakan flow, state, dan transisi | CRAFT-001 | Flow/state map | Approved |
+| CRAFT-003 | Ekstrak token visual | CRAFT-001 | Token warna, typography, spacing, radius, shadow | Approved |
 | CRAFT-004 | Inventarisasi dan lokalkan asset | CRAFT-001 | Asset map dan file asset lokal | Approved |
-| CRAFT-005 | Rancang komponen reusable | CRAFT-002, CRAFT-003, CRAFT-004 | Component map dan API props | Internal Review |
-| CRAFT-006 | Siapkan app shell dan routing prototype React | CRAFT-002, CRAFT-005 | React shell, screen state, dan navigation model | Internal Review |
-| CRAFT-007 | Kunci state contract dan test fixture | CRAFT-002, CRAFT-006 | State matrix, fixture path, dan acceptance criteria | Internal Review |
+| CRAFT-005 | Rancang komponen reusable | CRAFT-002, CRAFT-003, CRAFT-004 | Component map dan API props | Approved |
+| CRAFT-006 | Siapkan app shell dan routing prototype React | CRAFT-002, CRAFT-005 | React shell, screen state, dan navigation model | Approved |
+| CRAFT-007 | Kunci state contract dan test fixture | CRAFT-002, CRAFT-006 | State matrix, fixture path, dan acceptance criteria | Approved |
 | CRAFT-101 | Craft screen 01 — Aturan & Persetujuan | CRAFT-006 | Frame `15:9085` | Internal Review |
 | CRAFT-102 | Craft screen 02 — Unduh Soal | CRAFT-006 | Frame `6:419` | Internal Review |
 | CRAFT-103 | Craft screen 03 — Unduh Soal — Proses | CRAFT-006 | Frame `7:978` | Internal Review |
@@ -100,6 +100,8 @@ Tabel ini menyimpan inventory screen dan dependensi. Status `Internal Review` ti
 - Browser smoke evidence: screen 08 Online menampilkan overlay `25 detik` dan disabled controls; screen 09 Online menampilkan overlay dan disabled `Kembali ke Soal`/`Simpan Hasil` controls.
 - Upload recovery now has visible `uploading`, `failed`, `pending_sync`, and `Coba Lagi` states before screen 14 is reachable.
 - User visual feedback for screen 04: CTA `Lanjutkan` was converted to a floating action with no full-width sticky panel. Tracked in `CRAFT-216`.
+- User behavior decision for screens 04–05: changing the simulator to offline automatically advances from screen 04 to screen 05; changing it back to online on screen 05 automatically returns to screen 04. Implemented in `src/main.tsx` and verified at `360 × 740`.
+- User feedback for the active online-warning overlay: add a collapsed accordion with concise instructions for turning off Wi-Fi and mobile data; opening it must not dismiss the warning or interrupt the countdown. Implemented in `NetworkOverlay` and verified with the overlay DOM state.
 - User visual feedback for screen 06: the screenshot-backed modal was replaced with a semantic native bottom drawer and a localized warning illustration. Tracked in `CRAFT-219`.
 - User visual feedback for screens 07–08: the text glyph `▦` was replaced with a `LayoutGrid` control with an accessible label and disabled state. Tracked in `CRAFT-220`.
 - User visual feedback for screens 07–08: the two references intentionally differ by question state. Track state parity separately from browser/capture offset in `CRAFT-221`.
@@ -456,6 +458,7 @@ Temuan yang terlihat:
 - [ ] Alert merah terlihat terlalu dominan terhadap card peach: cek kembali tinggi, padding, radius, border, dan hubungan jarak alert ke card detail berdasarkan frame `13:3198`.
 - [ ] Judul alert dan copy kedua harus tetap berada dalam batas inner alert pada lebar `360px`; jangan mengandalkan `white-space: nowrap` bila menyebabkan clipping pada device atau zoom berbeda.
 - [ ] Isi card detail di bawah alert perlu diuji sampai bagian metrik, timer, info banner, subtitle, dan group soal; screenshot parsial belum cukup untuk menyatakan screen pixel-perfect.
+- [x] Sticky action bar sempat menempel ke sisi kiri viewport karena rule `.screen-content > .review-actions` menimpa positioning center; rule sudah diperbaiki agar sejajar dengan frame app 360 px.
 - [x] `.review-content` now owns internal scrolling; the final review group is visible at maximum scroll with 16 px clearance before the fixed actions.
 
 Task untuk builder:
@@ -464,6 +467,7 @@ Task untuk builder:
 - [ ] Bandingkan screenshot dengan node Figma `13:3198` pada viewport `360 × 740`; catat koordinat top/left/width/height untuk hero, title, outer card, alert, detail card, sticky action, subtitle, dan review groups.
 - [x] Removed the inherited scroll offset source without changing the screen 10 modal layout.
 - [x] Full viewport top and bottom browser captures were reviewed for the normal review state; the save action remains fixed and visible.
+- [x] Browser verification confirms sticky actions share the app frame's `left` and `width` at `360 × 740`.
 - [x] Tested `scrollTop = 0` through `scrollTop = scrollHeight - clientHeight`; subtitle and both review groups are reachable.
 - [x] Fixed actions remain available and do not cover the last group at the scroll maximum.
 - [x] `npm run build` and `git diff --check` pass after the revision.
@@ -519,6 +523,7 @@ Temuan:
 - [x] CTA `Lanjutkan` tampil sebagai tombol floating dengan margin dari sisi viewport dan tanpa panel selebar frame.
 - [x] Online tetap disabled dan offline enabled; kedua state terlihat di posisi yang sama.
 - [x] Isi panduan terakhir dapat dicapai dengan scroll dan tidak tertutup CTA.
+- [x] Perubahan koneksi otomatis memindahkan screen 04 ke screen 05 saat offline, lalu mengembalikan screen 05 ke screen 04 saat online.
 
 Task untuk builder:
 
