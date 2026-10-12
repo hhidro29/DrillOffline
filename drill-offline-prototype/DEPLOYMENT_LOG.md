@@ -6,9 +6,9 @@ Catatan ini melacak perubahan yang sudah dipush ke branch GitHub dan perubahan l
 
 - Branch: `feat/drill-dev`
 - Remote: `origin/feat/drill-dev`
-- Commit remote terbaru: `7f4338e` — `fix: add React type declarations for Vercel build`
+- Commit remote terbaru: `ed1aef7` — `DRILL-024: add connection guides and deployment log`
 - Branch lokal dan remote sinkron pada commit tersebut.
-- Build lokal pada `7f4338e` berhasil setelah penambahan `@types/react` dan `@types/react-dom`.
+- Build lokal pada `ed1aef7` berhasil.
 - Push ke branch memicu integrasi deployment Vercel. Status deployment live perlu dikonfirmasi di Vercel; file ini tidak mengklaim deployment sukses tanpa pemeriksaan di sana.
 
 ## Task yang sudah dipush
@@ -23,21 +23,13 @@ Catatan ini melacak perubahan yang sudah dipush ke branch GitHub dan perubahan l
 | `DRILL-021` | Shell prototype responsif dan terpusat. | Sudah dipush |
 | `DRILL-022`–`DRILL-023` | Alur akhiri sesi, konfirmasi, upload hasil, dan penyelarasan screen soal/konfirmasi ke Figma. | Sudah dipush |
 | `7f4338e` | Menambahkan tipe React yang diperlukan agar `npm run build` lolos di Vercel. | Sudah dipush; build lokal berhasil |
+| `ed1aef7` — `DRILL-024` | Accordion instruksi koneksi, pop-up akhir sesi, transisi otomatis saat koneksi aktif, GIF panduan asli dan reverse, serta deployment log. | Sudah dipush; build lokal berhasil |
 
 Rentang commit Drill tersebut tercatat pada branch remote dari `95044e9` sampai `7f4338e` (termasuk catatan review/audit `a417062`, `b66e58d`, dan `9a7f716`).
 
 ## Belum dipush
 
-Perubahan lokal berikut belum masuk ke `origin/feat/drill-dev`, sehingga belum memicu deployment dari commit tersebut:
-
-- Mengemas instruksi tekstual cara mematikan internet ke accordion tertutup secara default. Switch simulasi tetap di sidebar tester.
-- Mengemas instruksi menyalakan internet pada langkah pengumpulan ke accordion.
-- Mengubah konfirmasi akhiri sesi menjadi pop-up dengan `Kembali` dan `Yakin`.
-- Melanjutkan otomatis saat koneksi dinyalakan pada langkah awal dan setelah sesi selesai; upload hasil tetap memerlukan aksi user.
-- Mengganti placeholder panduan cara mematikan koneksi internet dengan GIF `public/assets/figma/offline-connection-guide.gif`.
-- Menambahkan GIF reverse `public/assets/figma/offline-connection-guide-reversed.gif` dan memasangnya pada panduan cara menyalakan koneksi internet di step pengumpulan.
-
-File yang berubah: `src/main.tsx`, `src/styles.css`, `DEPLOYMENT_LOG.md`, `public/assets/figma/offline-connection-guide.gif`, dan `public/assets/figma/offline-connection-guide-reversed.gif`.
+Tidak ada perubahan lokal yang belum dipush saat log ini diperbarui.
 
 ## Cara memperbarui log
 
