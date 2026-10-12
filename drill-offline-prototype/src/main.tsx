@@ -20,7 +20,7 @@ function HeaderArtwork() {
 }
 
 function ChecklistItem({ icon, children, status = 'pending' }: { icon: string; children: ReactNode; status?: 'pending' | 'complete' }) {
-  return <div className={`checklist-item ${status === 'complete' ? 'checklist-item-complete' : ''}`}><img src={asset(icon)} alt="" /><span>{children}</span>{status === 'complete' ? <img src={asset('checklist-ready.svg')} alt="" /> : <span className="checklist-pending-icon" aria-hidden="true" />}</div>;
+  return <div className={`checklist-item ${status === 'complete' ? 'checklist-item-complete' : ''}`}><img src={asset(icon)} alt="" /><span>{children}</span><img src={asset(status === 'complete' ? 'checklist-ready.svg' : 'checklist-success.svg')} alt="" /></div>;
 }
 
 function NetworkSwitch({ network, onChange }: { network: NetworkMode; onChange: (mode: NetworkMode) => void }) {

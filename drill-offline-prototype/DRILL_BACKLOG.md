@@ -154,3 +154,9 @@
 - **Task:** Perbarui hierarchy, spacing, dan pending/completed checklist state berdasarkan screenshot collection terbaru; hilangkan copy yang berulang atau memberi kesan langkah sudah selesai saat Offline.
 - **Acceptance criteria:** Pending checklist memakai indikator kosong; koneksi dan upload hanya complete pada state yang benar; card dan sticky CTA tetap selaras dengan preparation; Online auto-upload, retry, summary, scroll, dan overflow tidak regresi.
 - **Status:** Implemented locally
+
+### DRILL-047 — Gunakan centang abu-abu untuk checklist pending
+
+- **Task:** Ganti lingkaran kosong checklist pending dengan ikon centang abu-abu di seluruh flow, terutama panduan mematikan internet dan halaman collection.
+- **Acceptance criteria:** State pending memakai centang abu-abu; state complete tetap memakai centang hijau dan background hijau; makna status dan flow tidak berubah.
+- **Status:** Implemented locally

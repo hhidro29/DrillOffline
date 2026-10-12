@@ -28,7 +28,6 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .checklist-item { display: flex; align-items: center; gap: 4px; width: 100%; min-height: 34px; padding: 8px 16px; color: #2c313a; background: #f2f5fa; border-radius: 100px; font-size: 12px; line-height: 18px; }
 .checklist-item > img:first-child { width: 18px; height: 18px; flex: 0 0 18px; }
 .checklist-item > img:last-child { width: 18px; height: 18px; margin-left: auto; flex: 0 0 18px; }
-.checklist-pending-icon { width: 18px; height: 18px; margin-left: auto; flex: 0 0 18px; border: 2px solid #959dac; border-radius: 50%; }
 .checklist-item-complete { background: #e5f6e5; }
 .divider { height: 1px; width: 100%; background: #dadfea; }
 .download-panel { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 12px; background: #f2f5fa; border: 1px solid #dadfea; border-radius: 12px; text-align: center; }
