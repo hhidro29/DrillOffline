@@ -29,7 +29,12 @@ Rentang commit Drill tersebut tercatat pada branch remote dari `95044e9` sampai 
 
 ## Belum dipush
 
-Tidak ada perubahan lokal yang belum dipush saat log ini diperbarui.
+- Menghapus accordion dari how-to mematikan dan menyalakan koneksi internet; kedua panduan sekarang tampil langsung.
+- Timer tetap terlihat dan berjalan pada screen pengerjaan saat pop-up `Koneksi internet terdeteksi` terbuka; diverifikasi di preview lokal.
+- Menambahkan countdown grace period 25 detik pada pop-up koneksi; saat mencapai 00:00 sesi otomatis masuk ke langkah pengumpulan/upload.
+- Menyederhanakan copy countdown menjadi satu blok teks: `Matikan koneksi internet untuk melanjutkan. Jika waktu habis, sesi akan otomatis dikumpulkan.`
+
+File yang berubah sejak commit `ed1aef7`: `src/main.tsx`, `src/styles.css`, dan `DEPLOYMENT_LOG.md`.
 
 ## Cara memperbarui log
 

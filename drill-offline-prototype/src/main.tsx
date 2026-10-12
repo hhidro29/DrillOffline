@@ -55,28 +55,17 @@ function DownloadPanel({ progress }: { progress?: number }) {
   </div>;
 }
 
-function InstructionAccordion({ title, children }: { title: string; children: ReactNode }) {
-  const [open, setOpen] = useState(false);
-  return <div className={`connection-accordion ${open ? 'connection-accordion-open' : ''}`}>
-    <button type="button" className="connection-accordion-trigger" aria-expanded={open} onClick={() => setOpen(value => !value)}>
-      <span>{title}</span><b aria-hidden="true">{open ? '⌃' : '⌄'}</b>
-    </button>
-    {open && <div className="connection-accordion-content">{children}</div>}
-  </div>;
-}
-
 function OfflineGuide() {
   return <div className="offline-guide">
+    <h2>Cara mematikan koneksi internet perangkat</h2>
     <p>Matikan koneksi internet perangkat untuk melanjutkan mengerjakan drill secara offline.</p>
-    <InstructionAccordion title="Cara mematikan koneksi internet perangkat">
-      <div className="guide-tabs"><button className="selected">Android</button><button>iOS</button><button>Windows</button><button>MacOS</button></div>
-      <img className="guide-image guide-gif" src={asset('offline-connection-guide.gif')} alt="Panduan mematikan koneksi internet di Android" />
-      <h3>Cara utama: Aktifkan mode terbang</h3>
-      <ol><li>Geser layar dari atas ke bawah untuk membuka panel pengaturan cepat. Geser lagi jika diperlukan.</li><li>Ketuk ikon pesawat untuk mengaktifkan Mode pesawat / Mode terbang.</li><li>Pastikan Wi-Fi juga mati agar internet benar-benar terputus.</li></ol>
-      <h3>Alternatif: Atur Melalui Pengaturan</h3>
-      <ol><li>Buka Pengaturan → Wi-Fi, lalu matikan Wi-Fi.</li><li>Buka Jaringan seluler / Kartu SIM → matikan Data seluler. Jika memakai dua SIM, pastikan data pada keduanya tidak aktif.</li></ol>
-      <p>Nama menu dapat berbeda sesuai merek dan versi Android.</p>
-    </InstructionAccordion>
+    <div className="guide-tabs"><button className="selected">Android</button><button>iOS</button><button>Windows</button><button>MacOS</button></div>
+    <img className="guide-image guide-gif" src={asset('offline-connection-guide.gif')} alt="Panduan mematikan koneksi internet di Android" />
+    <h3>Cara utama: Aktifkan mode terbang</h3>
+    <ol><li>Geser layar dari atas ke bawah untuk membuka panel pengaturan cepat. Geser lagi jika diperlukan.</li><li>Ketuk ikon pesawat untuk mengaktifkan Mode pesawat / Mode terbang.</li><li>Pastikan Wi-Fi juga mati agar internet benar-benar terputus.</li></ol>
+    <h3>Alternatif: Atur Melalui Pengaturan</h3>
+    <ol><li>Buka Pengaturan → Wi-Fi, lalu matikan Wi-Fi.</li><li>Buka Jaringan seluler / Kartu SIM → matikan Data seluler. Jika memakai dua SIM, pastikan data pada keduanya tidak aktif.</li></ol>
+    <p>Nama menu dapat berbeda sesuai merek dan versi Android.</p>
   </div>;
 }
 
@@ -139,8 +128,20 @@ function ConfirmScreen({ network, timer, answer, onBack, onSubmit, finishRequest
   return <main className="drill-screen confirm-screen"><Navbar /><div className="confirm-scroll"><QuestionCard answer={answer} disabled /></div><div className="confirm-timer"><div className="footer-timer"><span><span className="timer-glyph">◴</span>Waktu kamu tersisa</span><TimerBoxes timer={timer} /></div></div><footer className="confirm-footer"><div><strong>{finishRequested ? 'Yakin ingin mengakhiri sesi Drill?' : 'Yakin dengan jawabannya?'}</strong><span>{finishRequested ? 'Jawabanmu akan dikumpulkan untuk diproses.' : 'Klik submit untuk tahu hasilnya, ya'}</span></div><div className="confirm-footer-actions"><button className="secondary-cta" onClick={onBack}>Kembali</button><button className="primary-cta" disabled={blocked} onClick={onSubmit}>{finishRequested ? 'Yakin' : 'Submit'}</button></div></footer></main>;
 }
 
-function NetworkInterruptionModal({ onBackOffline }: { onBackOffline: () => void }) {
-  return <div className="network-interruption-layer" role="alertdialog" aria-modal="true" aria-labelledby="network-interruption-title"><section className="network-interruption-card"><div className="network-interruption-icon">!</div><h2 id="network-interruption-title">Koneksi internet terdeteksi</h2><p>Matikan koneksi internet untuk melanjutkan mengerjakan Drill secara offline.</p><button className="primary-cta" onClick={onBackOffline}>Kembali ke Offline</button></section></div>;
+function NetworkInterruptionModal({ onBackOffline, onTimeout }: { onBackOffline: () => void; onTimeout: () => void }) {
+  const [remaining, setRemaining] = useState(25);
+  useEffect(() => {
+    const countdown = window.setInterval(() => setRemaining(value => {
+      if (value <= 1) {
+        window.clearInterval(countdown);
+        onTimeout();
+        return 0;
+      }
+      return value - 1;
+    }), 1000);
+    return () => window.clearInterval(countdown);
+  }, []);
+  return <div className="network-interruption-layer" role="alertdialog" aria-modal="true" aria-labelledby="network-interruption-title"><section className="network-interruption-card"><div className="network-interruption-icon">!</div><h2 id="network-interruption-title">Koneksi internet terdeteksi</h2><p>Matikan koneksi internet untuk melanjutkan. Jika waktu habis, sesi akan otomatis dikumpulkan.</p><div className="network-grace-timer" role="timer" aria-live="polite">00:{remaining.toString().padStart(2, '0')}</div><button className="primary-cta" onClick={onBackOffline}>Kembali ke Offline</button></section></div>;
 }
 
 function EndSessionModal({ onCancel, onConfirm }: { onCancel: () => void; onConfirm: () => void }) {
@@ -155,7 +156,7 @@ function ResultAnswerScreen({ kind, network, timer, onContinue }: { kind: 'wrong
 
 function OnlineGuide({ network }: { network: NetworkMode }) {
   const online = network === 'online';
-  return <main className="drill-screen preparation-screen"><Navbar /><div className="content online-content"><HeaderArtwork /><section className="prep-card upload-guide-card"><div className="prep-heading"><h1>Persiapan Mengumpulkan<br />Drill Soal Offline</h1><StepRing value={online ? '1/2' : '0/2'} /></div><div className="upload-alert"><img className="upload-alert-icon" src={asset('warning.svg')} alt="" /><div><strong>Drill belum dikumpulkan</strong><span>Upload hasil drill supaya jawabanmu tercatat</span></div></div><div className="checklist"><ChecklistItem icon="wifi.svg" status={online ? 'complete' : 'pending'}>Nyalakan Koneksi Internet</ChecklistItem><ChecklistItem icon="test.svg">Upload Hasil Drill Offline</ChecklistItem></div><div className="divider" /><div className="offline-guide"><InstructionAccordion title="Cara menyalakan koneksi internet perangkat"><div className="guide-tabs"><button className="selected">Android</button><button>iOS</button><button>Windows</button><button>MacOS</button></div><img className="guide-image guide-gif" src={asset('offline-connection-guide-reversed.gif')} alt="Panduan menyalakan koneksi internet di Android" /><h3>Cara utama: Nonaktifkan mode terbang</h3><ol><li>Geser layar dari atas ke bawah untuk membuka panel pengaturan cepat. Geser lagi jika diperlukan.</li><li>Ketuk ikon pesawat untuk menonaktifkan Mode pesawat / Mode terbang.</li><li>Pastikan Wi-Fi juga mati agar internet benar-benar terputus.</li></ol><h3>Alternatif: Atur Melalui Pengaturan</h3><ol><li>Buka Pengaturan → Wi-Fi, lalu matikan Wi-Fi.</li><li>Buka Jaringan seluler / Kartu SIM → matikan Data seluler. Jika memakai dua SIM, pastikan data pada keduanya tidak aktif.</li></ol><p>Nama menu dapat berbeda sesuai merek dan versi Android.</p></InstructionAccordion></div></section></div></main>;
+  return <main className="drill-screen preparation-screen"><Navbar /><div className="content online-content"><HeaderArtwork /><section className="prep-card upload-guide-card"><div className="prep-heading"><h1>Persiapan Mengumpulkan<br />Drill Soal Offline</h1><StepRing value={online ? '1/2' : '0/2'} /></div><div className="upload-alert"><img className="upload-alert-icon" src={asset('warning.svg')} alt="" /><div><strong>Drill belum dikumpulkan</strong><span>Upload hasil drill supaya jawabanmu tercatat</span></div></div><div className="checklist"><ChecklistItem icon="wifi.svg" status={online ? 'complete' : 'pending'}>Nyalakan Koneksi Internet</ChecklistItem><ChecklistItem icon="test.svg">Upload Hasil Drill Offline</ChecklistItem></div><div className="divider" /><div className="offline-guide"><h2>Cara menyalakan koneksi internet perangkat</h2><div className="guide-tabs"><button className="selected">Android</button><button>iOS</button><button>Windows</button><button>MacOS</button></div><img className="guide-image guide-gif" src={asset('offline-connection-guide-reversed.gif')} alt="Panduan menyalakan koneksi internet di Android" /><h3>Cara utama: Nonaktifkan mode terbang</h3><ol><li>Geser layar dari atas ke bawah untuk membuka panel pengaturan cepat. Geser lagi jika diperlukan.</li><li>Ketuk ikon pesawat untuk menonaktifkan Mode pesawat / Mode terbang.</li><li>Pastikan Wi-Fi juga mati agar internet benar-benar terputus.</li></ol><h3>Alternatif: Atur Melalui Pengaturan</h3><ol><li>Buka Pengaturan → Wi-Fi, lalu matikan Wi-Fi.</li><li>Buka Jaringan seluler / Kartu SIM → matikan Data seluler. Jika memakai dua SIM, pastikan data pada keduanya tidak aktif.</li></ol><p>Nama menu dapat berbeda sesuai merek dan versi Android.</p></div></section></div></main>;
 }
 
 function UploadScreen({ status, network, onUpload }: { status: 'ready' | 'uploading' | 'failed'; network: NetworkMode; onUpload: () => void }) {
@@ -272,6 +273,12 @@ function App() {
     setNetwork(mode);
     setNetworkPromptOpen(false);
   };
+  const handleNetworkTimeout = () => {
+    setSessionEnded(true);
+    setFinishRequested(false);
+    setNetworkPromptOpen(false);
+    setScreen('online-guide');
+  };
 
   let content: ReactNode;
   if (screen === 'question') content = <QuestionScreen network={network} timer={timer} answer={answer} onAnswer={setAnswer} onFinish={beginFinish} />;
@@ -293,7 +300,7 @@ function App() {
     };
     content = <main className="app-shell"><Navbar /><div className="content"><HeaderArtwork /><PreparationCard state={screen as PreparationState} network={network} /></div>{screen === 'ready' ? <ReadyState network={network} /> : screen === 'offline-guide' ? null : <div className="sticky-actions"><button className="primary-cta" disabled={stickyDisabled} onClick={onStickyClick}>{screen === 'download' ? 'Download Soal' : `Mendownload… ${shownState}%`}</button></div>}</main>;
   }
-  return <div className="drill-review-root" data-network={network}>{content}{menuOpen && <DrillSidebar current={screen} network={network} onClose={() => setMenuOpen(false)} onNavigate={navigateFromMenu} onNetworkChange={setNetworkMode} onReset={resetSession} onFailUpload={failUpload} />}{networkPromptOpen && <NetworkInterruptionModal onBackOffline={() => { setNetwork('offline'); setNetworkPromptOpen(false); }} />}{finishRequested && screen === 'question' && <EndSessionModal onCancel={cancelFinish} onConfirm={confirmFinish} />}</div>;
+  return <div className="drill-review-root" data-network={network}>{content}{menuOpen && <DrillSidebar current={screen} network={network} onClose={() => setMenuOpen(false)} onNavigate={navigateFromMenu} onNetworkChange={setNetworkMode} onReset={resetSession} onFailUpload={failUpload} />}{networkPromptOpen && <NetworkInterruptionModal onBackOffline={() => { setNetwork('offline'); setNetworkPromptOpen(false); }} onTimeout={handleNetworkTimeout} />}{finishRequested && screen === 'question' && <EndSessionModal onCancel={cancelFinish} onConfirm={confirmFinish} />}</div>;
 }
 
 createRoot(document.getElementById('root')!).render(<StrictMode><App /></StrictMode>);
