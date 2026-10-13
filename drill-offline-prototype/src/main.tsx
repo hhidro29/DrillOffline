@@ -193,7 +193,7 @@ function NetworkInterruptionModal({ onTimeout }: { onTimeout: () => void }) {
     }), 1000);
     return () => window.clearInterval(countdown);
   }, []);
-  return <div className="network-interruption-layer" role="alertdialog" aria-modal="true" aria-labelledby="network-interruption-title"><section className="network-interruption-card"><div className="network-interruption-icon">!</div><h2 id="network-interruption-title">Koneksi internet terdeteksi</h2><div className="network-grace-timer" role="timer" aria-live="polite">00:{remaining.toString().padStart(2, '0')}</div><div className="network-interruption-copy"><p>Matikan koneksi internet untuk melanjutkan. <strong>Jika waktu habis, sesi akan otomatis dikumpulkan.</strong></p></div></section></div>;
+  return <div className="network-overlay" role="alertdialog" aria-modal="true" aria-labelledby="network-interruption-title"><section className="network-overlay-card"><div className="network-overlay-icon">!</div><h2 id="network-interruption-title">Koneksi internet terdeteksi</h2><div className="network-grace-timer" role="timer" aria-live="polite">00:{remaining.toString().padStart(2, '0')}</div><div className="network-interruption-copy"><p>Matikan koneksi internet untuk melanjutkan. <strong>Drill otomatis dikumpulkan dalam {remaining} detik.</strong></p></div></section></div>;
 }
 
 function EndSessionModal({ onCancel, onConfirm }: { onCancel: () => void; onConfirm: () => void }) {

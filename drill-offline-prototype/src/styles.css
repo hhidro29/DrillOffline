@@ -300,12 +300,12 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .summary-footer .secondary-cta, .summary-footer .primary-cta { height: 44px; }
 .summary-footer .primary-cta { background: linear-gradient(90deg,#ff912e,#ff3048); }
 
-.network-interruption-layer { position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; padding: 16px; background: rgba(25,31,40,.45); }
-.network-interruption-card { display: flex; width: min(328px, 100%); flex-direction: column; align-items: center; gap: 12px; padding: 24px 16px 16px; color: #434856; background: #fff; border-radius: 16px; box-shadow: 0 12px 32px rgba(44,49,58,.24); text-align: center; }
-.network-interruption-icon { display: grid; place-items: center; width: 48px; height: 48px; color: #e52a34; background: #fff1f2; border: 1px solid #e52a34; border-radius: 50%; font-size: 24px; font-weight: 800; }
-.network-interruption-card h2 { margin: 0; font-size: 18px; line-height: 26px; }
-.network-interruption-card p { margin: 0; color: #6d7788; font-size: 12px; line-height: 18px; }
-.network-interruption-card p strong { color: #434856; font-weight: 800; }
+.network-overlay { position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; padding: 16px; background: rgba(25,31,40,.45); }
+.network-overlay-card { display: flex; width: min(328px, 100%); flex-direction: column; align-items: center; gap: 12px; padding: 24px 16px 16px; color: #434856; background: #fff; border-radius: 16px; box-shadow: 0 12px 32px rgba(44,49,58,.24); text-align: center; }
+.network-overlay-icon { display: grid; place-items: center; width: 48px; height: 48px; color: #e52a34; background: #fff1f2; border: 1px solid #e52a34; border-radius: 50%; font-size: 24px; font-weight: 800; }
+.network-overlay-card h2 { margin: 0; color: #434856; font-size: 18px; line-height: 26px; }
+.network-overlay-card p { margin: 0; color: #6d7788; font-size: 12px; line-height: 18px; }
+.network-overlay-card p strong { color: #434856; font-weight: 800; }
 .network-grace-timer { min-width: 92px; padding: 6px 12px; color: #e52a34; background: #fff1f2; border: 1px solid #e52a34; border-radius: 8px; font-size: 22px; font-weight: 800; line-height: 30px; letter-spacing: 1px; }
 .network-interruption-card .primary-cta { height: 44px; }
 
