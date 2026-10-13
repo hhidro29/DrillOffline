@@ -160,3 +160,19 @@
 - **Task:** Ganti lingkaran kosong checklist pending dengan ikon centang abu-abu di seluruh flow, terutama panduan mematikan internet dan halaman collection.
 - **Acceptance criteria:** State pending memakai centang abu-abu; state complete tetap memakai centang hijau dan background hijau; makna status dan flow tidak berubah.
 - **Status:** Implemented locally
+
+### DRILL-048 — Ringkas status pengumpulan menjadi progress linear
+
+- **Referensi:** Screenshot halaman `Kumpulkan hasil Tryout` di prototype TO Offline, dikirim 12 Oktober 2026.
+- **Task:** Adaptasikan halaman pengumpulan Drill agar memakai hierarki visual yang sama: judul `Kumpulkan hasil Drill`, keterangan jawaban tersimpan di perangkat, warning merah yang jelas saat Drill belum terkumpul, dan satu kartu status dengan tiga tahap horizontal.
+- **Rancangan:** Tahapnya adalah `Jawaban tersimpan` → `Nyalakan internet` → `Menunggu pengiriman`. Tahap aktif berubah mengikuti state: saat Offline, tahap koneksi diberi penekanan dan pulse halus; ketika Online dan upload berlangsung, tahap pengiriman aktif dan garis progres bergerak; state gagal memberi affordance untuk mencoba lagi. Pertahankan transisi otomatis ke hasil setelah upload berhasil.
+- **Rapikan halaman:** Satukan checklist dan status upload yang sekarang mengulang informasi menjadi satu progress linear. Pertahankan edukasi reward hanya jika masih dibutuhkan setelah revisi copy/layout lanjutan; CTA sticky tidak menjadi langkah wajib pada alur upload otomatis.
+- **Acceptance criteria:** Offline jelas meminta user menyalakan internet; perubahan Online langsung terlihat sebelum pindah ke hasil; progress upload terasa berlangsung; state gagal tetap bisa dicoba lagi; tampilan memakai bahasa visual halaman persiapan Drill; panduan menyalakan internet dan alur otomatis upload tetap berfungsi.
+- **Status:** Implemented locally
+- **Catatan implementasi:** Checklist dan status upload yang berulang diganti dengan warning kontekstual dan tracker linear. State menunggu koneksi pada halaman panduan internet juga memakai hierarki tracker yang sama. Auto-upload tetap berjalan; indikator pengiriman ditampilkan sebelum transisi ke hasil, dan CTA `Coba Lagi` hanya muncul saat gagal.
+
+### DRILL-049 — Tampilkan jumlah soal yang sudah dijawab saat mengumpulkan
+
+- **Task:** Beri ringkasan jumlah soal yang sudah dijawab dibanding total soal pada state menunggu internet dan upload.
+- **Acceptance criteria:** Angka mengikuti jawaban tersimpan, mudah ditemukan tanpa mengganggu warning atau progress linear, dan bar menunjukkan proporsi soal terjawab.
+- **Status:** Implemented locally

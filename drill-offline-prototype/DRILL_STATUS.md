@@ -62,11 +62,22 @@
 ## Assumptions and open decisions
 
 - Download progress is simulated locally for visual review.
-- The guide uses a neutral image placeholder until the Drill-specific instructional asset is exported from Figma.
-- The instructional image area remains a neutral placeholder until the Drill-specific image export is available.
-- Figma's guide image is a neutral placeholder in the source frame, so the prototype preserves that neutral area and its scrollable guide copy.
+- Device guide images for Android, iOS, Windows, and MacOS were updated from the latest user-provided assets; keep their intended image ratio/crop when revising guide layout.
 - The result summary uses local fixture values until a backend result contract is supplied.
 - The teacher-link entry is represented by the standalone app entry; authentication and link validation are outside this prototype.
+
+## Latest working-session handoff — 2026-10-13
+
+Full cross-project handoff: [HANDOFF_2026-10-13.md](../../TO%20Offline%20Mode/HANDOFF_2026-10-13.md).
+
+- The local demo fixture contains three Math questions for a short Drill simulation. A question cannot be skipped: the footer is hidden until the student chooses an answer. The answer footer uses `Yakin dengan jawabannya?` and `Hasil drill akan diberitahu setelah dikumpulkan.` The final-question `Akhiri` CTA ends directly without an extra modal; the header `Akhiri` continues to open the confirmation state.
+- Keep the question header design intact and scrolling with the question content. The latest pass tunes header size/spacing, gradient boundary, `Soal n/3`, and the `Mode Offline` tag.
+- A prominent inline `Poinmu tidak hilang` notice explains that correct/wrong status and Starchamp are processed only after the Drill is successfully collected. It appears in Drill preparation and collection; never transfer this notice into the TO flow.
+- The collection flow uses a reactive three-stage linear status, a gentle pulse while waiting for internet, a sending indicator during upload, and an answered-question count. Online starts upload automatically; a retry action is available on failure.
+- Result screen 11 now follows the result reference, but uses Starchamps only, with no XP or skipped count. It includes score, correct/wrong counts, elapsed time, report banner, and `Detail Pemahaman`. `result-mascot.png` belongs in the score card. `SyllabusIllustK12Report.png` belongs beside the `Detail Pemahaman` title; the report banner retains its separate document/search icon.
+- Both new result images were copied from the TO asset directory into this project's `public/assets/figma/`. The `SyllabusIllustK12Report` placement was corrected after review.
+- Student-facing preparation copy uses `Menyiapkan`; literal “download” has been removed from labels, progress, and warning copy. Internal state/asset names may still contain `download`.
+- On 2026-10-13, the revised result assets and placement were checked in the local browser at the 360px frame and `git diff --check` passed. The summary remains a local simulation; report, discussion, and detail filters have no supplied product/backend action yet.
 
 ## Evidence
 
