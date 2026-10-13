@@ -19,6 +19,21 @@ function HeaderArtwork() {
   return <div className="header-art" aria-hidden="true"><img className="header-left" src={asset('header-left.svg')} alt="" /><img className="header-right" src={asset('header-right.svg')} alt="" /></div>;
 }
 
+function ActivityLoading({ title }: { title: string }) {
+  return <main className="activity-loading" aria-label={`${title}. Memuat`}>
+    <div className="activity-loading-illustration" aria-hidden="true">
+      <div className="activity-loading-art">
+        <div className="activity-sheet activity-sheet-back" />
+        <div className="activity-sheet activity-sheet-front" />
+        <div className="activity-folder" />
+        <i className="activity-spark activity-spark-one" /><i className="activity-spark activity-spark-two" /><i className="activity-spark activity-spark-three" />
+      </div>
+    </div>
+    <h1>{title}</h1>
+    <div className="activity-loading-dots" role="status" aria-label="Memuat"><i aria-hidden="true" /><i aria-hidden="true" /><i aria-hidden="true" /></div>
+  </main>;
+}
+
 function ChecklistItem({ icon, children, status = 'pending' }: { icon: string; children: ReactNode; status?: 'pending' | 'complete' }) {
   return <div className={`checklist-item ${status === 'complete' ? 'checklist-item-complete' : ''}`}><img src={asset(icon)} alt="" /><span>{children}</span><img src={asset(status === 'complete' ? 'checklist-ready.svg' : 'checklist-success.svg')} alt="" /></div>;
 }
@@ -470,7 +485,8 @@ function App() {
       if (screen === 'offline-guide' && network === 'offline') setScreen('question');
     };
     const showGuideAction = screen === 'offline-guide';
-    content = <main className="app-shell"><Navbar /><div className="content"><HeaderArtwork /><PreparationCard state={screen as PreparationState} network={network} progress={progress} /></div>{screen === 'ready' ? <ReadyState network={network} /> : showGuideAction ? <div className="sticky-actions"><button className="primary-cta" disabled={stickyDisabled} onClick={onStickyClick}>Mulai Kerjakan</button></div> : null}</main>;
+    const isLoading = screen === 'download' || screen === 'downloading';
+    content = <main className={`app-shell ${isLoading ? 'loading-shell' : ''}`}>{!isLoading && <Navbar />}<div className="content">{isLoading ? <ActivityLoading title="Drill Soal segera dimulai" /> : <><HeaderArtwork /><PreparationCard state={screen as PreparationState} network={network} progress={progress} /></>}</div>{screen === 'ready' ? <ReadyState network={network} /> : showGuideAction ? <div className="sticky-actions"><button className="primary-cta" disabled={stickyDisabled} onClick={onStickyClick}>Mulai Kerjakan</button></div> : null}</main>;
   }
   return <div className="drill-review-root" data-network={network}>{content}{menuOpen && <DrillSidebar current={screen} network={network} networkPromptOpen={networkPromptOpen} onClose={() => setMenuOpen(false)} onNavigate={navigateFromMenu} onNetworkChange={setNetworkMode} onReset={resetSession} onFailUpload={failUpload} onSimulateOffline={simulateReturnOffline} />}{networkPromptOpen && <NetworkInterruptionModal onTimeout={handleNetworkTimeout} />}{finishRequested && screen === 'question' && <EndSessionModal onCancel={cancelFinish} onConfirm={confirmFinish} />}{toastMessage && <OfflineToast message={toastMessage} />}</div>;
 }
