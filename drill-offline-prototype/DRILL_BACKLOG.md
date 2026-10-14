@@ -170,9 +170,14 @@
 - **Acceptance criteria:** Offline jelas meminta user menyalakan internet; perubahan Online langsung terlihat sebelum pindah ke hasil; progress upload terasa berlangsung; state gagal tetap bisa dicoba lagi; tampilan memakai bahasa visual halaman persiapan Drill; panduan menyalakan internet dan alur otomatis upload tetap berfungsi.
 - **Status:** Implemented locally
 - **Catatan implementasi:** Checklist dan status upload yang berulang diganti dengan warning kontekstual dan tracker linear. State menunggu koneksi pada halaman panduan internet juga memakai hierarki tracker yang sama. Auto-upload tetap berjalan; indikator pengiriman ditampilkan sebelum transisi ke hasil, dan CTA `Coba Lagi` hanya muncul saat gagal.
+- **Refinement 2026-10-14:** `#internet-guide` sekarang menjadi halaman instruksi dan kesiapan mengumpulkan saja. Intro penyimpanan, tracker linear, dan progress jumlah soal dihapus dari guide; tracker serta jumlah soal tetap tersedia pada tahap upload.
 
 ### DRILL-049 — Tampilkan jumlah soal yang sudah dijawab saat mengumpulkan
 
-- **Task:** Beri ringkasan jumlah soal yang sudah dijawab dibanding total soal pada state menunggu internet dan upload.
+- **Task:** Beri ringkasan jumlah soal yang sudah dijawab dibanding total soal pada tahap upload.
 - **Acceptance criteria:** Angka mengikuti jawaban tersimpan, mudah ditemukan tanpa mengganggu warning atau progress linear, dan bar menunjukkan proporsi soal terjawab.
-- **Status:** Implemented locally
+- **Status:** Implemented locally; tidak ditampilkan pada `#internet-guide` sesuai refinement meeting terbaru.
+
+### Meeting supersession note — 2026-10-13
+
+DRILL-044's original auto-upload happy path is superseded by the latest meeting decision: normal collection is manual (`Kumpulkan`), while auto-submit is reserved for an internet interruption during an active attempt. The implementation and acceptance checks should follow that decision.

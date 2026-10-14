@@ -70,10 +70,9 @@
 
 Full cross-project handoff: [HANDOFF_2026-10-13.md](../../TO%20Offline%20Mode/HANDOFF_2026-10-13.md).
 
-- The local demo fixture contains three Math questions for a short Drill simulation. A question cannot be skipped: the footer is hidden until the student chooses an answer. The answer footer uses `Yakin dengan jawabannya?` and `Hasil drill akan diberitahu setelah dikumpulkan.` The final-question `Akhiri` CTA ends directly without an extra modal; the header `Akhiri` continues to open the confirmation state.
+- The local demo fixture contains three Math questions for a short Drill simulation. The question navigator allows moving between questions and leaving one unanswered. The footer uses local-save language; no correct/wrong confirmation is shown while Offline. The header `Akhiri` opens the confirmation state before collection.
 - Keep the question header design intact and scrolling with the question content. The latest pass tunes header size/spacing, gradient boundary, `Soal n/3`, and the `Mode Offline` tag.
-- A prominent inline `Poinmu tidak hilang` notice explains that correct/wrong status and Starchamp are processed only after the Drill is successfully collected. It appears in Drill preparation and collection; never transfer this notice into the TO flow.
-- The collection flow uses a reactive three-stage linear status, a gentle pulse while waiting for internet, a sending indicator during upload, and an answered-question count. Online starts upload automatically; a retry action is available on failure.
+- The collection flow uses a reactive three-stage linear status, a gentle pulse while waiting for internet, a sending indicator during upload, and an answered-question count. Normal Online collection starts only after the explicit `Kumpulkan` action; a retry action is available on failure.
 - Result screen 11 now follows the result reference, but uses Starchamps only, with no XP or skipped count. It includes score, correct/wrong counts, elapsed time, report banner, and `Detail Pemahaman`. `result-mascot.png` belongs in the score card. `SyllabusIllustK12Report.png` belongs beside the `Detail Pemahaman` title; the report banner retains its separate document/search icon.
 - Both new result images were copied from the TO asset directory into this project's `public/assets/figma/`. The `SyllabusIllustK12Report` placement was corrected after review.
 - Student-facing preparation copy uses `Menyiapkan`; literal “download” has been removed from labels, progress, and warning copy. Internal state/asset names may still contain `download`.
@@ -98,6 +97,16 @@ Full cross-project handoff: [HANDOFF_2026-10-13.md](../../TO%20Offline%20Mode/HA
 - Direct sidebar jumps preserve the selected network mode, so jumping to screen 10 while Offline cannot silently reset to Online; toggling to Online then immediately enables upload.
 - Latest switch iteration verified at the preview viewport: screen 03 changes between blocked and complete guide states, screen 04 changes between disabled and enabled start CTA, screen 09 updates its 0/2 → 1/2 internet checklist, and screen 10 changes between disabled `Nyalakan Internet` and enabled upload. Upload failure → `Coba Lagi` → progress → result summary also passes.
 - Planner final verdict after the latest live pass: Internal Review ready; all 11 states, long-screen scroll, sticky CTAs, network gates, wrong-answer, timeout, upload retry, and summary flow have no remaining P0/P1 mismatch.
+
+## Latest meeting alignment — 2026-10-13
+
+The meeting decisions supersede older notes above where they conflict:
+
+- Offline answering does not show correct/wrong, score, XP, or Starchamp feedback. Those are processed only after collection while Online.
+- Drill answering now exposes a question navigator so students can move between questions and leave a question unanswered; the footer uses local-save language instead of per-question grading confirmation.
+- Normal collection is explicit: Offline shows `Kembali ke Soal` enabled and `Kumpulkan` disabled; Online reverses those states. Upload starts only after `Kumpulkan` is clicked.
+- Auto-submit is reserved for an internet interruption during an active attempt. It shows a dedicated `Drill otomatis dikumpulkan` state before the processed result.
+- Preparation loading displays progress, and the Offline guide stays focused on turning off the connection.
 - Follow-up visual pass verified screen 03 at top and bottom scroll positions in both network modes; the guide remains aligned with the reference without a redundant alert, and its sticky CTA stays visible.
 - P0 regression check passed: sticky `Lanjutkan` → screen 04 `Kerjakan Drill` → screen 05 question flow; direct screen 05 jump and reset still preserve Offline/Online state as expected.
 - Screen 05 alignment audit now locks the Figma gutter relationships explicitly: progress/card containers remain `x=16..344` (`328px`), question stem/options/report remain `x=32..328` (`296px`), and the footer remains full width with a `328px` timer at both 360×740 and 360×710. Selected-answer, Online-disabled, and Offline-enabled states were checked at top, mid, and bottom scroll with no horizontal overflow.
@@ -119,3 +128,7 @@ Full cross-project handoff: [HANDOFF_2026-10-13.md](../../TO%20Offline%20Mode/HA
 
 - DRILL-046 visual collection pass updates the latest Offline screenshot state: pending checklist rows now use empty indicators instead of grey checkmarks, collection copy has one clear message per status, and the shared prep/card hierarchy remains intact. Online auto-upload, retry, processed summary, scroll, and overflow behavior remain unchanged.
 - DRILL-047 revises checklist pending markers across preparation and collection from empty circles to the existing grey check asset. Complete items retain their green check and green background; status semantics are unchanged.
+- Latest UI revision: `Mode Offline` is visible beside `Drill Soal` in the question hero. The question navigator now matches the question card width, uses a regular rounded-card radius, crosses the hero/neutral background boundary, and contains only the left-aligned numbered controls; purple is current, green is answered, and grey is unanswered. The redundant footer save-status copy was removed while previous/next arrow controls remain. The session timer is deferred from the initial Drill version.
+- Tester access revision: the existing navbar menu remains the only tester entry point, preserving the product UI position. The navbar is rendered during loading, stays reachable above blocking overlays, and remains sticky in the question scroll; the reviewer drawer is layered above overlays so network and direct state controls remain reachable.
+- Last-question collection revision: the right arrow stays enabled on the final question and is labeled `Kumpulkan Drill`; activating it opens the existing confirmation dialog before entering collection.
+- Collection guide refinement: `#internet-guide` now focuses on `Nyalakan internet agar jawabanmu tercatat.` It keeps only the connection state and gated `Kembali ke Soal` / `Kumpulkan` actions; question-count and upload progress remain on the upload state.
